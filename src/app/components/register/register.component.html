@@ -1,140 +1,99 @@
-<div class="register-container">
-  <div class="register-box">
-    <h2>Register</h2>
-
-    <div *ngIf="error" class="alert alert-danger">
-      {{ error }}
+<div class="auth-page">
+  <div class="auth-shell register-shell">
+    <div class="auth-visual auth-visual-register">
+      <div class="hero-badge">Create account</div>
+      <h1>Start your admin journey.</h1>
+      <p>Create an account with the right role and access level for your organization.</p>
+      <div class="feature-list">
+        <div><span class="feature-icon">🚀</span><span>Fast onboarding</span></div>
+        <div><span class="feature-icon">🔒</span><span>Secure credentials</span></div>
+        <div><span class="feature-icon">🛡️</span><span>Role-based access</span></div>
+      </div>
     </div>
 
-    <div *ngIf="success" class="alert alert-success">
-      {{ success }}
-    </div>
+    <div class="auth-forms">
+      <div class="auth-card card shadow-sm">
+        <div class="card-body">
+          <div class="auth-card-title mb-4">
+            <span class="eyebrow d-inline-block mb-2">Register</span>
+            <h2>Create your account</h2>
+            <p class="text-muted">Fill in the details below to join the platform.</p>
+          </div>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <!-- Username -->
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          class="form-control"
-          formControlName="username"
-          [class.is-invalid]="submitted && f['username'].errors"
-          placeholder="Choose a username"
-        />
-        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
-          <div *ngIf="f['username'].errors['required']">Username is required</div>
-          <div *ngIf="f['username'].errors['minlength']">Username must be at least 3 characters</div>
+          <div *ngIf="error" class="alert alert-danger d-flex align-items-center">
+            <span class="me-2">!</span>
+            <span>{{ error }}</span>
+          </div>
+          <div *ngIf="success" class="alert alert-success d-flex align-items-center">
+            <span class="me-2">✓</span>
+            <span>{{ success }}</span>
+          </div>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="row gx-3">
+              <div class="col-12 col-md-6 mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input id="username" type="text" class="form-control" formControlName="username" placeholder="Choose a username" [ngClass]="{'is-invalid': submitted && f['username'].errors}" />
+                <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+                  <div *ngIf="f['username'].errors['required']">Username is required</div>
+                  <div *ngIf="f['username'].errors['minlength']">Username must be at least 3 characters</div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" type="email" class="form-control" formControlName="email" placeholder="Enter your email" [ngClass]="{'is-invalid': submitted && f['email'].errors}" />
+                <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                  <div *ngIf="f['email'].errors['required']">Email is required</div>
+                  <div *ngIf="f['email'].errors['email']">Please enter a valid email</div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input id="name" type="text" class="form-control" formControlName="name" placeholder="Enter your full name" [ngClass]="{'is-invalid': submitted && f['name'].errors}" />
+                <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">Full name is required</div>
+              </div>
+
+              <div class="col-12 col-md-6 mb-3">
+                <label for="CIN" class="form-label">CIN (ID Number)</label>
+                <input id="CIN" type="number" class="form-control" formControlName="CIN" placeholder="Enter your CIN" [ngClass]="{'is-invalid': submitted && f['CIN'].errors}" />
+                <div *ngIf="submitted && f['CIN'].errors" class="invalid-feedback">CIN is required</div>
+              </div>
+
+              <div class="col-12 col-md-6 mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input id="password" type="password" class="form-control" formControlName="password" placeholder="Enter a strong password" [ngClass]="{'is-invalid': submitted && f['password'].errors}" />
+                <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                  <div *ngIf="f['password'].errors['required']">Password is required</div>
+                  <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select id="role" class="form-select" formControlName="role" [ngClass]="{'is-invalid': submitted && f['role'].errors}">
+                  <option value="">Select a role</option>
+                  <option *ngFor="let option of roleOptions" [value]="option.value">{{ option.label }}</option>
+                </select>
+                <div *ngIf="submitted && f['role'].errors" class="invalid-feedback">Role is required</div>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label for="photo" class="form-label">Photo URL (Optional)</label>
+                <input id="photo" type="text" class="form-control" formControlName="photo" placeholder="Enter photo URL" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="loading">{{ loading ? 'Registering...' : 'Register' }}</button>
+          </form>
+
+          <div class="auth-footer mt-4 d-flex justify-content-between flex-wrap gap-2">
+            <span class="text-muted">Already have an account?</span>
+            <a routerLink="/login">Login here</a>
+          </div>
         </div>
       </div>
-
-      <!-- Email -->
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          class="form-control"
-          formControlName="email"
-          [class.is-invalid]="submitted && f['email'].errors"
-          placeholder="Enter your email"
-        />
-        <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
-          <div *ngIf="f['email'].errors['required']">Email is required</div>
-          <div *ngIf="f['email'].errors['email']">Please enter a valid email</div>
-        </div>
-      </div>
-
-      <!-- Name -->
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input
-          type="text"
-          id="name"
-          class="form-control"
-          formControlName="name"
-          [class.is-invalid]="submitted && f['name'].errors"
-          placeholder="Enter your full name"
-        />
-        <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
-          <div *ngIf="f['name'].errors['required']">Full name is required</div>
-        </div>
-      </div>
-
-      <!-- CIN -->
-      <div class="form-group">
-        <label for="CIN">CIN (ID Number)</label>
-        <input
-          type="number"
-          id="CIN"
-          class="form-control"
-          formControlName="CIN"
-          [class.is-invalid]="submitted && f['CIN'].errors"
-          placeholder="Enter your CIN"
-        />
-        <div *ngIf="submitted && f['CIN'].errors" class="invalid-feedback">
-          <div *ngIf="f['CIN'].errors['required']">CIN is required</div>
-        </div>
-      </div>
-
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          class="form-control"
-          formControlName="password"
-          [class.is-invalid]="submitted && f['password'].errors"
-          placeholder="Enter a strong password"
-        />
-        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-          <div *ngIf="f['password'].errors['required']">Password is required</div>
-          <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
-        </div>
-      </div>
-
-      <!-- Role -->
-      <div class="form-group">
-        <label for="role">Role</label>
-        <select
-          id="role"
-          class="form-control"
-          formControlName="role"
-          [class.is-invalid]="submitted && f['role'].errors"
-        >
-          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-        </select>
-        <div *ngIf="submitted && f['role'].errors" class="invalid-feedback">
-          <div *ngIf="f['role'].errors['required']">Role is required</div>
-        </div>
-      </div>
-
-      <!-- Photo (Optional) -->
-      <div class="form-group">
-        <label for="photo">Photo URL (Optional)</label>
-        <input
-          type="text"
-          id="photo"
-          class="form-control"
-          formControlName="photo"
-          placeholder="Enter photo URL"
-        />
-      </div>
-
-      <!-- Submit Button -->
-      <button
-        type="submit"
-        class="btn btn-primary w-100"
-        [disabled]="loading"
-      >
-        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
-        {{ loading ? 'Registering...' : 'Register' }}
-      </button>
-    </form>
-
-    <div class="text-center mt-3">
-      <p>Already have an account? <a href="/login">Login here</a></p>
     </div>
   </div>
 </div>

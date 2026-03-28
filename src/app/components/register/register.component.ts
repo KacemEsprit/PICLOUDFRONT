@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
 
   // Role options that match backend RoleEnum
   roles = ['ADMIN', 'AGENT', 'OPERATOR', 'PASSENGER'];
+  roleOptions: { label: string; value: string }[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,6 +26,8 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.roleOptions = this.roles.map(role => ({ label: role, value: role }));
+
     this.registerForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],

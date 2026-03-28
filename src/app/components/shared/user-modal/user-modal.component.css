@@ -1,0 +1,137 @@
+.modal-fade {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+
+.modal-panel {
+  width: min(880px, calc(100vw - 2rem));
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  background: var(--card-bg);
+  border-radius: 26px;
+  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.24);
+  padding: 2rem;
+  animation: scaleUp 0.28s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.55rem;
+}
+
+.modal-header .subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--muted-text);
+}
+
+.modal-body {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.avatar-upload-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.avatar-preview {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.12), rgba(59, 130, 246, 0.08));
+  background-size: cover;
+  background-position: center;
+  border: 1px dashed rgba(99, 102, 241, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-empty {
+  color: rgba(15, 23, 42, 0.35);
+  font-size: 2.2rem;
+}
+
+.upload-dropzone {
+  border: 1px dashed rgba(148, 163, 184, 0.75);
+  border-radius: 14px;
+  padding: 1rem;
+  color: var(--muted-text);
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.upload-dropzone:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.user-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.user-form-3col .form-floating:nth-child(n+5) {
+  grid-column: span 1;
+}
+
+.user-form-grid .form-floating,
+.user-form-grid .toggle-switch {
+  width: 100%;
+}
+
+.user-form-grid .toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+  background: rgba(99, 102, 241, 0.06);
+  border-radius: 14px;
+}
+
+.password-strength {
+  border-radius: 999px;
+  height: 8px;
+  background: rgba(148, 163, 184, 0.18);
+  margin-top: 0.5rem;
+}
+
+.strength-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #34d399, #60a5fa);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

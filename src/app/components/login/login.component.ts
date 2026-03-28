@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
-    // Get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    // Get return url from route parameters if present
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
   }
 
   get f() {
@@ -56,7 +56,21 @@ export class LoginComponent implements OnInit {
       {
         next: (response: any) => {
           console.log('Login successful:', response);
-          this.router.navigate(['/dashboard']);
+          const role = (response.role || '').toString().toUpperCase();
+          let targetRoute = '/dashboard';
+
+          if (role === 'ADMIN' || role === 'ROLE_ADMIN') {
+            targetRoute = '/admin-dhasbord';
+          } else if (role === 'AGENT' || role === 'ROLE_AGENT') {
+            targetRoute = '/agent-dhasbord';
+          } else if (role === 'OPERATOR' || role === 'ROLE_OPERATOR') {
+            targetRoute = '/operator-dhasbord';
+          } else if (role === 'PASSENGER' || role === 'ROLE_PASSENGER' || role === 'PASSANGER' || role === 'ROLE_PASSANGER') {
+            targetRoute = '/passenger-dhasbord';
+          }
+
+          const redirectUrl = this.returnUrl && this.returnUrl !== '/login' && this.returnUrl !== '/' ? this.returnUrl : targetRoute;
+          this.router.navigate([redirectUrl]);
         },
         error: (error: any) => {
           this.error = error.error?.message || 'Login failed. Please check your credentials.';

@@ -1,58 +1,56 @@
-<div class="login-container">
-  <div class="login-box">
-    <h2>Login</h2>
+<div class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-visual">
+      <div class="hero-badge">Admin Portal</div>
+      <h1>Welcome back.</h1>
+      <p>Sign in to access your dashboard, manage users, and track system health in one place.</p>
 
-    <div *ngIf="error" class="alert alert-danger">
-      {{ error }}
+      <div class="feature-list">
+        <div><span class="feature-icon">✔️</span><span>Secure role-based login</span></div>
+        <div><span class="feature-icon">👥</span><span>Quick user management</span></div>
+        <div><span class="feature-icon">🛡️</span><span>Built for admin operations</span></div>
+      </div>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- Username -->
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          class="form-control"
-          formControlName="username"
-          [class.is-invalid]="submitted && f['username'].errors"
-          placeholder="Enter your username"
-        />
-        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
-          <div *ngIf="f['username'].errors['required']">Username is required</div>
+    <div class="auth-forms">
+      <div class="auth-card card shadow-sm">
+        <div class="card-body">
+          <div class="auth-card-title mb-4">
+            <span class="eyebrow d-inline-block mb-2">Sign in</span>
+            <h2>Enter your workspace</h2>
+            <p class="text-muted">Use your admin credentials to continue.</p>
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger d-flex align-items-center">
+            <span class="me-2">!</span>
+            <span>{{ error }}</span>
+          </div>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input id="username" type="text" class="form-control" formControlName="username" placeholder="Enter your username" [ngClass]="{'is-invalid': submitted && f['username'].errors}" />
+              <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">Username is required</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input id="password" type="password" class="form-control" formControlName="password" placeholder="Enter your password" [ngClass]="{'is-invalid': submitted && f['password'].errors}" />
+              <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                <div *ngIf="f['password'].errors['required']">Password is required</div>
+                <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="loading">{{ loading ? 'Logging in...' : 'Login' }}</button>
+          </form>
+
+          <div class="auth-footer mt-4 d-flex justify-content-between flex-wrap gap-2">
+            <span class="text-muted">New here?</span>
+            <a routerLink="/register">Create an account</a>
+          </div>
         </div>
       </div>
-
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          class="form-control"
-          formControlName="password"
-          [class.is-invalid]="submitted && f['password'].errors"
-          placeholder="Enter your password"
-        />
-        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-          <div *ngIf="f['password'].errors['required']">Password is required</div>
-          <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
-        </div>
-      </div>
-
-      <!-- Submit Button -->
-      <button
-        type="submit"
-        class="btn btn-primary w-100"
-        [disabled]="loading"
-      >
-        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
-        {{ loading ? 'Logging in...' : 'Login' }}
-      </button>
-    </form>
-
-    <div class="text-center mt-3">
-      <p>Don't have an account? <a href="/register">Register here</a></p>
     </div>
   </div>
 </div>
