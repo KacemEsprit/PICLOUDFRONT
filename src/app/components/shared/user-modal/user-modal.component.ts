@@ -34,7 +34,7 @@ export class UserModalComponent implements OnChanges {
       name: ['', [Validators.required, Validators.minLength(2)]],
       cin: [''],
       password: [''],
-      role: ['USER', [Validators.required]],
+      role: ['PASSENGER', [Validators.required]],
       enabled: [true]
     });
   }
@@ -49,8 +49,8 @@ export class UserModalComponent implements OnChanges {
         role: this.user.role,
         enabled: this.user.enabled ?? true
       });
-      // Photo preview not available in edit mode (photo stored as blob in DB, downloaded separately)
-      this.avatarPreview = '';
+      // Show existing photo in edit mode if available
+      this.avatarPreview = this.user.photoUrl || '';
     }
 
     if (changes['mode'] && this.mode === 'create') {
@@ -74,7 +74,7 @@ export class UserModalComponent implements OnChanges {
 
   resetForm(): void {
     if (this.mode === 'create') {
-      this.form.reset({ role: 'USER', enabled: true });
+      this.form.reset({ role: 'PASSENGER', enabled: true });
       this.avatarPreview = '';
       this.selectedFile = undefined;
       this.fileError = '';

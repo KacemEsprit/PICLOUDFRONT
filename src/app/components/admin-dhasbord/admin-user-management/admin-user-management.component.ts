@@ -14,7 +14,6 @@ export class AdminUserManagementComponent implements OnInit {
   errorMessage = '';
   selectedIds = new Set<number>();
   activeFilters: string[] = [];
-  showAdvancedFilters = false;
   showUserModal = false;
   showConfirmModal = false;
   showQuickView = false;
@@ -40,7 +39,8 @@ export class AdminUserManagementComponent implements OnInit {
     active: 0,
     admins: 0,
     agents: 0,
-    operators: 0
+    operators: 0,
+    passengers: 0
   };
 
   public Math = Math;
@@ -86,13 +86,32 @@ export class AdminUserManagementComponent implements OnInit {
         this.stats.admins = this.users.filter(user => user.role === 'ADMIN').length;
         this.stats.agents = this.users.filter(user => user.role === 'AGENT').length;
         this.stats.operators = this.users.filter(user => user.role === 'OPERATOR').length;
+        this.stats.passengers = this.users.filter(user => user.role === 'PASSENGER').length;
         this.loading = false;
         this.cdr.markForCheck();
+        // Load photos for all users
+        this.loadPhotosForUsers();
       },
       error: () => {
         this.errorMessage = 'Unable to load users. Please try again later.';
         this.loading = false;
         this.cdr.markForCheck();
+      }
+    });
+  }
+
+  loadPhotosForUsers(): void {
+    // Load photos for each user (don't block UI)
+    this.users.forEach(user => {
+      if (user.id && !user.photoUrl) {
+        this.userService.loadUserPhotoUrl(user).then(photoUrl => {
+          if (photoUrl) {
+            user.photoUrl = photoUrl;
+            this.cdr.markForCheck();
+          }
+        }).catch(() => {
+          // Silently ignore photo loading errors
+        });
       }
     });
   }
@@ -109,22 +128,6 @@ export class AdminUserManagementComponent implements OnInit {
     this.searchUsers();
   }
 
-  setDateRange(range: string): void {
-    this.filters.page = 0;
-    const now = new Date();
-    if (range === '7') {
-      this.filters.createdAfter = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
-      this.filters.createdBefore = now.toISOString();
-    } else if (range === '30') {
-      this.filters.createdAfter = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
-      this.filters.createdBefore = now.toISOString();
-    } else {
-      this.filters.createdAfter = undefined;
-      this.filters.createdBefore = undefined;
-    }
-    this.searchUsers();
-  }
-
   updateChips(): void {
     const chips: string[] = [];
     if (this.filters.keyword) {
@@ -135,9 +138,6 @@ export class AdminUserManagementComponent implements OnInit {
     }
     if (this.filters.status && this.filters.status !== 'all') {
       chips.push(`Status: ${this.filters.status}`);
-    }
-    if (this.filters.createdAfter) {
-      chips.push('Date range active');
     }
     this.activeFilters = chips;
   }
@@ -152,15 +152,7 @@ export class AdminUserManagementComponent implements OnInit {
     if (filter.startsWith('Status:')) {
       this.filters.status = 'all';
     }
-    if (filter === 'Date range active') {
-      this.filters.createdAfter = undefined;
-      this.filters.createdBefore = undefined;
-    }
     this.searchUsers();
-  }
-
-  toggleAdvancedPanel(): void {
-    this.showAdvancedFilters = !this.showAdvancedFilters;
   }
 
   toggleSelectAll(event: Event): void {
@@ -188,8 +180,33 @@ export class AdminUserManagementComponent implements OnInit {
 
   openUserModal(mode: 'create' | 'edit', user?: UserDto): void {
     this.userModalMode = mode;
-    this.selectedUser = user;
-    this.showUserModal = true;
+
+    if (mode === 'edit' && user?.id) {
+      // Fetch complete user details to ensure all fields are populated
+      this.userService.getUserById(user.id).subscribe({
+        next: completeUser => {
+          this.selectedUser = completeUser;
+          // Load photo and THEN open modal
+          this.userService.loadUserPhotoUrl(completeUser).then(photoUrl => {
+            if (photoUrl) {
+              completeUser.photoUrl = photoUrl;
+            }
+            this.showUserModal = true;
+            this.cdr.markForCheck();
+          }).catch(() => {
+            // Photo loading failed, but continue with modal
+            this.showUserModal = true;
+            this.cdr.markForCheck();
+          });
+        },
+        error: () => {
+          this.toastService.error('Error', 'Unable to load user details.');
+        }
+      });
+    } else {
+      this.selectedUser = user;
+      this.showUserModal = true;
+    }
   }
 
   closeUserModal(): void {
@@ -296,10 +313,11 @@ export class AdminUserManagementComponent implements OnInit {
   }
 
   toggleStatus(user: UserDto): void {
-    this.userService.updateUser(user.id!, { enabled: !user.enabled }).subscribe({
+    this.userService.updateUserStatus(user.id!, !user.enabled).subscribe({
       next: updatedUser => {
         user.enabled = updatedUser.enabled;
-        this.toastService.info('Status updated', `${updatedUser.username} status changed.`);
+        const statusText = updatedUser.enabled ? 'activated' : 'deactivated';
+        this.toastService.info('Status updated', `${updatedUser.username} has been ${statusText}.`);
         this.cdr.markForCheck();
       },
       error: () => {

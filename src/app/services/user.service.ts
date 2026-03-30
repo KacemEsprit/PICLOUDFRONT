@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface PaginatedResponse<T> {
   content: T[];
@@ -19,8 +20,6 @@ export interface UserFilterParams {
   keyword?: string;
   role?: string;
   status?: string;
-  createdAfter?: string;
-  createdBefore?: string;
   sortBy?: string;
   sortDir?: string;
 }
@@ -35,6 +34,7 @@ export interface UserDto {
   enabled: boolean;
   createdAt?: string;
   updatedAt?: string;
+  photoUrl?: string; // Base64 or blob URL for display
 }
 
 export interface UserCreatePayload {
@@ -81,12 +81,6 @@ export class UserService {
     if (params.status && params.status !== 'all') {
       httpParams = httpParams.set('status', params.status);
     }
-    if (params.createdAfter) {
-      httpParams = httpParams.set('createdAfter', params.createdAfter);
-    }
-    if (params.createdBefore) {
-      httpParams = httpParams.set('createdBefore', params.createdBefore);
-    }
     if (params.sortBy) {
       httpParams = httpParams.set('sortBy', params.sortBy);
     }
@@ -122,6 +116,10 @@ export class UserService {
     return this.http.patch<UserDto>(`${this.apiUrl}/${id}/role`, { role });
   }
 
+  updateUserStatus(id: number, enabled: boolean): Observable<UserDto> {
+    return this.http.patch<UserDto>(`${this.apiUrl}/${id}/status`, { enabled });
+  }
+
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
@@ -142,6 +140,29 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/${id}/photo`, {
       responseType: 'blob'
     });
+  }
+
+  /** Load user photo and convert to data URL for display */
+  loadUserPhotoUrl(user: UserDto): Promise<string | undefined> {
+    if (!user.id) {
+      return Promise.resolve(undefined);
+    }
+
+    return this.http.get(`${this.apiUrl}/${user.id}/photo`, {
+      responseType: 'blob'
+    }).pipe(
+      catchError(() => of(new Blob())) // Return empty blob on error (404, etc)
+    ).toPromise().then(blob => {
+      if (blob && blob.size > 0) {
+        return this.blobToDataUrl(blob);
+      }
+      return undefined;
+    }).catch(() => undefined);
+  }
+
+  /** Convert blob to base64 data URL */
+  private blobToDataUrl(blob: Blob): string {
+    return URL.createObjectURL(blob);
   }
 
   exportUsers(params: UserFilterParams = {}): Observable<Blob> {

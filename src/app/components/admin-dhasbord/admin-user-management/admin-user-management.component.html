@@ -51,8 +51,8 @@
         <button type="button" class="filter-pill" [class.active]="filters.role === 'ADMIN'" (click)="applyRoleFilter('ADMIN')">
           Admin
         </button>
-        <button type="button" class="filter-pill" [class.active]="filters.role === 'USER'" (click)="applyRoleFilter('USER')">
-          User
+        <button type="button" class="filter-pill" [class.active]="filters.role === 'PASSENGER'" (click)="applyRoleFilter('PASSENGER')">
+          Passenger
         </button>
         <button type="button" class="filter-pill" [class.active]="filters.role === 'AGENT'" (click)="applyRoleFilter('AGENT')">
           Agent
@@ -63,22 +63,7 @@
       </div>
     </div>
 
-    <div class="actions-group">
-      <div class="dropdown">
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Date range
-        </button>
-        <ul class="dropdown-menu">
-          <li><button class="dropdown-item" type="button" (click)="setDateRange('7')">Last 7 days</button></li>
-          <li><button class="dropdown-item" type="button" (click)="setDateRange('30')">Last 30 days</button></li>
-          <li><button class="dropdown-item" type="button" (click)="setDateRange('all')">Reset</button></li>
-        </ul>
-      </div>
-      <button class="btn btn-outline-secondary" type="button" (click)="toggleAdvancedPanel()">
-        <i class="bi bi-funnel me-1"></i>
-        Advanced filters
-      </button>
-    </div>
+
   </div>
 
   <div class="filter-chips mb-3" *ngIf="activeFilters.length">
@@ -88,30 +73,7 @@
     </span>
   </div>
 
-  <div class="advanced-panel card-glass mb-4" *ngIf="showAdvancedFilters">
-    <div class="row gy-3">
-      <div class="col-sm-6 col-lg-3">
-        <label class="form-label">Status</label>
-        <select class="form-select" [(ngModel)]="filters.status" (change)="searchUsers()">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-      </div>
-      <div class="col-sm-6 col-lg-3">
-        <label class="form-label">Page size</label>
-        <select class="form-select" [(ngModel)]="filters.size" (change)="changePageSize(filters.size!)">
-          <option [value]="10">10</option>
-          <option [value]="25">25</option>
-          <option [value]="50">50</option>
-          <option [value]="100">100</option>
-        </select>
-      </div>
-      <div class="col-sm-6 col-lg-3 align-self-end">
-        <button type="button" class="btn btn-outline-primary" (click)="searchUsers()">Apply filters</button>
-      </div>
-    </div>
-  </div>
+
 
   <div class="bulk-action-bar card-glass mb-3" *ngIf="selectedCount > 0">
     <div>
@@ -153,7 +115,9 @@
             <td><input type="checkbox" [checked]="selectedIds.has(user.id)" (click)="$event.stopPropagation()" (change)="toggleSelection(user.id)" /></td>
             <td>
               <div class="user-cell">
-                <div class="avatar-circle">{{ (user.name || user.username).charAt(0) }}</div>
+                <div class="avatar-circle" [ngStyle]="{ 'background-image': user.photoUrl ? 'url(' + user.photoUrl + ')' : 'none', 'background-size': 'cover', 'background-position': 'center' }">
+                  <span *ngIf="!user.photoUrl">{{ user.username.charAt(0).toUpperCase() }}</span>
+                </div>
                 <div>
                   <strong>{{ user.name || user.username }}</strong>
                   <p>{{ user.email }}</p>
@@ -181,7 +145,7 @@
                   <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'ADMIN')">Admin</button></li>
                   <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'AGENT')">Agent</button></li>
                   <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'OPERATOR')">Operator</button></li>
-                  <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'USER')">User</button></li>
+                  <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'PASSENGER')">Passenger</button></li>
                 </ul>
               </div>
               <button class="btn btn-icon btn-outline-danger" type="button" (click)="$event.stopPropagation(); openConfirmDelete(user)">
@@ -225,7 +189,9 @@
       <button type="button" class="btn-close" (click)="closeQuickView()"></button>
     </div>
     <div class="quick-view-body">
-      <div class="quick-avatar">{{ (selectedUser.name || selectedUser.username).charAt(0) }}</div>
+      <div class="quick-avatar" [ngStyle]="{ 'background-image': selectedUser.photoUrl ? 'url(' + selectedUser.photoUrl + ')' : 'none', 'background-size': 'cover', 'background-position': 'center' }">
+        <span *ngIf="!selectedUser.photoUrl">{{ selectedUser.username.charAt(0).toUpperCase() }}</span>
+      </div>
       <h5>{{ selectedUser.name || selectedUser.username }}</h5>
       <p class="text-muted">{{ selectedUser.email }}</p>
       <div class="detail-grid">
