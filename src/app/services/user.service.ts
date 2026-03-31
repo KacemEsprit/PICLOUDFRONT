@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 
 export interface PaginatedResponse<T> {
   content: T[];
@@ -125,9 +125,21 @@ export class UserService {
   }
 
   deleteUsers(ids: number[]): Observable<void> {
-    return this.http.request<void>('delete', this.apiUrl, {
-      body: { ids }
-    });
+    // Delete users one by one to avoid CORS preflight issues with bulk DELETE
+    // This approach doesn't trigger CORS preflight for simple individual DELETE requests
+    if (ids.length === 0) {
+      return of(void 0);
+    }
+
+    // Delete first user, then recursively delete the rest
+    return this.deleteUser(ids[0]).pipe(
+      switchMap(() => {
+        if (ids.length > 1) {
+          return this.deleteUsers(ids.slice(1));
+        }
+        return of(void 0);
+      })
+    );
   }
 
   uploadUserPhoto(id: number, file: File): Observable<UserDto> {
@@ -151,7 +163,13 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/${user.id}/photo`, {
       responseType: 'blob'
     }).pipe(
-      catchError(() => of(new Blob())) // Return empty blob on error (404, etc)
+      catchError((error) => {
+        // Silently handle 404 and other errors - photo may not exist
+        if (error.status === 404) {
+          return of(new Blob());
+        }
+        return of(new Blob());
+      })
     ).toPromise().then(blob => {
       if (blob && blob.size > 0) {
         return this.blobToDataUrl(blob);

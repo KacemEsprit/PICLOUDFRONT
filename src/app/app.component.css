@@ -1,0 +1,129 @@
+/* Global App Styles - Riot Games Inspired */
+:host {
+  --primary-dark: #0a0e27;
+  --secondary-dark: #0f1438;
+  --accent-gold: #c89b3c;
+  --accent-gold-light: #e8b740;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --border-color: #c89b3c;
+}
+
+body,
+:host ::ng-deep {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+:host ::ng-deep .page-content {
+  background-color: var(--bg);
+  min-height: calc(100vh - 250px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Global Button Styles */
+:host ::ng-deep .btn {
+  transition: all 0.3s ease;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 0;
+}
+
+:host ::ng-deep .btn-primary {
+  background-color: var(--button-primary);
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+}
+
+html[data-theme='dark'] :host ::ng-deep .btn-primary {
+  color: #0a0e27;
+}
+
+:host ::ng-deep .btn-primary:hover {
+  background-color: var(--accent-light);
+  transform: translateY(-2px);
+}
+
+:host ::ng-deep .btn-secondary {
+  background-color: var(--secondary-dark);
+  color: var(--accent-gold);
+  border: 2px solid var(--accent-gold);
+}
+
+:host ::ng-deep .btn-secondary:hover {
+  background-color: var(--accent-gold);
+  color: var(--primary-dark);
+}
+
+/* Global Card Styles */
+:host ::ng-deep .card {
+  background-color: var(--secondary-dark);
+  border: 1px solid var(--accent-gold);
+  border-radius: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+:host ::ng-deep .card-header {
+  border-bottom: 2px solid var(--accent-gold);
+}
+
+/* Global Typography */
+:host ::ng-deep h1,
+:host ::ng-deep h2,
+:host ::ng-deep h3 {
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+:host ::ng-deep h1 {
+  font-size: 2rem;
+  color: var(--accent-gold);
+}
+
+:host ::ng-deep h2 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+:host ::ng-deep h3 {
+  font-size: 1.2rem;
+  color: var(--accent-gold);
+}
+
+/* Input Fields - High Contrast */
+:host ::ng-deep input[type="text"],
+:host ::ng-deep input[type="email"],
+:host ::ng-deep input[type="password"],
+:host ::ng-deep input[type="number"],
+:host ::ng-deep input[type="search"],
+:host ::ng-deep textarea,
+:host ::ng-deep select {
+  background-color: #ffffff !important;
+  color: #0a0e27 !important;
+  border: 2px solid var(--accent-gold) !important;
+  border-radius: 0 !important;
+  padding: 0.75rem !important;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+:host ::ng-deep input::placeholder,
+:host ::ng-deep textarea::placeholder {
+  color: #888888 !important;
+  opacity: 1;
+}
+
+:host ::ng-deep input:focus,
+:host ::ng-deep textarea:focus,
+:host ::ng-deep select:focus {
+  outline: none !important;
+  border-color: var(--accent-gold-light) !important;
+  box-shadow: 0 0 12px rgba(200, 155, 60, 0.5) !important;
+}

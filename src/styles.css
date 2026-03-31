@@ -1,28 +1,49 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 :root {
-  color-scheme: light;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface-strong: #f8fafc;
-  --text: #0f172a;
-  --muted-text: #475569;
-  --card-bg: rgba(255, 255, 255, 0.92);
-  --border: rgba(148, 163, 184, 0.18);
-  --shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  color-scheme: dark;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  --bg: #0a0e27;
+  --surface: #0f1438;
+  --surface-strong: #13192b;
+  --text: #ffffff;
+  --muted-text: #b0b8c1;
+  --card-bg: rgba(15, 20, 56, 0.9);
+  --border: #c89b3c;
+  --accent: #c89b3c;
+  --accent-light: #e8b740;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --button-primary: #c89b3c;
 }
 
 html[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #0f172a;
-  --surface: #111827;
-  --surface-strong: #1f2937;
-  --text: #e2e8f0;
-  --muted-text: #94a3b8;
-  --card-bg: rgba(15, 23, 42, 0.92);
-  --border: rgba(148, 163, 184, 0.12);
-  --shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  --bg: #0a0e27;
+  --surface: #0f1438;
+  --surface-strong: #13192b;
+  --text: #ffffff;
+  --muted-text: #b0b8c1;
+  --card-bg: rgba(15, 20, 56, 0.9);
+  --border: #c89b3c;
+  --accent: #c89b3c;
+  --accent-light: #e8b740;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --button-primary: #c89b3c;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-strong: #f0f0f0;
+  --text: #0a0e27;
+  --muted-text: #6b7280;
+  --card-bg: #ffffff;
+  --border: #e5e7eb;
+  --accent: #c41e3a;
+  --accent-light: #dc2626;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --button-primary: #c41e3a;
 }
 
 body {
@@ -30,7 +51,7 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
@@ -39,7 +60,7 @@ body, input, button, select, textarea {
 }
 
 button, input, select {
-  border-radius: 0.85rem;
+  border-radius: 0;
 }
 
 img {
@@ -47,21 +68,303 @@ img {
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(200, 155, 60, 0.3);
+}
+
+/* Input Fields - High Contrast */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea,
+select {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--accent) !important;
+  border-radius: 0 !important;
+  padding: 0.75rem !important;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="number"]::placeholder,
+input[type="search"]::placeholder,
+textarea::placeholder {
+  color: var(--muted-text) !important;
+  opacity: 0.7;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--accent-light) !important;
+  box-shadow: 0 0 12px var(--accent) !important;
+}
+
+/* Bootstrap Override - Form Controls */
+.form-control,
+.form-select {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--accent) !important;
+  border-radius: 0 !important;
+  padding: 0.75rem !important;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.form-control::placeholder {
+  color: var(--muted-text) !important;
+  opacity: 0.7;
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none !important;
+  border-color: var(--accent-light) !important;
+  box-shadow: 0 0 12px var(--accent) !important;
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+/* Bootstrap Alerts */
+.alert {
+  border-radius: 0 !important;
+}
+
+html[data-theme='dark'] .alert-danger {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  border: 2px solid #ef4444 !important;
+  color: #f87171 !important;
+}
+
+html[data-theme='light'] .alert-danger {
+  background-color: rgba(220, 38, 38, 0.1) !important;
+  border: 2px solid #dc2626 !important;
+  color: #991b1b !important;
+}
+
+html[data-theme='dark'] .alert-success {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border: 2px solid #10b981 !important;
+  color: #6ee7b7 !important;
+}
+
+html[data-theme='light'] .alert-success {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border: 2px solid #10b981 !important;
+  color: #065f46 !important;
+}
+
+html[data-theme='dark'] .alert-warning {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border: 2px solid #f59e0b !important;
+  color: #fcd34d !important;
+}
+
+html[data-theme='light'] .alert-warning {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border: 2px solid #f59e0b !important;
+  color: #92400e !important;
+}
+
+/* Bootstrap Cards */
+.card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.card-body {
+  padding: 0 !important;
+}
+
+/* Bootstrap Forms */
+.invalid-feedback {
+  color: #f87171 !important;
+  display: block !important;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.is-invalid {
+  border-color: #ef4444 !important;
+}
+
+input.form-control:invalid,
+select.form-select:invalid {
+  border-color: #ef4444 !important;
+}
+
+.form-label {
+  color: var(--accent);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+/* Bootstrap Grid */
+.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.col-12,
+.col-md-6 {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.me-2 {
+  margin-right: 0.5rem !important;
+}
+
+.shadow-sm {
+  box-shadow: none !important;
+}
+
+.gx-3 {
+  --bs-gutter-x: 0.75rem;
 }
 
 .btn-theme-toggle {
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  background: rgba(255, 255, 255, 0.16);
-  color: white;
+  border: 2px solid var(--accent);
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
   width: 44px;
   height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 0;
+  transition: all 0.3s ease;
 }
 
-.btn-theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.26);
+html[data-theme='dark'] .btn-theme-toggle {
+  border: 1px solid #c89b3c;
+  background: rgba(200, 155, 60, 0.15);
+  color: #c89b3c;
+}
+
+html[data-theme='dark'] .btn-theme-toggle:hover {
+  background: rgba(200, 155, 60, 0.25);
+  color: #e8b740;
+}
+
+html[data-theme='light'] .btn-theme-toggle {
+  border: 2px solid #c41e3a;
+  background: rgba(196, 30, 58, 0.1);
+  color: #c41e3a;
+}
+
+html[data-theme='light'] .btn-theme-toggle:hover {
+  background: rgba(196, 30, 58, 0.2);
+  color: #dc2626;
+}
+
+/* Bootstrap Table Override */
+html[data-theme='dark'] .table {
+  background-color: transparent !important;
+  color: #ffffff;
+}
+
+html[data-theme='dark'] .table tbody tr {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border-bottom: 1px solid rgba(200, 155, 60, 0.2) !important;
+}
+
+html[data-theme='dark'] .table tbody td {
+  color: #ffffff !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+html[data-theme='dark'] .table thead th {
+  background-color: rgba(200, 155, 60, 0.1) !important;
+  border-bottom: 2px solid rgba(200, 155, 60, 0.4) !important;
+  color: #e8b740 !important;
+}
+
+html[data-theme='dark'] .table-card {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+}
+
+html[data-theme='dark'] .table-card .table {
+  background-color: transparent !important;
+}
+
+/* Force all table cells to be transparent in dark mode */
+html[data-theme='dark'] .table tbody tr td,
+html[data-theme='dark'] .table tfoot tr td {
+  background-color: transparent !important;
+}
+
+html[data-theme='dark'] .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Status button override - force Bootstrap override */
+.btn.status-btn.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+.btn.status-btn.btn-success:hover,
+.btn.status-btn.btn-success:focus {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+.btn.status-btn.btn-outline-secondary {
+  background: linear-gradient(135deg, #dc2626, #f43f5e) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+.btn.status-btn.btn-outline-secondary:hover,
+.btn.status-btn.btn-outline-secondary:focus {
+  background: linear-gradient(135deg, #b91c1c, #ec2d4a) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+/* Role badge styling - Riot Games colors */
+.badge.role-badge.admin {
+  background: linear-gradient(135deg, #9333ea, #a855f7) !important;
+  color: #fff !important;
+}
+
+.badge.role-badge.agent {
+  background: linear-gradient(135deg, #ff006e, #ff3385) !important;
+  color: #fff !important;
+}
+
+.badge.role-badge.operator {
+  background: linear-gradient(135deg, #00d9ff, #0099cc) !important;
+  color: #000 !important;
+}
+
+.badge.role-badge.passenger {
+  background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+  color: #000 !important;
 }

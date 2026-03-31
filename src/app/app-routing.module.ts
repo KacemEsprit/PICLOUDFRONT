@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 import { AdminDhasbordComponent } from './components/admin-dhasbord/admin-dhasbord.component';
 import { AgentDhasbordComponent } from './components/agent-dhasbord/agent-dhasbord.component';
 import { OperatorDhasbordComponent } from './components/operator-dhasbord/operator-dhasbord.component';
@@ -10,20 +12,32 @@ import { AdminUserManagementComponent } from './components/admin-dhasbord/admin-
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'admin-dhasbord', component: AdminDhasbordComponent, canActivate: [AuthGuard] },
-  { path: 'admin-dhasbord/users', component: AdminUserManagementComponent, canActivate: [AuthGuard] },
-  { path: 'admin/users', component: AdminUserManagementComponent, canActivate: [AuthGuard] },
-  { path: 'agent-dhasbord', component: AgentDhasbordComponent, canActivate: [AuthGuard] },
-  { path: 'operator-dhasbord', component: OperatorDhasbordComponent, canActivate: [AuthGuard] },
-  { path: 'passenger-dhasbord', component: PassengerDhasbordComponent, canActivate: [AuthGuard] },
+  { path: 'access-denied', component: AccessDeniedComponent },
+
+  // Admin Dashboard - Only accessible by ADMIN role
+  { path: 'admin-dhasbord', component: AdminDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'admin-dhasbord/users', component: AdminUserManagementComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'admin/users', component: AdminUserManagementComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+
+  // Agent Dashboard - Only accessible by AGENT role
+  { path: 'agent-dhasbord', component: AgentDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['AGENT'] } },
+
+  // Operator Dashboard - Only accessible by OPERATOR role
+  { path: 'operator-dhasbord', component: OperatorDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
+
+  // Passenger Dashboard - Only accessible by PASSENGER role
+  { path: 'passenger-dhasbord', component: PassengerDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
+
+  // Redirect dashboard routes based on role (for convenience)
   { path: 'dashboard', redirectTo: '/admin-dhasbord', pathMatch: 'full' },
   { path: 'dashboard/users', redirectTo: '/admin-dhasbord/users', pathMatch: 'full' },
 
-  // Redirect unknown routes to login
-  { path: '**', redirectTo: '/login' }
+  // Redirect unknown routes to home
+  { path: '**', redirectTo: '/' }
 ];
 
 @NgModule({

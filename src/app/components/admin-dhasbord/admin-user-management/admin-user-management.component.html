@@ -128,7 +128,8 @@
               <span class="badge role-badge {{ user.role.toLowerCase() }}">{{ user.role }}</span>
             </td>
             <td>
-              <button type="button" class="btn btn-sm" [ngClass]="user.enabled ? 'btn-success' : 'btn-outline-secondary'" (click)="$event.stopPropagation(); toggleStatus(user)">
+              <button type="button" class="btn btn-sm status-btn" [ngClass]="user.enabled ? 'btn-success' : 'btn-outline-secondary'" (click)="$event.stopPropagation(); toggleStatus(user)">
+                <i [ngClass]="user.enabled ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
                 {{ user.enabled ? 'Active' : 'Inactive' }}
               </button>
             </td>

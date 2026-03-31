@@ -1,0 +1,46 @@
+<!-- Navigation Navbar -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Left Section: Title + Home Link + Dashboard Link -->
+    <div class="navbar-left">
+      <h1 class="navbar-title">{{ title }}</h1>
+      <a routerLink="/home" class="home-link" [class.active]="isHomePage()">Home</a>
+      <a *ngIf="isAuthenticated$ | async" [routerLink]="getDashboardLink()" class="dashboard-link" [class.active]="isDashboardPage()">Dashboard</a>
+    </div>
+
+    <!-- Center Section: Spacer -->
+    <div class="navbar-center">
+    </div>
+
+    <!-- Right Section: User Info/Welcome Message + Logout + Auth Buttons + Theme Toggle -->
+    <div class="navbar-right">
+      <!-- Welcome Message and Logout (when authenticated) -->
+      <ng-container *ngIf="isAuthenticated$ | async as isAuth">
+        <ng-container *ngIf="isAuth">
+          <span class="user-info">Welcome {{ (currentUser$ | async)?.name }}</span>
+          <button (click)="logout()" class="btn-logout">Logout</button>
+        </ng-container>
+      </ng-container>
+
+      <!-- Auth Buttons Section (when not authenticated) -->
+      <div class="auth-buttons">
+        <ng-container *ngIf="!(isAuthenticated$ | async)">
+          <!-- On Login Page - Show Sign Up Button -->
+          <a *ngIf="isLoginPage()" href="/register" class="btn-link">Sign Up</a>
+          <!-- On Register Page - Show Login Button -->
+          <a *ngIf="isRegisterPage()" href="/login" class="btn-link">Login</a>
+          <!-- On Other Pages - Show Both -->
+          <ng-container *ngIf="!isLoginPage() && !isRegisterPage()">
+            <a href="/login" class="btn-link">Login</a>
+            <a href="/register" class="btn-link">Sign Up</a>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <!-- Theme Toggle Button -->
+      <button class="btn btn-theme-toggle" type="button" (click)="toggleTheme()">
+        <i class="bi" [ngClass]="{ 'bi-moon-stars': (theme$ | async) === 'light', 'bi-sun-fill': (theme$ | async) === 'dark' }"></i>
+      </button>
+    </div>
+  </div>
+</nav>

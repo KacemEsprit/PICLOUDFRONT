@@ -15,7 +15,7 @@ export interface RegisterRequest {
   name: string;
   role: string;
   CIN: number;
-  photo: string;
+  photo?: string;
 }
 
 export interface AuthResponse {

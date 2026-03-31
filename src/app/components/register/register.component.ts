@@ -14,6 +14,10 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   error = '';
   success = '';
+  showPassword = false;
+  passwordStrength = 0;
+  passwordStrengthText = '';
+  passwordStrengthColor = '';
 
   // Role options that match backend RoleEnum
   roles = ['ADMIN', 'AGENT', 'OPERATOR', 'PASSENGER'];
@@ -30,17 +34,74 @@ export class RegisterComponent implements OnInit {
 
     this.registerForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required]],
       CIN: ['', [Validators.required]],
-      role: ['AGENT', [Validators.required]],
-      photo: ['']
+      role: ['AGENT', [Validators.required]]
+    });
+
+    // Subscribe to password changes to calculate strength
+    this.registerForm.get('password')?.valueChanges.subscribe((password: string) => {
+      this.calculatePasswordStrength(password);
     });
   }
 
   get f() {
     return this.registerForm.controls;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  calculatePasswordStrength(password: string): void {
+    let strength = 0;
+    const feedback = [];
+
+    if (!password) {
+      this.passwordStrength = 0;
+      this.passwordStrengthText = '';
+      this.passwordStrengthColor = '';
+      return;
+    }
+
+    // Length checks
+    if (password.length >= 8) strength += 1;
+    if (password.length >= 12) strength += 1;
+    if (password.length >= 16) strength += 1;
+
+    // Character type checks
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
+
+    // Normalize strength to 0-4 scale
+    this.passwordStrength = Math.min(4, Math.ceil(strength / 2));
+
+    // Set text and color
+    switch (this.passwordStrength) {
+      case 1:
+        this.passwordStrengthText = 'Weak';
+        this.passwordStrengthColor = '#ef4444'; // Red
+        break;
+      case 2:
+        this.passwordStrengthText = 'Fair';
+        this.passwordStrengthColor = '#f97316'; // Orange
+        break;
+      case 3:
+        this.passwordStrengthText = 'Good';
+        this.passwordStrengthColor = '#eab308'; // Yellow
+        break;
+      case 4:
+        this.passwordStrengthText = 'Strong';
+        this.passwordStrengthColor = '#22c55e'; // Green
+        break;
+      default:
+        this.passwordStrengthText = '';
+        this.passwordStrengthColor = '';
+    }
   }
 
   onSubmit(): void {
@@ -49,6 +110,14 @@ export class RegisterComponent implements OnInit {
     this.success = '';
 
     if (this.registerForm.invalid) {
+      if (this.passwordStrength < 2) {
+        this.error = 'Password must be at least Fair strength. Include uppercase, lowercase, and numbers.';
+      }
+      return;
+    }
+
+    if (this.passwordStrength < 2) {
+      this.error = 'Password must be at least Fair strength level.';
       return;
     }
 
@@ -60,8 +129,7 @@ export class RegisterComponent implements OnInit {
       email: this.f['email'].value,
       name: this.f['name'].value,
       CIN: this.f['CIN'].value,
-      role: this.f['role'].value,
-      photo: this.f['photo'].value || ''
+      role: this.f['role'].value
     };
 
     this.authService.register(registerRequest).subscribe(

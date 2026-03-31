@@ -1,15 +1,18 @@
 .admin-user-management-container {
-  padding: 2rem 1rem 3rem;
+  padding: 3rem 1rem 3rem;
   max-width: 1440px;
   margin: 0 auto;
+  background-color: var(--bg);
+  transition: background-color 0.3s ease;
 }
 
 .card-glass {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface);
   backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 24px;
-  padding: 1.5rem 1.75rem;
+  border: 2px solid var(--accent);
+  border-radius: 0;
+  padding: 2rem 1.75rem;
+  box-shadow: var(--shadow);
 }
 
 .dashboard-header {
@@ -17,25 +20,40 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2rem;
 }
 
 .eyebrow {
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #6366f1;
-  font-weight: 700;
+  color: var(--accent);
+  font-weight: 900;
   font-size: 0.78rem;
 }
 
 .dashboard-header h1 {
   margin: 0.5rem 0 0.5rem;
   font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+  color: var(--accent);
+  font-weight: 900;
+  letter-spacing: 2px;
 }
 
 .dashboard-header .subtitle {
   margin: 0;
-  color: #475569;
+  color: var(--text);
+}
+
+html[data-theme='dark'] .dashboard-header .subtitle {
+  color: #ffffff;
+  opacity: 0.85;
+}
+
+html[data-theme='light'] .dashboard-header .subtitle {
+  color: #666666;
 }
 
 .header-actions {
@@ -46,9 +64,31 @@
 }
 
 .btn-gradient {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: var(--button-primary);
   border: none;
-  color: #fff;
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.75rem 1.5rem;
+}
+
+html[data-theme='dark'] .btn-gradient {
+  color: #0a0e27;
+}
+
+.btn-gradient:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(var(--accent-rgb), 0.4);
+}
+
+html[data-theme='dark'] .btn-gradient:hover {
+  box-shadow: 0 6px 16px rgba(200, 155, 60, 0.4);
+}
+
+html[data-theme='light'] .btn-gradient:hover {
+  box-shadow: 0 6px 16px rgba(196, 30, 58, 0.3);
 }
 
 .stats-grid {
@@ -58,20 +98,33 @@
 }
 
 .stat-card {
-  background: #f8fafc;
-  border-radius: 18px;
-  padding: 1rem 1.2rem;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: var(--surface);
+  border-radius: 0;
+  padding: 1.5rem 1.2rem;
+  border: 1px solid var(--accent);
 }
 
 .stat-card span {
   display: block;
-  color: #64748b;
+  color: var(--text);
   margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+html[data-theme='dark'] .stat-card span {
+  color: #ffffff;
+  opacity: 0.75;
+}
+
+html[data-theme='light'] .stat-card span {
+  color: #666666;
 }
 
 .stat-card strong {
   font-size: 1.55rem;
+  color: var(--accent);
 }
 
 .filter-toolbar {
@@ -101,16 +154,32 @@
 }
 
 .filter-pill {
-  border: 1px solid rgba(99, 102, 241, 0.24);
-  background: rgba(99, 102, 241, 0.08);
-  color: #4338ca;
-  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
+  border-radius: 0;
   padding: 0.45rem 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-pill:hover {
+  background: rgba(var(--accent-rgb), 0.2);
 }
 
 .filter-pill.active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.14));
-  border-color: rgba(99, 102, 241, 0.55);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+html[data-theme='dark'] .filter-pill.active {
+  color: #0a0e27;
+}
+
+html[data-theme='light'] .filter-pill.active {
+  color: #fafafa;
 }
 
 .actions-group {
@@ -129,15 +198,19 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 999px;
-  background: rgba(99, 102, 241, 0.12);
-  color: #334155;
+  border-radius: 0;
+  background: rgba(var(--accent-rgb), 0.15);
+  color: var(--accent);
   padding: 0.45rem 0.85rem;
+  border: 1px solid var(--accent);
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .advanced-panel {
-  border-radius: 20px;
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 0;
+  border: 1px solid var(--accent);
+  background: var(--surface);
 }
 
 .bulk-action-bar {
@@ -145,7 +218,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  border-radius: 20px;
+  border-radius: 0;
 }
 
 .bulk-actions {
@@ -153,9 +226,191 @@
   gap: 0.75rem;
 }
 
+/* Form Fields - Use Theme Variables */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea,
+select {
+  background-color: var(--input-bg, rgba(255, 255, 255, 0.9)) !important;
+  color: var(--input-text, #0a0e27) !important;
+  border: 2px solid var(--accent) !important;
+  border-radius: 0 !important;
+  padding: 0.75rem !important;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+:host-context(.light-mode) input[type="text"],
+:host-context(.light-mode) input[type="email"],
+:host-context(.light-mode) input[type="password"],
+:host-context(.light-mode) input[type="number"],
+:host-context(.light-mode) input[type="search"],
+:host-context(.light-mode) textarea,
+:host-context(.light-mode) select {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+:host-context(.dark-mode) input[type="text"],
+:host-context(.dark-mode) input[type="email"],
+:host-context(.dark-mode) input[type="password"],
+:host-context(.dark-mode) input[type="number"],
+:host-context(.dark-mode) input[type="search"],
+:host-context(.dark-mode) textarea,
+:host-context(.dark-mode) select {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(10, 14, 39, 0.5) !important;
+  opacity: 1;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--accent-light) !important;
+  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.5) !important;
+}
+
+/* Bootstrap Override - Form Controls */
+.form-control,
+.form-select {
+  background-color: var(--input-bg, rgba(255, 255, 255, 0.9)) !important;
+  color: var(--input-text, #0a0e27) !important;
+  border: 2px solid var(--accent) !important;
+  border-radius: 0 !important;
+  padding: 0.75rem !important;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+:host-context(.light-mode) .form-control,
+:host-context(.light-mode) .form-select {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+:host-context(.dark-mode) .form-control,
+:host-context(.dark-mode) .form-select {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.form-control::placeholder {
+  color: rgba(10, 14, 39, 0.5) !important;
+  opacity: 1;
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none !important;
+  border-color: var(--accent-light) !important;
+  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.5) !important;
+  background-color: var(--input-bg, rgba(255, 255, 255, 0.9)) !important;
+  color: var(--input-text, #0a0e27) !important;
+}
+
+.form-label {
+  color: var(--accent) !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
 .table-card {
-  border-radius: 26px;
+  border-radius: 16px;
   overflow: hidden;
+  border: 2px solid var(--accent);
+  background: var(--surface);
+}
+
+html[data-theme='dark'] .table-card {
+  background: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(18px);
+  border-color: rgba(200, 155, 60, 0.6) !important;
+}
+
+html[data-theme='dark'] .table-card .table-responsive {
+  background: rgba(15, 23, 42, 0.95) !important;
+}
+
+html[data-theme='light'] .table-card {
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+
+.users-table {
+  width: 100%;
+  min-width: 860px;
+  background-color: transparent !important;
+}
+
+.users-table thead {
+  background: rgba(var(--accent-rgb), 0.08) !important;
+  border-bottom: 2px solid var(--accent);
+}
+
+html[data-theme='dark'] .users-table thead {
+  background: rgba(99, 102, 241, 0.1) !important;
+}
+
+.users-table thead th {
+  color: var(--accent);
+  background: transparent !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  padding: 1rem 0.75rem;
+  border: none !important;
+}
+
+.users-table tbody tr {
+  transition: all 0.25s ease;
+  background: transparent;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.15);
+}
+
+html[data-theme='dark'] .users-table tbody tr {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+html[data-theme='light'] .users-table tbody tr {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.users-table tbody td {
+  color: var(--text);
+  padding: 1rem 0.75rem;
+  vertical-align: middle;
+  border: none;
+}
+
+html[data-theme='dark'] .users-table tbody td {
+  color: #ffffff;
+}
+
+html[data-theme='light'] .users-table tbody td {
+  color: #333333;
+}
+
+.users-table tbody tr:hover {
+  transform: scale(1.01);
+  box-shadow: inset 0 0 0 2px rgba(var(--accent-rgb), 0.15);
+}
+
+html[data-theme='dark'] .users-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+html[data-theme='light'] .users-table tbody tr:hover {
+  background: rgba(var(--accent-rgb), 0.12);
 }
 
 .table-skeleton {
@@ -166,9 +421,9 @@
 
 .skeleton-row {
   height: 68px;
-  background: linear-gradient(90deg, rgba(243, 244, 246, 1) 0%, rgba(229, 231, 235, 1) 50%, rgba(243, 244, 246, 1) 100%);
+  background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.1) 0%, rgba(var(--accent-rgb), 0.15) 50%, rgba(var(--accent-rgb), 0.1) 100%);
   background-size: 200% 100%;
-  border-radius: 18px;
+  border-radius: 12px;
   animation: shimmer 1.5s infinite ease-in-out;
 }
 
@@ -178,37 +433,161 @@
   place-items: center;
   gap: 0.75rem;
   padding: 2rem;
-  color: #475569;
+  color: var(--text);
 }
 
 .empty-state-card i {
   font-size: 2.5rem;
-  color: #6366f1;
+  color: var(--accent);
 }
 
-.users-table {
-  width: 100%;
-  min-width: 860px;
+/* Checkbox styling */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--accent);
+  border-radius: 4px;
 }
 
-.users-table thead th {
-  color: #475569;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-  background: transparent;
+input[type="checkbox"]:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 
-.users-table tbody tr {
-  transition: background 0.2s ease, transform 0.2s ease;
+input[type="checkbox"]:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-.users-table tbody tr:hover {
-  background: rgba(99, 102, 241, 0.06);
+/* Dropdown styling */
+.dropdown-menu {
+  background: var(--surface) !important;
+  border: 2px solid var(--accent) !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+  color: var(--text) !important;
+  padding: 0.6rem 1rem !important;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(var(--accent-rgb), 0.15) !important;
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+html[data-theme='dark'] .dropdown-item {
+  color: #ffffff !important;
+}
+
+html[data-theme='light'] .dropdown-item {
+  color: #333333 !important;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+}
+
+/* Override Bootstrap table background - AGGRESSIVE */
+.table-card .table-responsive .table {
+  background-color: transparent !important;
+  margin-bottom: 0;
+  color: inherit;
+}
+
+.table-card .table-responsive .table thead {
+  background: rgba(var(--accent-rgb), 0.08) !important;
+  border-bottom: 2px solid var(--accent);
+}
+
+.table-card .table-responsive .table thead th {
+  background: transparent !important;
+  border: none !important;
+}
+
+.table-card .table-responsive .table tbody {
+  background: transparent !important;
+}
+
+.table-card .table-responsive .table tbody tr {
+  background-color: transparent !important;
+}
+
+html[data-theme='dark'] .table-card .table-responsive .table tbody tr {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+html[data-theme='light'] .table-card .table-responsive .table tbody tr {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.table-card .table-responsive .table tbody td {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.table-card .table-responsive .table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Global override using ::ng-deep */
+::ng-deep .table-card .table {
+  background-color: transparent !important;
+}
+
+::ng-deep html[data-theme='dark'] .table-card .table tbody tr {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+::ng-deep .table-card .table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Sortable header styling */
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.sortable:hover {
+  color: var(--accent-light);
+  text-shadow: 0 0 8px rgba(var(--accent-rgb), 0.3);
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem 0.75rem;
 }
 
 .user-cell {
   display: flex;
   gap: 0.9rem;
   align-items: center;
+  font-weight: 600;
+}
+
+.user-cell strong {
+  color: var(--accent);
+  font-weight: 900;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.user-cell p {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  font-weight: 500;
 }
 
 .avatar-circle {
@@ -220,34 +599,63 @@
   display: grid;
   place-items: center;
   font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
 
 .role-badge {
-  padding: 0.4rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 600;
+  padding: 0.5rem 0.95rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
   color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.role-badge:hover {
+  transform: translateY(-1px);
 }
 
 .role-badge.admin {
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
-}
-
-.role-badge.user {
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  background: linear-gradient(135deg, #9333ea, #a855f7);
 }
 
 .role-badge.agent {
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  background: linear-gradient(135deg, #ff006e, #ff3385);
 }
 
 .role-badge.operator {
-  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  background: linear-gradient(135deg, #00d9ff, #0099cc);
 }
 
 .role-badge.passenger {
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+}
+
+/* Force role badge colors with ::ng-deep */
+::ng-deep .role-badge.admin {
+  background: linear-gradient(135deg, #9333ea, #a855f7) !important;
+  color: #fff !important;
+}
+
+::ng-deep .role-badge.agent {
+  background: linear-gradient(135deg, #ff006e, #ff3385) !important;
+  color: #fff !important;
+}
+
+::ng-deep .role-badge.operator {
+  background: linear-gradient(135deg, #00d9ff, #0099cc) !important;
+  color: #000 !important;
+}
+
+::ng-deep .role-badge.passenger {
+  background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+  color: #000 !important;
 }
 
 .actions-cell {
@@ -263,6 +671,113 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-icon:hover {
+  background: rgba(var(--accent-rgb), 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.25);
+}
+
+.btn-icon.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.btn-icon.btn-outline-danger:hover {
+  background: rgba(220, 53, 69, 0.15);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+}
+
+/* Status button styling */
+.status-btn {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.73rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  border: none !important;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.status-btn i {
+  font-size: 0.9rem;
+}
+
+/* Active status button */
+.status-btn.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.status-btn.btn-success:hover,
+.status-btn.btn-success:focus {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: translateY(-1px);
+}
+
+.status-btn.btn-success:active {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+/* Inactive status button */
+.status-btn.btn-outline-secondary {
+  background: linear-gradient(135deg, #dc2626, #f43f5e) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 800;
+  box-shadow: none !important;
+}
+
+.status-btn.btn-outline-secondary:hover,
+.status-btn.btn-outline-secondary:focus {
+  background: linear-gradient(135deg, #b91c1c, #ec2d4a) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: translateY(-1px);
+}
+
+.status-btn.btn-outline-secondary:active {
+  background: linear-gradient(135deg, #9d174d, #dc2626) !important;
+}
+
+html[data-theme='light'] .status-btn.btn-outline-secondary {
+  color: #fff !important;
+}
+
+/* Force override Bootstrap */
+::ng-deep .status-btn.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+}
+
+::ng-deep .status-btn.btn-success:hover {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+::ng-deep .status-btn.btn-outline-secondary {
+  background: linear-gradient(135deg, #e8b740, #d4a135) !important;
+  color: #0a0e27 !important;
+}
+
+::ng-deep .status-btn.btn-outline-secondary:hover {
+  background: linear-gradient(135deg, #f5c959, #e8b740) !important;
 }
 
 .quick-view-panel {
@@ -294,6 +809,29 @@
   place-items: center;
   font-size: 2rem;
   margin: 1.25rem auto;
+}
+
+/* Export and other outline buttons - styled like primary buttons */
+.btn-outline-primary {
+  background: var(--button-primary) !important;
+  border: 2px solid var(--button-primary) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 0.75rem 1.5rem !important;
+  transition: all 0.3s ease !important;
+}
+
+html[data-theme='dark'] .btn-outline-primary {
+  color: #0a0e27 !important;
+}
+
+.btn-outline-primary:hover {
+  background: var(--accent-light) !important;
+  border-color: var(--accent-light) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(var(--accent-rgb), 0.4) !important;
 }
 
 .detail-grid {

@@ -102,6 +102,7 @@ export class AdminUserManagementComponent implements OnInit {
 
   loadPhotosForUsers(): void {
     // Load photos for each user (don't block UI)
+    // Only load if photoUrl is not already set from backend
     this.users.forEach(user => {
       if (user.id && !user.photoUrl) {
         this.userService.loadUserPhotoUrl(user).then(photoUrl => {
@@ -110,7 +111,7 @@ export class AdminUserManagementComponent implements OnInit {
             this.cdr.markForCheck();
           }
         }).catch(() => {
-          // Silently ignore photo loading errors
+          // Silently ignore photo loading errors - user doesn't have a photo
         });
       }
     });
@@ -186,18 +187,25 @@ export class AdminUserManagementComponent implements OnInit {
       this.userService.getUserById(user.id).subscribe({
         next: completeUser => {
           this.selectedUser = completeUser;
-          // Load photo and THEN open modal
-          this.userService.loadUserPhotoUrl(completeUser).then(photoUrl => {
-            if (photoUrl) {
-              completeUser.photoUrl = photoUrl;
-            }
+          // photoUrl is already included in the user response from backend
+          // Only try to load photo if photoUrl is not in response and user has photo
+          if (!completeUser.photoUrl && completeUser.id) {
+            this.userService.loadUserPhotoUrl(completeUser).then(photoUrl => {
+              if (photoUrl) {
+                completeUser.photoUrl = photoUrl;
+              }
+              this.showUserModal = true;
+              this.cdr.markForCheck();
+            }).catch(() => {
+              // Photo loading failed, but continue with modal
+              this.showUserModal = true;
+              this.cdr.markForCheck();
+            });
+          } else {
+            // photoUrl is already in response or no photo exists
             this.showUserModal = true;
             this.cdr.markForCheck();
-          }).catch(() => {
-            // Photo loading failed, but continue with modal
-            this.showUserModal = true;
-            this.cdr.markForCheck();
-          });
+          }
         },
         error: () => {
           this.toastService.error('Error', 'Unable to load user details.');

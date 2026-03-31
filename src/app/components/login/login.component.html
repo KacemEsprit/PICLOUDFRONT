@@ -1,14 +1,14 @@
 <div class="auth-page">
   <div class="auth-shell">
     <div class="auth-visual">
-      <div class="hero-badge">Admin Portal</div>
-      <h1>Welcome back.</h1>
-      <p>Sign in to access your dashboard, manage users, and track system health in one place.</p>
+      <div class="hero-badge">Transportation Platform</div>
+      <h1>Welcome to Transit TN.</h1>
+      <p>Sign in to manage transportation operations, track vehicles, and connect passengers seamlessly.</p>
 
       <div class="feature-list">
-        <div><span class="feature-icon">✔️</span><span>Secure role-based login</span></div>
-        <div><span class="feature-icon">👥</span><span>Quick user management</span></div>
-        <div><span class="feature-icon">🛡️</span><span>Built for admin operations</span></div>
+        <div><span class="feature-icon">✔️</span><span>Real-time route management</span></div>
+        <div><span class="feature-icon">🚍</span><span>Multi-modal journey planning</span></div>
+        <div><span class="feature-icon">📍</span><span>Live tracking & analytics</span></div>
       </div>
     </div>
 
@@ -17,8 +17,8 @@
         <div class="card-body">
           <div class="auth-card-title mb-4">
             <span class="eyebrow d-inline-block mb-2">Sign in</span>
-            <h2>Enter your workspace</h2>
-            <p class="text-muted">Use your admin credentials to continue.</p>
+            <h2>Access your portal</h2>
+            <p class="text-muted">Connect to manage your transportation operations efficiently.</p>
           </div>
 
           <div *ngIf="error" class="alert alert-danger d-flex align-items-center">
@@ -35,7 +35,22 @@
 
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
-              <input id="password" type="password" class="form-control" formControlName="password" placeholder="Enter your password" [ngClass]="{'is-invalid': submitted && f['password'].errors}" />
+              <div class="password-input-wrapper">
+                <input
+                  id="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control password-input"
+                  formControlName="password"
+                  placeholder="Enter your password"
+                  [ngClass]="{'is-invalid': submitted && f['password'].errors}" />
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  (click)="togglePasswordVisibility()"
+                  tabindex="-1">
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+              </div>
               <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
                 <div *ngIf="f['password'].errors['required']">Password is required</div>
                 <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>

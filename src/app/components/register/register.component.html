@@ -2,12 +2,12 @@
   <div class="auth-shell register-shell">
     <div class="auth-visual auth-visual-register">
       <div class="hero-badge">Create account</div>
-      <h1>Start your admin journey.</h1>
-      <p>Create an account with the right role and access level for your organization.</p>
+      <h1>Join the transportation network.</h1>
+      <p>Create your account and start managing transportation with Transit TN's unified platform.</p>
       <div class="feature-list">
-        <div><span class="feature-icon">🚀</span><span>Fast onboarding</span></div>
+        <div><span class="feature-icon">🚀</span><span>Quick registration</span></div>
         <div><span class="feature-icon">🔒</span><span>Secure credentials</span></div>
-        <div><span class="feature-icon">🛡️</span><span>Role-based access</span></div>
+        <div><span class="feature-icon">🚌</span><span>Multi-role access</span></div>
       </div>
     </div>
 
@@ -16,8 +16,8 @@
         <div class="card-body">
           <div class="auth-card-title mb-4">
             <span class="eyebrow d-inline-block mb-2">Register</span>
-            <h2>Create your account</h2>
-            <p class="text-muted">Fill in the details below to join the platform.</p>
+            <h2>Transform mobility with us</h2>
+            <p class="text-muted">Join Transit TN and help revolutionize transportation in Tunisia.</p>
           </div>
 
           <div *ngIf="error" class="alert alert-danger d-flex align-items-center">
@@ -63,10 +63,30 @@
 
               <div class="col-12 col-md-6 mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input id="password" type="password" class="form-control" formControlName="password" placeholder="Enter a strong password" [ngClass]="{'is-invalid': submitted && f['password'].errors}" />
+                <div class="password-input-wrapper">
+                  <input
+                    id="password"
+                    [type]="showPassword ? 'text' : 'password'"
+                    class="form-control password-input"
+                    formControlName="password"
+                    placeholder="Enter your password"
+                    [ngClass]="{'is-invalid': submitted && f['password'].errors}" />
+                  <button
+                    type="button"
+                    class="password-toggle-btn"
+                    (click)="togglePasswordVisibility()"
+                    tabindex="-1">
+                    <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                  </button>
+                </div>
+                <div *ngIf="passwordStrength > 0" class="password-strength-bar" [style.background]="'linear-gradient(to right, ' + passwordStrengthColor + ' 0%, ' + passwordStrengthColor + ' ' + (passwordStrength * 25) + '%, #e5e7eb ' + (passwordStrength * 25) + '%, #e5e7eb 100%)'">
+                </div>
+                <div *ngIf="passwordStrengthText" class="password-strength-text" [style.color]="passwordStrengthColor">
+                  Strength: {{ passwordStrengthText }}
+                </div>
                 <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
                   <div *ngIf="f['password'].errors['required']">Password is required</div>
-                  <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
+                  <div *ngIf="f['password'].errors['minlength']">Password must be at least 8 characters</div>
                 </div>
               </div>
 
@@ -77,11 +97,6 @@
                   <option *ngFor="let option of roleOptions" [value]="option.value">{{ option.label }}</option>
                 </select>
                 <div *ngIf="submitted && f['role'].errors" class="invalid-feedback">Role is required</div>
-              </div>
-
-              <div class="col-12 mb-3">
-                <label for="photo" class="form-label">Photo URL (Optional)</label>
-                <input id="photo" type="text" class="form-control" formControlName="photo" placeholder="Enter photo URL" />
               </div>
             </div>
 
