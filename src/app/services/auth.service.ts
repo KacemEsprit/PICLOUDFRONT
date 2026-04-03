@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CookieService } from './cookie.service';
 
 export interface LoginRequest {
   username: string;
@@ -40,6 +41,8 @@ export interface User {
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8081/api/auth';
+  private tokenCookieName = 'jwt_token';
+  private userCookieName = 'current_user';
 
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser$: Observable<User | null>;
@@ -47,7 +50,10 @@ export class AuthService {
   private isAuthenticatedSubject: BehaviorSubject<boolean>;
   public isAuthenticated$: Observable<boolean>;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService
+  ) {
     this.currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
     this.currentUser$ = this.currentUserSubject.asObservable();
 
@@ -67,10 +73,10 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request)
       .pipe(
         map(response => {
-          // Store JWT token
-          localStorage.setItem('jwt_token', response.token);
+          // Store JWT token in cookie
+          this.cookieService.setCookie(this.tokenCookieName, response.token, 7);
 
-          // Store user info
+          // Store user info in cookie
           const user: User = {
             id: response.id,
             username: response.username,
@@ -78,7 +84,7 @@ export class AuthService {
             name: response.name,
             role: response.role
           };
-          localStorage.setItem('current_user', JSON.stringify(user));
+          this.cookieService.setCookie(this.userCookieName, JSON.stringify(user), 7);
 
           // Update subjects
           this.currentUserSubject.next(user);
@@ -94,9 +100,9 @@ export class AuthService {
   }
 
   logout(): void {
-    // Remove token and user from storage
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('current_user');
+    // Remove token and user from cookies
+    this.cookieService.deleteCookie(this.tokenCookieName);
+    this.cookieService.deleteCookie(this.userCookieName);
 
     // Update subjects
     this.currentUserSubject.next(null);
@@ -104,7 +110,7 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('jwt_token');
+    return this.cookieService.getCookie(this.tokenCookieName);
   }
 
   hasToken(): boolean {
@@ -112,7 +118,7 @@ export class AuthService {
   }
 
   private getUserFromStorage(): User | null {
-    const userStr = localStorage.getItem('current_user');
+    const userStr = this.cookieService.getCookie(this.userCookieName);
     return userStr ? JSON.parse(userStr) : null;
   }
 

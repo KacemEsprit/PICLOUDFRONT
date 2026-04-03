@@ -487,6 +487,19 @@ input.form-control:focus {
   text-decoration: underline;
 }
 
+.forgot-password-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: var(--accent-light);
+  text-decoration: underline;
+}
+
 @media (max-width: 960px) {
   .auth-shell {
     grid-template-columns: 1fr;
