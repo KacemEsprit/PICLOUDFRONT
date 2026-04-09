@@ -1,0 +1,153 @@
+<div class="admin-document-list-container">
+  <div class="dashboard-header">
+    <h1>Document Management</h1>
+    <p class="subtitle">Manage legal documents and approvals</p>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs-section">
+    <button class="btn btn-outline-primary active"
+            routerLink="/admin/documents"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}">
+      <i class="bi bi-file-text"></i> Documents
+    </button>
+    <button class="btn btn-outline-primary"
+            routerLink="/admin/documents/types">
+      Document Types
+    </button>
+  </div>
+
+  <!-- Add New Button -->
+  <div class="action-bar">
+    <button class="btn btn-primary" (click)="openUploadModal()">
+      <i class="bi bi-plus-circle"></i> Upload Document
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-card">
+    <div class="filter-group">
+      <label>Status</label>
+      <select [(ngModel)]="statusFilter" (change)="onStatusFilterChange()" class="form-control">
+        <option value="">All Statuses</option>
+        <option value="PENDING">Pending</option>
+        <option value="VALID">Valid</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading and Error States -->
+  <div *ngIf="loading$ | async" class="loading-state">
+    <p>Loading documents...</p>
+  </div>
+
+  <div *ngIf="error$ | async as error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- Documents Table -->
+  <div *ngIf="!(loading$ | async) && documents.length > 0" class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Document Type</th>
+          <th>User</th>
+          <th>Status</th>
+          <th>Upload Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of documents">
+          <td>{{ doc.documentType.name }}</td>
+          <td>{{ doc.userId }}</td>
+          <td>{{ doc.status }}</td>
+          <td>{{ doc.uploadDate | date }}</td>
+          <td>
+            <button class="btn btn-sm btn-success" (click)="approveDocument(doc.id!)" *ngIf="doc.status === 'PENDING'">
+              Approve
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="rejectDocument(doc.id!)" *ngIf="doc.status === 'PENDING'">
+              Reject
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <app-pagination
+    *ngIf="!(loading$ | async) && totalElements > 0"
+    [totalElements]="totalElements"
+    [pageSize]="pageSize"
+    [pageNumber]="currentPage"
+    (pageChanged)="onPageChange($any($event))"
+    (pageSizeChanged)="onPageSizeChange($any($event))">
+  </app-pagination>
+
+  <!-- Empty State -->
+  <div *ngIf="!(loading$ | async) && documents.length === 0" class="empty-state">
+    <p>No documents found</p>
+  </div>
+
+  <!-- Modal Form -->
+  <div *ngIf="showUploadForm" class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Upload Document</h2>
+
+      <form [formGroup]="uploadForm">
+        <div class="form-group">
+          <label>Document Type</label>
+          <select formControlName="documentTypeId" class="form-control">
+            <option value="">{{ documentTypes.length > 0 ? 'Select document type...' : 'Loading document types...' }}</option>
+            <option *ngFor="let type of documentTypes" [value]="type.id">
+              {{ type.name }}
+            </option>
+          </select>
+          <div *ngIf="uploadForm.get('documentTypeId')?.invalid && uploadForm.get('documentTypeId')?.touched" class="text-danger">
+            Document type is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea formControlName="description" class="form-control" placeholder="Enter document description (optional)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Upload File</label>
+          <input type="file"
+                 class="form-control"
+                 (change)="onFileSelected($event)"
+                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+          <small class="form-text text-muted">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG</small>
+          <div *ngIf="uploadForm.get('file')?.invalid && uploadForm.get('file')?.touched" class="text-danger">
+            File is required
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="isExpiryRequired()">
+          <label>Expiry Date</label>
+          <input type="date"
+                 formControlName="expiryDate"
+                 class="form-control">
+          <div *ngIf="uploadForm.get('expiryDate')?.invalid && uploadForm.get('expiryDate')?.touched" class="text-danger">
+            Expiry date is required for this document type
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-primary" (click)="uploadDocument()">
+            Upload
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

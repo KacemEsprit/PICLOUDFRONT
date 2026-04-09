@@ -1,17 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { LoginComponent } from './components/authentication/login/login.component';
+import { RegisterComponent } from './components/authentication/register/register.component';
+import { ForgotPasswordComponent } from './components/authentication/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/authentication/reset-password/reset-password.component';
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
-import { AdminDhasbordComponent } from './components/admin-dhasbord/admin-dhasbord.component';
-import { AgentDhasbordComponent } from './components/agent-dhasbord/agent-dhasbord.component';
-import { OperatorDhasbordComponent } from './components/operator-dhasbord/operator-dhasbord.component';
-import { PassengerDhasbordComponent } from './components/passenger-dhasbord/passenger-dhasbord.component';
-import { AdminUserManagementComponent } from './components/admin-dhasbord/admin-user-management/admin-user-management.component';
+import { AdminDhasbordComponent } from './components/admin/admin-dhasbord.component';
+import { AgentDhasbordComponent } from './components/users/agent/agent-dhasbord/agent-dhasbord.component';
+import { OperatorDhasbordComponent } from './components/users/operator/operator-dhasbord/operator-dhasbord.component';
+import { PassengerDhasbordComponent } from './components/users/passenger/passenger-dhasbord/passenger-dhasbord.component';
+import { AdminUserManagementComponent } from './components/admin/users/admin-user-management.component';
 import { AuthGuard } from './guards/auth.guard';
+
+// Document Management Components
+import { DocumentListComponent } from './components/users/documents/document-list/document-list.component';
+import { DocumentUploadComponent } from './components/users/documents/document-upload/document-upload.component';
+import { DocumentDetailComponent } from './components/users/documents/document-detail/document-detail.component';
+import { AdminDocumentListComponent } from './components/admin/documents-admin/admin-document-list/admin-document-list.component';
+import { DocumentTypeManagerComponent } from './components/admin/documents-admin/document-type-manager/document-type-manager.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -35,6 +42,16 @@ const routes: Routes = [
 
   // Passenger Dashboard - Only accessible by PASSENGER role
   { path: 'passenger-dhasbord', component: PassengerDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
+
+  // Document Management Routes - User side
+  { path: 'documents', component: DocumentListComponent, canActivate: [AuthGuard] },
+  { path: 'documents/upload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
+  { path: 'documents/:id', component: DocumentDetailComponent, canActivate: [AuthGuard] },
+  { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
+
+  // Document Management Routes - Admin side
+  { path: 'admin/documents', component: AdminDocumentListComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'admin/documents/types', component: DocumentTypeManagerComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
   // Redirect dashboard routes based on role (for convenience)
   { path: 'dashboard', redirectTo: '/admin-dhasbord', pathMatch: 'full' },

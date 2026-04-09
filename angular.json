@@ -72,7 +72,8 @@
               "buildTarget": "pidev-frontend:build:production"
             },
             "development": {
-              "buildTarget": "pidev-frontend:build:development"
+              "buildTarget": "pidev-frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

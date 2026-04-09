@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ToastNotification, ToastService } from '../../../services/toast.service';
+import { ToastNotification, ToastService } from '../../../services/shared/toast.service';
 
 @Component({
   selector: 'app-toast-notification',

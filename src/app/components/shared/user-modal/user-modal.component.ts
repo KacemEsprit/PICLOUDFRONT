@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserCreatePayload, UserDto, UserUpdatePayload } from '../../../services/user.service';
+import { UserCreatePayload, UserDto, UserUpdatePayload } from '../../../services/admin/user.service';
 
 export interface UserModalPayload {
   userData: UserCreatePayload | UserUpdatePayload;
