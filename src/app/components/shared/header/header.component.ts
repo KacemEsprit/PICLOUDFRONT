@@ -60,6 +60,10 @@ export class HeaderComponent implements OnInit {
            this.currentRoute.includes('-dhasbord/users');
   }
 
+  isProfilePage(): boolean {
+    return this.currentRoute.includes('/profile');
+  }
+
   getDashboardLink(): string {
     const user = this.currentUser;
     if (!user) return '/home';

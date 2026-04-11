@@ -23,6 +23,7 @@ import { ConfirmationModalComponent } from './components/shared/confirmation-mod
 import { ToastNotificationComponent } from './components/shared/toast-notification/toast-notification.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
+import { ProfileComponent } from './components/users/profile/profile.component';
 
 // Shared Components
 // StatusBadgeComponent is now standalone
@@ -53,6 +54,7 @@ import { AuthGuard } from './guards/auth.guard';
     ToastNotificationComponent,
     HeaderComponent,
     FooterComponent,
+    ProfileComponent,
     // Pipes
     StatusLabelPipe,
     StatusColorPipe,

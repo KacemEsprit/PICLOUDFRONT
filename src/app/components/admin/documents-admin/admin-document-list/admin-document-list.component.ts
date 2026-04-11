@@ -34,11 +34,19 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
   userIdFilter: string = '';
   dateFromFilter: string = '';
   dateToFilter: string = '';
+  searchFilter: string = ''; // Search by filename
 
   // Modal state
   showUploadForm: boolean = false;
   uploadForm!: FormGroup;
   selectedFile: File | null = null;
+
+  // Document detail modal state
+  showDetailModal: boolean = false;
+  selectedDocument: LegalDocument | null = null;
+
+  // Direct URL base for files served from htdocs
+  private fileServerUrl = 'http://localhost:8081/pidev-uploads/';
 
   private destroy$ = new Subject<void>();
 
@@ -64,6 +72,35 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
         console.log('✅ Document types received:', types);
         this.documentTypes = types;
       });
+  }
+
+  /**
+   * Filter documents based on search term (filename/document name)
+   * This is a client-side filter for instant search results
+   */
+  get filteredDocuments(): LegalDocument[] {
+    if (!this.searchFilter.trim()) {
+      return this.documents;
+    }
+
+    const searchTerm = this.searchFilter.toLowerCase();
+    return this.documents.filter(doc => {
+      // Search by document type name
+      const docTypeMatch = doc.documentType.name.toLowerCase().includes(searchTerm);
+      // Search by user ID
+      const userIdMatch = doc.userId.toString().includes(searchTerm);
+      // Search by document ID
+      const docIdMatch = doc.id?.toString().includes(searchTerm);
+      // Search by filename (if available in documentUrl)
+      const filenameMatch = doc.documentUrl.toLowerCase().includes(searchTerm);
+
+      return docTypeMatch || userIdMatch || docIdMatch || filenameMatch;
+    });
+  }
+
+  onSearchChange(): void {
+    // Client-side search, no need to reload documents
+    // The search filter is applied via the filteredDocuments getter
   }
 
   ngOnDestroy(): void {
@@ -227,12 +264,35 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
   }
 
   approveDocument(documentId: number): void {
-    this.documentService.approveDocument(documentId)
+    // Get the document to check its current status
+    const document = this.selectedDocument;
+
+    if (!document) {
+      this.toastService.error('Error', 'Document not found');
+      return;
+    }
+
+    // If the document is REJECTED, use toggle endpoint
+    // If the document is PENDING, use approve endpoint
+    const approvalRequest = document.status === 'REJECTED'
+      ? this.documentService.toggleDocumentStatus(documentId)
+      : this.documentService.approveDocument(documentId);
+
+    approvalRequest
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
-          this.toastService.success('Success', 'Document approved successfully');
-          this.loadDocuments();
+        next: (updatedDoc) => {
+          const statusMsg = updatedDoc.status === 'VALID' ? 'approved' : 'toggled to approved';
+          this.toastService.success('Success', `Document ${statusMsg} successfully`);
+          // Update the document in the list
+          const index = this.documents.findIndex(d => d.id === documentId);
+          if (index !== -1) {
+            this.documents[index] = updatedDoc;
+          }
+          // Update selected document if it's opened in modal
+          if (this.selectedDocument?.id === documentId) {
+            this.selectedDocument = updatedDoc;
+          }
         },
         error: (err) => {
           this.toastService.error('Error', err.message || 'Failed to approve document');
@@ -241,12 +301,34 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
   }
 
   rejectDocument(documentId: number): void {
-    this.documentService.rejectDocument(documentId)
+    // Get the document to check its current status
+    const document = this.selectedDocument;
+
+    if (!document) {
+      this.toastService.error('Error', 'Document not found');
+      return;
+    }
+
+    // If the document is VALID, use toggle endpoint
+    // If the document is PENDING, use reject endpoint
+    const rejectRequest = document.status === 'VALID'
+      ? this.documentService.toggleDocumentStatus(documentId)
+      : this.documentService.rejectDocument(documentId);
+
+    rejectRequest
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (updatedDoc) => {
           this.toastService.success('Success', 'Document rejected');
-          this.loadDocuments();
+          // Update the document in the list
+          const index = this.documents.findIndex(d => d.id === documentId);
+          if (index !== -1) {
+            this.documents[index] = updatedDoc;
+          }
+          // Update selected document if it's opened in modal
+          if (this.selectedDocument?.id === documentId) {
+            this.selectedDocument = updatedDoc;
+          }
         },
         error: (err) => {
           this.toastService.error('Error', err.message || 'Failed to reject document');
@@ -272,6 +354,62 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
   }
 
   viewDocumentDetails(documentId: number): void {
-    // Navigate to detail view
+    const document = this.documents.find(d => d.id === documentId);
+    if (document) {
+      this.selectedDocument = document;
+      this.showDetailModal = true;
+    }
+  }
+
+  closeDetailModal(): void {
+    this.showDetailModal = false;
+    this.selectedDocument = null;
+  }
+
+  /**
+   * Open the actual document file (PDF, JPG, etc.) in a new window using direct URL
+   */
+  viewDocumentFile(): void {
+    if (this.selectedDocument?.documentUrl) {
+      // Construct direct URL from relative path
+      const directUrl = this.fileServerUrl + this.selectedDocument.documentUrl;
+      window.open(directUrl, '_blank');
+    } else {
+      this.toastService.error('Error', 'Document URL not available');
+    }
+  }
+
+  /**
+   * Download the document file using direct URL
+   */
+  downloadDocumentFile(): void {
+    if (this.selectedDocument?.documentUrl) {
+      // Construct direct URL from relative path
+      const directUrl = this.fileServerUrl + this.selectedDocument.documentUrl;
+      const link = document.createElement('a');
+      link.href = directUrl;
+      link.download = `document-${this.selectedDocument.id}`;
+      link.click();
+    } else {
+      this.toastService.error('Error', 'Document URL not available');
+    }
+  }
+
+  /**
+   * Get status badge color
+   */
+  getStatusBadgeColor(status: string): string {
+    switch (status) {
+      case 'PENDING':
+        return 'warning';
+      case 'VALID':
+        return 'success';
+      case 'REJECTED':
+        return 'danger';
+      case 'EXPIRED':
+        return 'secondary';
+      default:
+        return 'info';
+    }
   }
 }

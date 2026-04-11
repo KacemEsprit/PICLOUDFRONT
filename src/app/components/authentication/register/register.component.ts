@@ -1,7 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, RegisterRequest } from '../../../services/auth/auth.service';
+
+/**
+ * Custom validator for CIN - must be exactly 8 digits
+ */
+export function cinValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null; // Don't validate empty values
+  }
+  const value = control.value.toString();
+  if (!/^\d{8}$/.test(value)) {
+    return { 'invalidCin': true };
+  }
+  return null;
+}
 
 @Component({
   selector: 'app-register',
@@ -37,7 +51,7 @@ export class RegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required]],
-      CIN: ['', [Validators.required]],
+      CIN: ['', [Validators.required, cinValidator]],
       role: ['AGENT', [Validators.required]]
     });
 

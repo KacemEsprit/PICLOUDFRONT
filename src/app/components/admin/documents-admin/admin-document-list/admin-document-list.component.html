@@ -25,8 +25,18 @@
     </button>
   </div>
 
-  <!-- Filters -->
+  <!-- Search and Filters -->
   <div class="filters-card">
+    <div class="search-group">
+      <label>Search Documents</label>
+      <input type="text"
+             [(ngModel)]="searchFilter"
+             (change)="onSearchChange()"
+             placeholder="Search by document type, user ID, filename, or document ID..."
+             class="form-control search-input">
+      <small class="form-text text-muted">Search by: document type name, user ID, filename, or document ID</small>
+    </div>
+
     <div class="filter-group">
       <label>Status</label>
       <select [(ngModel)]="statusFilter" (change)="onStatusFilterChange()" class="form-control">
@@ -48,7 +58,7 @@
   </div>
 
   <!-- Documents Table -->
-  <div *ngIf="!(loading$ | async) && documents.length > 0" class="table-responsive">
+  <div *ngIf="!(loading$ | async) && filteredDocuments.length > 0" class="table-responsive">
     <table class="table">
       <thead>
         <tr>
@@ -60,17 +70,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let doc of documents">
+        <tr *ngFor="let doc of filteredDocuments">
           <td>{{ doc.documentType.name }}</td>
           <td>{{ doc.userId }}</td>
-          <td>{{ doc.status }}</td>
+          <td><span class="badge" [ngClass]="'bg-' + getStatusBadgeColor(doc.status)">{{ doc.status }}</span></td>
           <td>{{ doc.uploadDate | date }}</td>
           <td>
-            <button class="btn btn-sm btn-success" (click)="approveDocument(doc.id!)" *ngIf="doc.status === 'PENDING'">
-              Approve
-            </button>
-            <button class="btn btn-sm btn-danger" (click)="rejectDocument(doc.id!)" *ngIf="doc.status === 'PENDING'">
-              Reject
+            <button class="btn btn-sm btn-info" (click)="viewDocumentDetails(doc.id!)">
+              <i class="bi bi-eye"></i> View
             </button>
           </td>
         </tr>
@@ -89,7 +96,11 @@
   </app-pagination>
 
   <!-- Empty State -->
-  <div *ngIf="!(loading$ | async) && documents.length === 0" class="empty-state">
+  <div *ngIf="!(loading$ | async) && filteredDocuments.length === 0 && searchFilter" class="empty-state">
+    <p>No documents match your search criteria</p>
+  </div>
+
+  <div *ngIf="!(loading$ | async) && documents.length === 0 && !searchFilter" class="empty-state">
     <p>No documents found</p>
   </div>
 
@@ -148,6 +159,75 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Document Detail Modal -->
+  <div *ngIf="showDetailModal && selectedDocument" class="modal-overlay" (click)="closeDetailModal()">
+    <div class="modal-content modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Document Details</h2>
+        <button type="button" class="btn-close" (click)="closeDetailModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Document Information -->
+        <div class="detail-section">
+          <h3>Information</h3>
+          <div class="detail-row">
+            <label>Document Type:</label>
+            <span>{{ selectedDocument.documentType.name }}</span>
+          </div>
+          <div class="detail-row">
+            <label>User ID:</label>
+            <span>{{ selectedDocument.userId }}</span>
+          </div>
+          <div class="detail-row">
+            <label>Status:</label>
+            <span class="badge" [ngClass]="'bg-' + getStatusBadgeColor(selectedDocument.status)">
+              {{ selectedDocument.status }}
+            </span>
+          </div>
+          <div class="detail-row">
+            <label>Upload Date:</label>
+            <span>{{ selectedDocument.uploadDate | date: 'medium' }}</span>
+          </div>
+          <div class="detail-row" *ngIf="selectedDocument.expiryDate">
+            <label>Expiry Date:</label>
+            <span>{{ selectedDocument.expiryDate | date: 'medium' }}</span>
+          </div>
+          <div class="detail-row">
+            <label>File Hash:</label>
+            <span class="text-monospace">{{ selectedDocument.fileHash }}</span>
+          </div>
+        </div>
+
+        <!-- Document Preview/File Section -->
+        <div class="detail-section">
+          <h3>Document File</h3>
+          <p class="text-muted">Click the button below to view or download the actual document file.</p>
+          <div class="file-actions">
+            <button type="button" class="btn btn-primary btn-lg" (click)="viewDocumentFile()">
+              <i class="bi bi-file-earmark"></i> View File
+            </button>
+            <button type="button" class="btn btn-secondary btn-lg" (click)="downloadDocumentFile()">
+              <i class="bi bi-download"></i> Download
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="approveDocument(selectedDocument.id!)" *ngIf="selectedDocument.status === 'PENDING' || selectedDocument.status === 'REJECTED'">
+          <i class="bi bi-check-circle"></i> Approve
+        </button>
+        <button type="button" class="btn btn-danger" (click)="rejectDocument(selectedDocument.id!)" *ngIf="selectedDocument.status === 'PENDING' || selectedDocument.status === 'VALID'">
+          <i class="bi bi-x-circle"></i> Reject
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="closeDetailModal()">
+          Close
+        </button>
+      </div>
     </div>
   </div>
 </div>

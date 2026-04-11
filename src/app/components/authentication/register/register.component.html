@@ -57,8 +57,11 @@
 
               <div class="col-12 col-md-6 mb-3">
                 <label for="CIN" class="form-label">CIN (ID Number)</label>
-                <input id="CIN" type="number" class="form-control" formControlName="CIN" placeholder="Enter your CIN" [ngClass]="{'is-invalid': submitted && f['CIN'].errors}" />
-                <div *ngIf="submitted && f['CIN'].errors" class="invalid-feedback">CIN is required</div>
+                <input id="CIN" type="text" class="form-control" formControlName="CIN" placeholder="12345678" [ngClass]="{'is-invalid': submitted && f['CIN'].errors}" maxlength="8" inputmode="numeric" />
+                <div *ngIf="submitted && f['CIN'].errors" class="invalid-feedback">
+                  <div *ngIf="f['CIN'].errors['required']">CIN is required</div>
+                  <div *ngIf="f['CIN'].errors['invalidCin']">CIN must be exactly 8 numeric digits</div>
+                </div>
               </div>
 
               <div class="col-12 col-md-6 mb-3">

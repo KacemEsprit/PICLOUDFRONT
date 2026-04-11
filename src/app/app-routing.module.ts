@@ -19,6 +19,7 @@ import { DocumentUploadComponent } from './components/users/documents/document-u
 import { DocumentDetailComponent } from './components/users/documents/document-detail/document-detail.component';
 import { AdminDocumentListComponent } from './components/admin/documents-admin/admin-document-list/admin-document-list.component';
 import { DocumentTypeManagerComponent } from './components/admin/documents-admin/document-type-manager/document-type-manager.component';
+import { ProfileComponent } from './components/users/profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -42,6 +43,9 @@ const routes: Routes = [
 
   // Passenger Dashboard - Only accessible by PASSENGER role
   { path: 'passenger-dhasbord', component: PassengerDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
+
+  // User Profile - Accessible by all authenticated users (AGENT, OPERATOR, PASSENGER)
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['AGENT', 'OPERATOR', 'PASSENGER'] } },
 
   // Document Management Routes - User side
   { path: 'documents', component: DocumentListComponent, canActivate: [AuthGuard] },

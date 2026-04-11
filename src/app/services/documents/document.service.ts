@@ -354,6 +354,23 @@ export class DocumentService {
   }
 
   /**
+   * ADMIN: Toggle document status between VALID and REJECTED
+   * Only works with VALID and REJECTED documents
+   */
+  toggleDocumentStatus(documentId: number): Observable<LegalDocument> {
+    return this.http.post<LegalDocument>(`${this.adminApiUrl}/${documentId}/toggle-status`, {}).pipe(
+      tap(() => {
+        this.errorSubject.next(null);
+      }),
+      catchError(error => {
+        const errorMsg = this.getErrorMessage(error);
+        this.errorSubject.next(errorMsg);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
    * Clear error message
    */
   clearError(): void {
