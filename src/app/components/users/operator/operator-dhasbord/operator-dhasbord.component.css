@@ -1,4 +1,4 @@
-.dashboard-container {
+﻿.dashboard-container {
   padding: 3rem 2rem;
   background-color: var(--bg);
   transition: background-color 0.3s ease;
@@ -6,7 +6,7 @@
 
 .dashboard-header {
   margin-bottom: 3rem;
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid #1a73e8;
   padding-bottom: 2rem;
 }
 
@@ -15,7 +15,7 @@
   font-size: 2.5rem;
   font-weight: 900;
   letter-spacing: 2px;
-  color: var(--accent);
+  color: #1a73e8;
   text-transform: uppercase;
 }
 
@@ -27,14 +27,14 @@
 
 .user-info-card {
   background: var(--surface);
-  border: 2px solid var(--accent);
+  border: 2px solid #1a73e8;
   border-radius: 0;
   box-shadow: var(--shadow);
   padding: 2rem;
 }
 
 .card-header {
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid #1a73e8;
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -44,7 +44,7 @@
   font-size: 1.5rem;
   font-weight: 900;
   letter-spacing: 1px;
-  color: var(--accent);
+  color: #1a73e8;
   text-transform: uppercase;
 }
 
@@ -58,7 +58,7 @@
   display: block;
   font-weight: 900;
   margin-bottom: 0.5rem;
-  color: var(--accent);
+  color: #1a73e8;
   font-size: 0.9rem;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -71,20 +71,20 @@
 }
 
 .badge {
-  color: var(--accent);
-  background-color: rgba(var(--accent-rgb), 0.15);
+  color: #1a73e8;
+  background-color: rgba(26, 115, 232, 0.15);
   padding: 0.5rem 0.75rem;
   border-radius: 0;
-  border: 1px solid var(--accent);
+  border: 1px solid #1a73e8;
   font-weight: 700;
   text-transform: uppercase;
   display: inline-block;
 }
 
 html[data-theme='dark'] .badge {
-  color: #c89b3c;
+  color: #666;
   background-color: rgba(200, 155, 60, 0.15);
-  border: 1px solid #c89b3c;
+  border: 1px solid #666;
 }
 
 html[data-theme='light'] .badge {
@@ -92,3 +92,6 @@ html[data-theme='light'] .badge {
   background-color: rgba(196, 30, 58, 0.1);
   border: 1px solid #c41e3a;
 }
+
+
+

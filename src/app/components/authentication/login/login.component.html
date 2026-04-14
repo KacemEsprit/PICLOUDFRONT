@@ -1,73 +1,94 @@
-<div class="auth-page">
-  <div class="auth-shell">
-    <div class="auth-visual">
-      <div class="hero-badge">Transportation Platform</div>
-      <h1>Welcome to Transit TN.</h1>
-      <p>Sign in to manage transportation operations, track vehicles, and connect passengers seamlessly.</p>
+<!-- Include Navbar -->
+<app-header></app-header>
 
-      <div class="feature-list">
-        <div><span class="feature-icon">✔️</span><span>Real-time route management</span></div>
-        <div><span class="feature-icon">🚍</span><span>Multi-modal journey planning</span></div>
-        <div><span class="feature-icon">📍</span><span>Live tracking & analytics</span></div>
-      </div>
-    </div>
+<!-- ============================================================
+     LOGIN PAGE — Professional Template
+     ============================================================ -->
+<div class="auth-wrapper">
+  <div class="auth-section">
+    <div class="auth-form-wrapper">
+      <div class="auth-card">
+        <!-- Card Header -->
+        <div class="auth-card-header">
+          <h2>Welcome Back</h2>
+          <p>Sign in to your account to continue</p>
+        </div>
 
-    <div class="auth-forms">
-      <div class="auth-card card shadow-sm">
-        <div class="card-body">
-          <div class="auth-card-title mb-4">
-            <span class="eyebrow d-inline-block mb-2">Sign in</span>
-            <h2>Access your portal</h2>
-            <p class="text-muted">Connect to manage your transportation operations efficiently.</p>
-          </div>
+        <!-- Auth Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab active">Sign In</button>
+        </div>
 
-          <div *ngIf="error" class="alert alert-danger d-flex align-items-center">
-            <span class="me-2">!</span>
+        <!-- Login Form -->
+        <div class="auth-form">
+          <!-- Error Alert -->
+          <div *ngIf="error" class="alert alert-error">
+            <span class="alert-icon">⚠️</span>
             <span>{{ error }}</span>
           </div>
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input id="username" type="text" class="form-control" formControlName="username" placeholder="Enter your username" [ngClass]="{'is-invalid': submitted && f['username'].errors}" />
-              <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">Username is required</div>
+            <!-- Username -->
+            <div class="auth-form-group">
+              <label for="username" class="auth-label">Email or Username</label>
+              <div class="auth-input-wrapper">
+                <input
+                  id="username"
+                  type="text"
+                  class="auth-input"
+                  formControlName="username"
+                  placeholder="Enter your email or username"
+                  [ngClass]="{'error': submitted && f['username'].errors}" />
+              </div>
+              <div *ngIf="submitted && f['username'].errors" class="auth-error-msg">
+                Username is required
+              </div>
             </div>
 
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <label for="password" class="form-label">Password</label>
-                <a routerLink="/forgot-password" class="forgot-password-link">Forgot?</a>
-              </div>
-              <div class="password-input-wrapper">
+            <!-- Password -->
+            <div class="auth-form-group">
+              <label for="password" class="auth-label">Password</label>
+              <div class="auth-input-wrapper">
                 <input
                   id="password"
                   [type]="showPassword ? 'text' : 'password'"
-                  class="form-control password-input"
+                  class="auth-input"
                   formControlName="password"
                   placeholder="Enter your password"
-                  [ngClass]="{'is-invalid': submitted && f['password'].errors}" />
+                  [ngClass]="{'error': submitted && f['password'].errors}" />
                 <button
                   type="button"
-                  class="password-toggle-btn"
+                  class="password-toggle"
                   (click)="togglePasswordVisibility()"
                   tabindex="-1">
-                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                  <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                 </button>
               </div>
-              <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-                <div *ngIf="f['password'].errors['required']">Password is required</div>
+              <div *ngIf="submitted && f['password'].errors" class="auth-error-msg">
+                Password is required
               </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="loading">{{ loading ? 'Logging in...' : 'Login' }}</button>
+            <!-- Forgot Password Link -->
+            <div class="forgot-link">
+              <a routerLink="/forgot-password">Forgot your password?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-auth" [disabled]="loading">
+              {{ loading ? 'Signing in...' : 'Sign In' }}
+            </button>
           </form>
 
-          <div class="auth-footer mt-4 d-flex justify-content-between flex-wrap gap-2">
-            <span class="text-muted">New here?</span>
-            <a routerLink="/register">Create an account</a>
+          <!-- Sign Up Link -->
+          <div class="auth-bottom-text">
+            Don't have an account? <a routerLink="/register">Sign up</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Include Footer -->
+<app-footer></app-footer>

@@ -12,6 +12,8 @@ import { OperatorDhasbordComponent } from './components/users/operator/operator-
 import { PassengerDhasbordComponent } from './components/users/passenger/passenger-dhasbord/passenger-dhasbord.component';
 import { AdminUserManagementComponent } from './components/admin/users/admin-user-management.component';
 import { AuthGuard } from './guards/auth.guard';
+import { FrontofficeLayoutComponent } from './components/shared/frontoffice-layout/frontoffice-layout.component';
+import { BackofficeLayoutComponent } from './components/shared/backoffice-layout/backoffice-layout.component';
 
 // Document Management Components
 import { DocumentListComponent } from './components/users/documents/document-list/document-list.component';
@@ -22,44 +24,66 @@ import { DocumentTypeManagerComponent } from './components/admin/documents-admin
 import { ProfileComponent } from './components/users/profile/profile.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'home', component: HomeComponent },
+  // Authentication routes (without layout)
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'access-denied', component: AccessDeniedComponent },
 
-  // Admin Dashboard - Only accessible by ADMIN role
-  { path: 'admin-dhasbord', component: AdminDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'admin-dhasbord/users', component: AdminUserManagementComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'admin/users', component: AdminUserManagementComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  // Frontoffice routes (with frontoffice layout for users: AGENT, OPERATOR, PASSENGER)
+  {
+    path: '',
+    component: FrontofficeLayoutComponent,
+    children: [
+      { path: '', component: HomeComponent },
+      { path: 'home', component: HomeComponent },
+      { path: 'transit', component: HomeComponent }, // Placeholder
+      { path: 'carpool', component: HomeComponent }, // Placeholder
+      { path: 'community', component: HomeComponent }, // Placeholder
 
-  // Agent Dashboard - Only accessible by AGENT role
-  { path: 'agent-dhasbord', component: AgentDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['AGENT'] } },
+      // Agent routes
+      { path: 'agent-dhasbord', component: AgentDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['AGENT'] } },
 
-  // Operator Dashboard - Only accessible by OPERATOR role
-  { path: 'operator-dhasbord', component: OperatorDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
+      // Operator routes
+      { path: 'operator-dhasbord', component: OperatorDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
 
-  // Passenger Dashboard - Only accessible by PASSENGER role
-  { path: 'passenger-dhasbord', component: PassengerDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
+      // Passenger routes
+      { path: 'passenger-dhasbord', component: PassengerDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
 
-  // User Profile - Accessible by all authenticated users (AGENT, OPERATOR, PASSENGER)
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['AGENT', 'OPERATOR', 'PASSENGER'] } },
+      // User Profile - Accessible by all authenticated users (AGENT, OPERATOR, PASSENGER)
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['AGENT', 'OPERATOR', 'PASSENGER'] } },
 
-  // Document Management Routes - User side
-  { path: 'documents', component: DocumentListComponent, canActivate: [AuthGuard] },
-  { path: 'documents/upload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
-  { path: 'documents/:id', component: DocumentDetailComponent, canActivate: [AuthGuard] },
-  { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
+      // Document Management Routes - User side
+      { path: 'documents', component: DocumentListComponent, canActivate: [AuthGuard] },
+      { path: 'documents/upload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
+      { path: 'documents/:id', component: DocumentDetailComponent, canActivate: [AuthGuard] },
+      { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] }
+    ]
+  },
 
-  // Document Management Routes - Admin side
-  { path: 'admin/documents', component: AdminDocumentListComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'admin/documents/types', component: DocumentTypeManagerComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  // Backoffice routes (with backoffice layout for admin)
+  {
+    path: 'admin',
+    component: BackofficeLayoutComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
+    children: [
+      { path: 'dashboard', component: AdminDhasbordComponent },
+      { path: 'admin-dhasbord', component: AdminDhasbordComponent },
+      { path: 'users', component: AdminUserManagementComponent },
+      { path: 'admin-dhasbord/users', component: AdminUserManagementComponent },
+      { path: 'documents', component: AdminDocumentListComponent },
+      { path: 'documents/types', component: DocumentTypeManagerComponent }
+    ]
+  },
 
-  // Redirect dashboard routes based on role (for convenience)
-  { path: 'dashboard', redirectTo: '/admin-dhasbord', pathMatch: 'full' },
-  { path: 'dashboard/users', redirectTo: '/admin-dhasbord/users', pathMatch: 'full' },
+  // Old admin routes (redirect to new structure for backwards compatibility)
+  { path: 'admin-dhasbord', redirectTo: '/admin/dashboard', pathMatch: 'full' },
+  { path: 'admin-dhasbord/users', redirectTo: '/admin/users', pathMatch: 'full' },
+
+  // Legacy redirect routes
+  { path: 'dashboard', redirectTo: '/admin/dashboard', pathMatch: 'full' },
 
   // Redirect unknown routes to home
   { path: '**', redirectTo: '/' }

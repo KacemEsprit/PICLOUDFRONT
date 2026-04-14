@@ -1,14 +1,18 @@
-<div class="container-fluid mt-4">
-  <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          <h4 class="mb-0">
-            <i class="bi bi-cloud-arrow-up"></i> Upload Legal Document
-          </h4>
-        </div>
+<div class="upload-modal-overlay">
+  <div class="upload-modal-box">
+    <!-- Modal Header -->
+    <div class="upload-modal-header">
+      <div class="upload-modal-title">
+        <i class="fas fa-cloud-upload-alt"></i>
+        Upload Document (Pending Review)
+      </div>
+      <button type="button" class="upload-modal-close" (click)="cancel()" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
 
-        <div class="card-body">
+    <!-- Modal Body -->
+    <div class="upload-modal-body">
           <!-- Error Alert -->
           <div *ngIf="(error$ | async) as error" class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ error }}
@@ -116,45 +120,23 @@
                 Expiry date is required and cannot be in the past
               </div>
             </div>
-
-            <!-- Form Actions -->
-            <div class="d-flex gap-3 justify-content-end">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                (click)="cancel()"
-                [disabled]="uploadInProgress">
-                Cancel
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                (click)="onSubmit()"
-                [disabled]="uploadInProgress">
-                <span *ngIf="!uploadInProgress">
-                  <i class="bi bi-cloud-arrow-up"></i> Upload Document
-                </span>
-                <span *ngIf="uploadInProgress">
-                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Uploading...
-                </span>
-              </button>
-            </div>
           </form>
-        </div>
-      </div>
+    </div>
 
-      <!-- Info Box -->
-      <div class="alert alert-info mt-4">
-        <h5><i class="bi bi-info-circle"></i> Upload Guidelines</h5>
-        <ul class="mb-0">
-          <li>Documents must be in PDF or image format (JPG, PNG)</li>
-          <li>Maximum file size is 10MB</li>
-          <li>After upload, your document will be reviewed by administrators</li>
-          <li>You will receive notifications for approval or rejection</li>
-          <li>Some document types require an expiry date</li>
-        </ul>
-      </div>
+    <!-- Modal Footer -->
+    <div class="upload-modal-footer">
+      <button type="button" class="btn btn-outline" (click)="cancel()" [disabled]="uploadInProgress">
+        Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="uploadInProgress">
+        <span *ngIf="!uploadInProgress">
+          <i class="fas fa-cloud-upload-alt"></i> Upload Document
+        </span>
+        <span *ngIf="uploadInProgress">
+          <i class="fas fa-spinner fa-spin"></i>
+          Uploading...
+        </span>
+      </button>
     </div>
   </div>
 </div>

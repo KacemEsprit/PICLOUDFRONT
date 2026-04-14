@@ -1,4 +1,4 @@
-.access-denied-container {
+﻿.access-denied-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,7 +9,7 @@
 
 .error-card {
   background: var(--surface);
-  border: 2px solid var(--accent);
+  border: 2px solid #1a73e8;
   border-radius: 4px;
   padding: 60px 40px;
   max-width: 500px;
@@ -23,7 +23,7 @@
 }
 
 .error-card h2 {
-  color: var(--accent);
+  color: #1a73e8;
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 15px;
@@ -59,7 +59,7 @@
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: #1a73e8;
   color: var(--button-text, #000);
 }
 
@@ -70,23 +70,23 @@
 
 .btn-secondary {
   background: transparent;
-  color: var(--accent);
-  border: 2px solid var(--accent);
+  color: #1a73e8;
+  border: 2px solid #1a73e8;
 }
 
 .btn-secondary:hover {
-  background: var(--accent);
+  background: #1a73e8;
   color: var(--button-text, #000);
 }
 
 /* Dark theme adjustments */
 :host-context(.dark-mode) .btn-primary {
-  background: var(--accent);
+  background: #1a73e8;
   color: #000;
 }
 
 :host-context(.dark-mode) .error-card {
-  border-color: var(--accent);
+  border-color: #1a73e8;
 }
 
 /* Responsive design */
@@ -111,3 +111,6 @@
     width: 100%;
   }
 }
+
+
+

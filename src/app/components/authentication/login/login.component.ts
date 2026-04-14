@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   error = '';
   returnUrl: string = '';
   showPassword = false;
+  activeTab = 'login';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,6 +36,10 @@ export class LoginComponent implements OnInit {
 
   get f() {
     return this.loginForm.controls;
+  }
+
+  setTab(tab: string): void {
+    this.activeTab = tab;
   }
 
   togglePasswordVisibility(): void {
@@ -65,7 +70,7 @@ export class LoginComponent implements OnInit {
           let targetRoute = '/dashboard';
 
           if (role === 'ADMIN' || role === 'ROLE_ADMIN') {
-            targetRoute = '/admin-dhasbord';
+            targetRoute = '/admin/dashboard';
           } else if (role === 'AGENT' || role === 'ROLE_AGENT') {
             targetRoute = '/agent-dhasbord';
           } else if (role === 'OPERATOR' || role === 'ROLE_OPERATOR') {

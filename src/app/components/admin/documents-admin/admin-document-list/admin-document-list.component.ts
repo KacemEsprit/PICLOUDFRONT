@@ -13,7 +13,7 @@ import { PaginationComponent } from '../../../shared/pagination/pagination.compo
 @Component({
   selector: 'app-admin-document-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, PaginationComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './admin-document-list.component.html',
   styleUrls: ['./admin-document-list.component.css']
 })
@@ -412,4 +412,25 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
         return 'info';
     }
   }
+
+  /**
+   * Get status class for backoffice styling
+   */
+  getStatusClass(status: string): string {
+    switch (status?.toUpperCase()) {
+      case 'PENDING':
+        return 'status-pending';
+      case 'VALID':
+      case 'APPROVED':
+        return 'status-valid';
+      case 'REJECTED':
+        return 'status-rejected';
+      case 'EXPIRED':
+        return 'status-expired';
+      default:
+        return 'status-pending';
+    }
+  }
+
+  Math = Math;
 }

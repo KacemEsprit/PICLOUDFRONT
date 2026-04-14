@@ -37,11 +37,6 @@
           </ng-container>
         </ng-container>
       </div>
-
-      <!-- Theme Toggle Button -->
-      <button class="btn btn-theme-toggle" type="button" (click)="toggleTheme()">
-        <i class="bi" [ngClass]="{ 'bi-moon-stars': (theme$ | async) === 'light', 'bi-sun-fill': (theme$ | async) === 'dark' }"></i>
-      </button>
     </div>
   </div>
 </nav>

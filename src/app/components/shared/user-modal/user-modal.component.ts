@@ -15,7 +15,7 @@ export interface UserModalPayload {
 })
 export class UserModalComponent implements OnChanges {
   @Input() isOpen = false;
-  @Input() mode: 'create' | 'edit' = 'create';
+  @Input() mode: 'create' | 'edit' | 'view' = 'create';
   @Input() user?: UserDto;
   @Input() loading = false;
   @Output() close = new EventEmitter<void>();

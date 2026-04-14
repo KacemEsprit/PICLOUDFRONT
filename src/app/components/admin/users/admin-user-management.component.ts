@@ -17,7 +17,7 @@ export class AdminUserManagementComponent implements OnInit {
   showUserModal = false;
   showConfirmModal = false;
   showQuickView = false;
-  userModalMode: 'create' | 'edit' = 'create';
+  userModalMode: 'create' | 'edit' | 'view' = 'create';
   selectedUser?: UserDto;
   confirmTitle = 'Confirm deletion';
   confirmMessage = 'This action cannot be undone.';
@@ -179,7 +179,7 @@ export class AdminUserManagementComponent implements OnInit {
     return this.selectedIds.size;
   }
 
-  openUserModal(mode: 'create' | 'edit', user?: UserDto): void {
+  openUserModal(mode: 'create' | 'edit' | 'view', user?: UserDto): void {
     this.userModalMode = mode;
 
     if (mode === 'edit' && user?.id) {
@@ -397,5 +397,20 @@ export class AdminUserManagementComponent implements OnInit {
 
   trackByUser(index: number, user: UserDto): number {
     return user.id!;
+  }
+
+  getRoleTagClass(role: string): string {
+    switch (role) {
+      case 'ADMIN':
+        return 'cell-tag-orange';
+      case 'AGENT':
+        return 'cell-tag-blue';
+      case 'OPERATOR':
+        return 'cell-tag-green';
+      case 'PASSENGER':
+        return 'cell-tag-blue';
+      default:
+        return 'cell-tag-blue';
+    }
   }
 }

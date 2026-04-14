@@ -25,6 +25,10 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { ProfileComponent } from './components/users/profile/profile.component';
 
+import { BackofficeSidebarComponent } from './components/shared/backoffice-sidebar/backoffice-sidebar.component';
+import { FrontofficeLayoutComponent } from './components/shared/frontoffice-layout/frontoffice-layout.component';
+import { BackofficeLayoutComponent } from './components/shared/backoffice-layout/backoffice-layout.component';
+
 // Shared Components
 // StatusBadgeComponent is now standalone
 
@@ -55,6 +59,9 @@ import { AuthGuard } from './guards/auth.guard';
     HeaderComponent,
     FooterComponent,
     ProfileComponent,
+    BackofficeSidebarComponent,
+    FrontofficeLayoutComponent,
+    BackofficeLayoutComponent,
     // Pipes
     StatusLabelPipe,
     StatusColorPipe,

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../../services/auth/auth.service';
-import { ThemeMode, ThemeService } from '../../../services/shared/theme.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,13 +12,11 @@ export class HeaderComponent implements OnInit {
   title = 'Transit TN';
   currentUser$!: Observable<User | null>;
   isAuthenticated$!: Observable<boolean>;
-  theme$!: Observable<ThemeMode>;
   currentRoute: string = '';
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private themeService: ThemeService
+    private router: Router
   ) {
     this.router.events.subscribe(() => {
       this.currentRoute = this.router.url;
@@ -29,17 +26,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser$ = this.authService.currentUser$;
     this.isAuthenticated$ = this.authService.isAuthenticated$;
-    this.theme$ = this.themeService.theme$;
     this.currentRoute = this.router.url;
   }
 
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
-  }
-
-  toggleTheme(): void {
-    this.themeService.toggleTheme();
   }
 
   isLoginPage(): boolean {

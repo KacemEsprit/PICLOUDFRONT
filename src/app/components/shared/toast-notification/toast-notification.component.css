@@ -1,4 +1,4 @@
-.toast-notification-wrapper {
+﻿.toast-notification-wrapper {
   position: fixed;
   top: 1.25rem;
   right: 1.25rem;
@@ -21,41 +21,41 @@
   color: var(--text);
   opacity: 0.98;
   animation: slideIn 0.35s ease-out;
-  border: 1px solid var(--accent);
+  border: 1px solid #1a73e8;
 }
 
 .toast-notification.success {
   border-left: 4px solid #10b981;
-  border-top: 1px solid #c89b3c;
-  border-right: 1px solid #c89b3c;
-  border-bottom: 1px solid #c89b3c;
+  border-top: 1px solid #666;
+  border-right: 1px solid #666;
+  border-bottom: 1px solid #666;
 }
 
 .toast-notification.error {
   border-left: 4px solid #ef4444;
-  border-top: 1px solid #c89b3c;
-  border-right: 1px solid #c89b3c;
-  border-bottom: 1px solid #c89b3c;
+  border-top: 1px solid #666;
+  border-right: 1px solid #666;
+  border-bottom: 1px solid #666;
 }
 
 .toast-notification.warning {
   border-left: 4px solid #f59e0b;
-  border-top: 1px solid #c89b3c;
-  border-right: 1px solid #c89b3c;
-  border-bottom: 1px solid #c89b3c;
+  border-top: 1px solid #666;
+  border-right: 1px solid #666;
+  border-bottom: 1px solid #666;
 }
 
 .toast-notification.info {
   border-left: 4px solid #3b82f6;
-  border-top: 1px solid #c89b3c;
-  border-right: 1px solid #c89b3c;
-  border-bottom: 1px solid #c89b3c;
+  border-top: 1px solid #666;
+  border-right: 1px solid #666;
+  border-bottom: 1px solid #666;
 }
 
 .toast-icon {
   font-size: 1.4rem;
   margin-top: 0.2rem;
-  color: var(--accent);
+  color: #1a73e8;
 }
 
 .toast-text {
@@ -96,3 +96,6 @@
     transform: translateX(0);
   }
 }
+
+
+

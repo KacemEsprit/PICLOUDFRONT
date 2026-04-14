@@ -8,12 +8,11 @@ import { DocumentService } from '../../../../services/documents/document.service
 import { ToastService } from '../../../../services/shared/toast.service';
 import { LegalDocument, DocumentStatusEnum, Page } from '../../../../models';
 import { PaginationComponent } from '../../../shared/pagination/pagination.component';
-import { StatusBadgeComponent } from '../../../shared/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-document-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, PaginationComponent, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, RouterModule, PaginationComponent],
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.css']
 })
@@ -180,5 +179,9 @@ export class DocumentListComponent implements OnInit, OnDestroy {
       [DocumentStatusEnum.REQUEST_UPDATE]: '#007BFF'
     };
     return colorMap[status] || '#6C757D';
+  }
+
+  trackByDocument(index: number, doc: LegalDocument): any {
+    return doc.id;
   }
 }

@@ -1,171 +1,186 @@
-<div class="admin-user-management-container">
-  <div class="dashboard-header card-glass mb-4">
+<div class="users-page">
+  <!-- Page Header -->
+  <div class="page-header">
     <div>
-      <span class="eyebrow">Administration</span>
-      <h1>User Management</h1>
-      <p class="subtitle">Manage accounts, roles, and access from one polished workspace.</p>
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-primary btn-gradient" (click)="openUserModal('create')">
-        <i class="bi bi-plus-circle me-2"></i>
-        Add New User
-      </button>
-      <button class="btn btn-outline-primary" (click)="exportCsv()">
-        <i class="bi bi-download me-2"></i>
-        Export
-      </button>
-    </div>
-  </div>
-
-  <div class="stats-grid mb-4">
-    <div class="stat-card">
-      <span>Total users</span>
-      <strong>{{ stats.total }}</strong>
-    </div>
-    <div class="stat-card">
-      <span>Active users</span>
-      <strong>{{ stats.active }}</strong>
-    </div>
-    <div class="stat-card">
-      <span>Admins</span>
-      <strong>{{ stats.admins }}</strong>
-    </div>
-  </div>
-
-  <div class="filter-toolbar card-glass mb-3">
-    <div class="search-group">
-      <div class="input-group search-box">
-        <span class="input-group-text"><i class="bi bi-search"></i></span>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search users"
-          [(ngModel)]="filters.keyword"
-          (keyup.enter)="searchUsers()"
-        />
+      <div class="breadcrumb">
+        <span>Admin</span>
+        <span>/</span>
+        <span>Users</span>
       </div>
-      <div class="filter-pill-group">
-        <button type="button" class="filter-pill" [class.active]="filters.role === 'ALL'" (click)="applyRoleFilter('ALL')">
-          All
-        </button>
-        <button type="button" class="filter-pill" [class.active]="filters.role === 'ADMIN'" (click)="applyRoleFilter('ADMIN')">
-          Admin
-        </button>
-        <button type="button" class="filter-pill" [class.active]="filters.role === 'PASSENGER'" (click)="applyRoleFilter('PASSENGER')">
-          Passenger
-        </button>
-        <button type="button" class="filter-pill" [class.active]="filters.role === 'AGENT'" (click)="applyRoleFilter('AGENT')">
-          Agent
-        </button>
-        <button type="button" class="filter-pill" [class.active]="filters.role === 'OPERATOR'" (click)="applyRoleFilter('OPERATOR')">
-          Operator
-        </button>
+      <h1 class="page-title">User Management</h1>
+      <p class="page-subtitle">Manage accounts, roles, and access</p>
+    </div>
+    <button class="btn btn-primary" (click)="openUserModal('create')">
+      <i class="fas fa-user-plus"></i>
+      Add New User
+    </button>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card stat-card-blue">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-card-value">{{ stats.total }}</div>
+          <div class="stat-card-label">Total Users</div>
+        </div>
+        <i class="fas fa-users stat-card-icon"></i>
       </div>
     </div>
-
-
+    <div class="stat-card stat-card-green">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-card-value">{{ stats.active }}</div>
+          <div class="stat-card-label">Active Users</div>
+        </div>
+        <i class="fas fa-check-circle stat-card-icon"></i>
+      </div>
+    </div>
+    <div class="stat-card stat-card-orange">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-card-value">{{ stats.admins }}</div>
+          <div class="stat-card-label">Administrators</div>
+        </div>
+        <i class="fas fa-shield-alt stat-card-icon"></i>
+      </div>
+    </div>
+    <div class="stat-card stat-card-purple">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-card-value">{{ stats.agents }}</div>
+          <div class="stat-card-label">Agents</div>
+        </div>
+        <i class="fas fa-id-badge stat-card-icon"></i>
+      </div>
+    </div>
   </div>
 
-  <div class="filter-chips mb-3" *ngIf="activeFilters.length">
-    <span class="chip" *ngFor="let chip of activeFilters">
-      {{ chip }}
-      <button type="button" class="btn-close btn-close-white btn-sm" aria-label="Remove" (click)="removeFilter(chip)"></button>
-    </span>
+  <!-- Filters Card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <i class="fas fa-filter"></i>
+        Filters
+      </div>
+    </div>
+    <div class="card-body" style="padding: 20px;">
+      <div class="filters-bar">
+        <div class="filter-search-wrap">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            class="filter-input"
+            placeholder="Search by name or email..."
+            [(ngModel)]="filters.keyword"
+            (keyup.enter)="searchUsers()"
+          />
+        </div>
+        <select class="filter-select" [(ngModel)]="filters.role" (change)="applyRoleFilter(filters.role || '')">
+          <option value="ALL">All Roles</option>
+          <option value="ADMIN">Admin</option>
+          <option value="AGENT">Agent</option>
+          <option value="OPERATOR">Operator</option>
+          <option value="PASSENGER">Passenger</option>
+        </select>
+      </div>
+    </div>
   </div>
 
-
-
-  <div class="bulk-action-bar card-glass mb-3" *ngIf="selectedCount > 0">
-    <div>
-      <strong>{{ selectedCount }}</strong> selected
-    </div>
-    <div class="bulk-actions">
-      <button class="btn btn-outline-danger" (click)="openBulkDelete()">Delete selected</button>
-      <button class="btn btn-outline-secondary" (click)="openUserModal('edit', getSelectedUser())" [disabled]="selectedCount !== 1">
-        Edit selected
-      </button>
-    </div>
-  </div>
-
-  <div class="table-card card-glass">
-    <div *ngIf="loading" class="table-skeleton">
-      <div class="skeleton-row" *ngFor="let row of [1,2,3,4,5]"></div>
+  <!-- Users Table -->
+  <div class="card" style="margin-top: 24px;">
+    <div class="card-header">
+      <div class="card-title">
+        <i class="fas fa-list"></i>
+        Users List
+      </div>
     </div>
 
-    <div *ngIf="!loading && users.length === 0" class="empty-state-card">
-      <i class="bi bi-people"></i>
-      <h4>No users found</h4>
-      <p>Try adjusting your filters or add a new user.</p>
+    <div *ngIf="loading" class="card-body">
+      <div style="text-align: center; padding: 40px;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #1a73e8;"></i>
+        <p style="margin-top: 16px; color: #999;">Loading users...</p>
+      </div>
     </div>
 
-    <div *ngIf="!loading && users.length > 0" class="table-responsive">
-      <table class="table table-borderless align-middle users-table">
+    <div *ngIf="!loading && users.length === 0" class="card-body">
+      <div class="table-empty">
+        <i class="fas fa-inbox"></i>
+        <div class="table-empty-title">No users found</div>
+        <div class="table-empty-sub">Try adjusting your filters or add a new user</div>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && users.length > 0" class="table-wrapper">
+      <table class="data-table">
         <thead>
           <tr>
-            <th scope="col"><input type="checkbox" (change)="toggleSelectAll($event)" /></th>
-            <th scope="col" class="sortable" (click)="sortBy('username')">User</th>
-            <th scope="col" class="sortable" (click)="sortBy('role')">Role</th>
-            <th scope="col" class="sortable" (click)="sortBy('enabled')">Status</th>
-            <th scope="col" class="sortable" (click)="sortBy('createdAt')">Created</th>
+            <th scope="col">User</th>
+            <th scope="col">Role</th>
+            <th scope="col">Status</th>
+            <th scope="col">Email</th>
+            <th scope="col">Created</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users; trackBy: trackByUser" (click)="showQuickDetails(user)" class="user-row">
-            <td><input type="checkbox" [checked]="selectedIds.has(user.id)" (click)="$event.stopPropagation()" (change)="toggleSelection(user.id)" /></td>
+          <tr *ngFor="let user of users; trackBy: trackByUser">
             <td>
-              <div class="user-cell">
-                <div class="avatar-circle" [ngStyle]="{ 'background-image': user.photoUrl ? 'url(' + user.photoUrl + ')' : 'none', 'background-size': 'cover', 'background-position': 'center' }">
-                  <span *ngIf="!user.photoUrl">{{ user.username.charAt(0).toUpperCase() }}</span>
+              <div class="cell-entity">
+                <div class="cell-avatar cell-avatar-blue">
+                  {{ user.username.charAt(0).toUpperCase() }}
                 </div>
-                <div>
-                  <strong>{{ user.name || user.username }}</strong>
-                  <p>{{ user.email }}</p>
-                </div>
+                <div class="cell-entity-name">{{ user.name || user.username }}</div>
               </div>
             </td>
             <td>
-              <span class="badge role-badge {{ user.role.toLowerCase() }}">{{ user.role }}</span>
+              <span class="cell-tag cell-tag-blue">
+                {{ user.role }}
+              </span>
             </td>
             <td>
-              <button type="button" class="btn btn-sm status-btn" [ngClass]="user.enabled ? 'btn-success' : 'btn-outline-secondary'" (click)="$event.stopPropagation(); toggleStatus(user)">
-                <i [ngClass]="user.enabled ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+              <span class="status-badge" [ngClass]="user.enabled ? 'status-active' : 'status-inactive'">
+                <span class="status-dot"></span>
                 {{ user.enabled ? 'Active' : 'Inactive' }}
-              </button>
+              </span>
             </td>
-            <td>{{ formatDate(user.createdAt) }}</td>
-            <td class="actions-cell">
-              <button class="btn btn-icon btn-outline-secondary" type="button" (click)="$event.stopPropagation(); openUserModal('edit', user)">
-                <i class="bi bi-pencil"></i>
+            <td class="cell-date">{{ user.email }}</td>
+            <td class="cell-date">
+              <i class="fas fa-calendar-alt"></i>
+              {{ formatDate(user.createdAt) }}
+            </td>
+            <td class="cell-actions">
+              <button class="btn-icon btn-icon-edit" type="button" (click)="openUserModal('edit', user)" title="Edit">
+                <i class="fas fa-edit"></i>
               </button>
-              <div class="dropdown d-inline-block">
-                <button class="btn btn-icon btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" (click)="$event.stopPropagation()">
-                  <i class="bi bi-person-badge"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'ADMIN')">Admin</button></li>
-                  <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'AGENT')">Agent</button></li>
-                  <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'OPERATOR')">Operator</button></li>
-                  <li><button class="dropdown-item" type="button" (click)="$event.stopPropagation(); changeRoleInline(user, 'PASSENGER')">Passenger</button></li>
-                </ul>
-              </div>
-              <button class="btn btn-icon btn-outline-danger" type="button" (click)="$event.stopPropagation(); openConfirmDelete(user)">
-                <i class="bi bi-trash"></i>
+              <button class="btn-icon btn-icon-view" type="button" (click)="openUserModal('view', user)" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn-icon btn-icon-delete" type="button" (click)="openConfirmDelete(user)" title="Delete">
+                <i class="fas fa-trash"></i>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="!loading && users.length > 0">
+      <div class="pagination-info">Showing {{ pageStart }} to {{ pageEnd }} of {{ stats.total }} results</div>
+      <div class="pagination-controls">
+        <button class="page-btn" [disabled]="pageIndex === 0" (click)="changePage(pageIndex - 1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="page-btn active">{{ pageIndex + 1 }}</button>
+        <button class="page-btn" [disabled]="pageIndex >= getLastPageIndex()" (click)="changePage(pageIndex + 1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="pagination-panel mt-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
-      <div class="pagination-summary">Showing {{ pageStart }} to {{ pageEnd }} of {{ stats.total }} results</div>
-      <div class="pagination-controls btn-group" role="group">
-        <button class="btn btn-outline-primary" type="button" [disabled]="pageIndex === 0" (click)="changePage(pageIndex - 1)">Previous</button>
-        <button class="btn btn-outline-primary" type="button" [disabled]="pageIndex >= getLastPageIndex()" (click)="changePage(pageIndex + 1)">Next</button>
-  </div>
-
+  <!-- User Modal -->
   <app-user-modal
     [isOpen]="showUserModal"
     [mode]="userModalMode"
@@ -174,42 +189,14 @@
     (save)="onUserSaved($event)">
   </app-user-modal>
 
+  <!-- Confirmation Modal -->
   <app-confirmation-modal
     [isOpen]="showConfirmModal"
     [title]="confirmTitle"
     [message]="confirmMessage"
-    [confirmLabel]="confirmAction === 'deleteSelected' ? 'Delete selected' : 'Delete user'"
+    [confirmLabel]="'Delete'"
     [danger]="true"
     (close)="closeConfirmModal()"
     (confirm)="executeConfirm()">
   </app-confirmation-modal>
-
-  <aside class="quick-view-panel" *ngIf="showQuickView && selectedUser">
-    <div class="quick-view-header">
-      <h4>Quick view</h4>
-      <button type="button" class="btn-close" (click)="closeQuickView()"></button>
-    </div>
-    <div class="quick-view-body">
-      <div class="quick-avatar" [ngStyle]="{ 'background-image': selectedUser.photoUrl ? 'url(' + selectedUser.photoUrl + ')' : 'none', 'background-size': 'cover', 'background-position': 'center' }">
-        <span *ngIf="!selectedUser.photoUrl">{{ selectedUser.username.charAt(0).toUpperCase() }}</span>
-      </div>
-      <h5>{{ selectedUser.name || selectedUser.username }}</h5>
-      <p class="text-muted">{{ selectedUser.email }}</p>
-      <div class="detail-grid">
-        <div>
-          <small class="text-muted">Role</small>
-          <p>{{ selectedUser.role }}</p>
-        </div>
-        <div>
-          <small class="text-muted">Status</small>
-          <p>{{ selectedUser.enabled ? 'Active' : 'Inactive' }}</p>
-        </div>
-        <div>
-          <small class="text-muted">Created</small>
-          <p>{{ formatDate(selectedUser.createdAt) }}</p>
-        </div>
-      </div>
-      <button class="btn btn-primary w-100" (click)="openUserModal('edit', selectedUser)">Edit user</button>
-    </div>
-  </aside>
 </div>

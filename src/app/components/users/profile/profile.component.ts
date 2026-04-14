@@ -114,10 +114,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
    */
   private loadProfilePhoto(): void {
     if (this.profile?.photoPath) {
-      // Use direct URL from htdocs instead of API call
-      this.profilePhotoUrl = this.fileServerUrl + this.profile.photoPath;
+      // Normalize path: convert backslashes to forward slashes (in case backend returns Windows path)
+      let normalizedPath = this.profile.photoPath.replace(/\\/g, '/');
+
+      // Remove absolute path if backend returns full path
+      if (normalizedPath.includes('pidev-uploads/')) {
+        normalizedPath = normalizedPath.split('pidev-uploads/')[1];
+      }
+
+      this.profilePhotoUrl = this.fileServerUrl + normalizedPath;
+      console.log('Profile photo URL:', this.profilePhotoUrl);
+      console.log('Backend photoPath:', this.profile.photoPath);
     } else {
       this.profilePhotoUrl = null;
+      console.log('No photo path found in profile');
     }
   }
 

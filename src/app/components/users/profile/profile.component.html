@@ -66,7 +66,7 @@
         </div>
 
         <button
-          *ngIf="profile?.photoContentType && !photoSelected"
+          *ngIf="profile.photoContentType && !photoSelected"
           type="button"
           class="btn btn-danger"
           (click)="deletePhoto()"
@@ -98,7 +98,6 @@
             class="form-control"
             formControlName="username"
             [class.error]="hasFieldError('username')"
-            [disabled]="!editing"
             placeholder="Enter your username (3+ characters)"
           />
           <small *ngIf="hasFieldError('username')" class="error-message">
@@ -118,7 +117,6 @@
             class="form-control"
             formControlName="email"
             [class.error]="hasFieldError('email')"
-            [disabled]="!editing"
             placeholder="example@email.com"
           />
           <small *ngIf="hasFieldError('email')" class="error-message">
@@ -138,7 +136,6 @@
             class="form-control"
             formControlName="name"
             [class.error]="hasFieldError('name')"
-            [disabled]="!editing"
             placeholder="Enter your full name"
           />
           <small *ngIf="hasFieldError('name')" class="error-message">
@@ -156,7 +153,6 @@
             class="form-control"
             formControlName="cin"
             [class.error]="hasFieldError('cin')"
-            [disabled]="!editing"
             placeholder="12345678"
             maxlength="8"
             inputmode="numeric"
