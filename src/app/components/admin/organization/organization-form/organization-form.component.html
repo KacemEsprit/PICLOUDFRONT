@@ -1,0 +1,203 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">{{ isEditMode ? 'Edit Organization' : 'Add Organization' }}</h3>
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="save()">
+
+      <!-- Infos de base -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" class="form-control" [(ngModel)]="organization.name" name="name" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Acronyme *</label>
+            <input type="text" class="form-control" [(ngModel)]="organization.acronyme" name="acronyme" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" class="form-control" [(ngModel)]="organization.email" name="email" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="text" class="form-control" [(ngModel)]="organization.phoneNumber" name="phoneNumber" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Transport Type *</label>
+            <input type="text" class="form-control" [(ngModel)]="organization.transportType" name="transportType" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Website</label>
+            <input type="text" class="form-control" [(ngModel)]="organization.website" name="website">
+          </div>
+        </div>
+      </div>
+
+      <!-- Logo -->
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label><i class="fas fa-image"></i> Logo</label>
+            <div style="display:flex; align-items:center; gap:20px; margin-top:8px;">
+              <div style="width:80px; height:80px; border-radius:50%; background:#f0f2f5; border:3px solid #1a73e8; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+                <img *ngIf="organization.logo" [src]="organization.logo" style="width:100%; height:100%; object-fit:contain; padding:5px;" onerror="this.style.display='none'">
+                <i *ngIf="!organization.logo" class="fas fa-bus" style="font-size:1.8rem; color:#1a73e8;"></i>
+              </div>
+              <div style="flex:1;">
+                <input type="text" class="form-control" [(ngModel)]="organization.logo" name="logo" placeholder="https://exemple.com/logo.png">
+                <small class="text-muted">Collez une URL d'image directe (PNG, JPG, SVG).</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type/Status/Coverage -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Type *</label>
+            <select class="form-control" [(ngModel)]="organization.type" name="type">
+              <option value="PUBLIC">PUBLIC</option>
+              <option value="PRIVATE">PRIVATE</option>
+              <option value="MIXED">MIXED</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Status *</label>
+            <select class="form-control" [(ngModel)]="organization.status" name="status">
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="INACTIVE">INACTIVE</option>
+              <option value="SUSPENDED">SUSPENDED</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Coverage Type *</label>
+            <select class="form-control" [(ngModel)]="organization.coverageType" name="coverageType">
+              <option value="BUS">BUS</option>
+              <option value="TRAIN">TRAIN</option>
+              <option value="METRO">METRO</option>
+              <option value="LOUAGE">LOUAGE</option>
+              <option value="BATAH">BATAH</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gouvernorats -->
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="form-group">
+            <label><i class="fas fa-map-marker-alt"></i> Organization Location</label>
+            <p class="text-muted small">Selectionnez les gouvernorats couverts</p>
+            <div class="d-flex flex-wrap gap-2 mt-2">
+              <button *ngFor="let gov of governorates" type="button" class="btn btn-sm"
+                [class.btn-primary]="isSelected(gov)"
+                [class.btn-outline-secondary]="!isSelected(gov)"
+                (click)="toggleGovernorate(gov)">{{ gov }}</button>
+            </div>
+            <div class="mt-2" *ngIf="selectedGovernorates.length > 0">
+              <small class="text-success"><i class="fas fa-check"></i> {{ selectedGovernorates.length }} gouvernorat(s): {{ selectedGovernorates.join(', ') }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Partenaires -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card border-primary">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+              <h5 class="mb-0"><i class="fas fa-handshake mr-2"></i> Partenaires associes</h5>
+              <button type="button" class="btn btn-light btn-sm" (click)="showNewPartnerForm = !showNewPartnerForm">
+                <i class="fas fa-plus"></i> Nouveau partenaire
+              </button>
+            </div>
+            <div class="card-body">
+
+              <!-- Formulaire nouveau partenaire -->
+              <div *ngIf="showNewPartnerForm" class="border rounded p-3 mb-3 bg-light">
+                <h6>Creer un nouveau partenaire</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="text" class="form-control mb-2" [(ngModel)]="newPartner.name" name="npName" placeholder="Nom *">
+                    <input type="email" class="form-control mb-2" [(ngModel)]="newPartner.email" name="npEmail" placeholder="Email *">
+                    <input type="text" class="form-control mb-2" [(ngModel)]="newPartner.phoneNumber" name="npPhone" placeholder="Telephone *">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="text" class="form-control mb-2" [(ngModel)]="newPartner.industrySector" name="npSector" placeholder="Secteur *">
+                    <input type="text" class="form-control mb-2" [(ngModel)]="newPartner.partnershipType" name="npType" placeholder="Type de partenariat *">
+                    <input type="text" class="form-control mb-2" [(ngModel)]="newPartner.website" name="npWebsite" placeholder="Website">
+                  </div>
+                </div>
+                <button type="button" class="btn btn-success btn-sm mr-2" (click)="addNewPartner()">
+                  <i class="fas fa-save"></i> Creer et associer
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="showNewPartnerForm = false">Annuler</button>
+              </div>
+
+              <!-- Liste partenaires existants -->
+              <p class="text-muted small">Selectionnez les partenaires a associer a cette organisation</p>
+              <div class="row">
+                <div class="col-md-4 mb-2" *ngFor="let partner of allPartners">
+                  <div class="card cursor-pointer"
+                    [class.border-success]="isPartnerLinked(partner)"
+                    [class.border-light]="!isPartnerLinked(partner)"
+                    style="cursor:pointer;"
+                    (click)="togglePartner(partner)">
+                    <div class="card-body p-2 d-flex align-items-center">
+                      <i class="fas" [class.fa-check-circle]="isPartnerLinked(partner)" [class.fa-circle]="!isPartnerLinked(partner)"
+                        [class.text-success]="isPartnerLinked(partner)" [class.text-muted]="!isPartnerLinked(partner)"
+                        style="font-size:1.2rem; margin-right:8px;"></i>
+                      <div>
+                        <strong>{{ partner.name }}</strong>
+                        <br><small class="text-muted">{{ partner.industrySector }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-2" *ngIf="linkedPartners.length > 0">
+                <small class="text-success"><i class="fas fa-check"></i> {{ linkedPartners.length }} partenaire(s) associe(s)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Boutons -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary mr-2">
+          <i class="fas fa-save"></i> {{ isEditMode ? 'Update' : 'Save' }}
+        </button>
+        <button type="button" class="btn btn-secondary" routerLink="/admin/organizations">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

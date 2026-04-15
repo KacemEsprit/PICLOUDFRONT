@@ -1,0 +1,126 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title mb-0">{{ isEditMode ? 'Edit Contract' : 'Add Contract' }}</h3>
+    <button type="button" class="btn btn-success" (click)="generateClauses()" [disabled]="aiLoading">
+      <i class="fas" [class.fa-robot]="!aiLoading" [class.fa-spinner]="aiLoading" [class.fa-spin]="aiLoading"></i>
+      {{ aiLoading ? 'Generation en cours...' : 'Generer Clauses avec AI' }}
+    </button>
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="save()">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Contract Type *</label>
+            <select class="form-control" [(ngModel)]="contract.contractType" name="contractType">
+              <option value="COMMERCIAL">COMMERCIAL</option>
+              <option value="TECHNICAL">TECHNICAL</option>
+              <option value="INSTITUTIONAL">INSTITUTIONAL</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Status *</label>
+            <select class="form-control" [(ngModel)]="contract.status" name="status">
+              <option value="DRAFT">DRAFT</option>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="EXPIRED">EXPIRED</option>
+              <option value="TERMINATED">TERMINATED</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Start Date *</label>
+            <input type="date" class="form-control" [(ngModel)]="contract.startDate" name="startDate" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>End Date *</label>
+            <input type="date" class="form-control" [(ngModel)]="contract.endDate" name="endDate" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Organisation *</label>
+            <select class="form-control" [(ngModel)]="contract.organizationId" name="organizationId">
+              <option [value]="0">-- Selectionner --</option>
+              <option *ngFor="let org of organizations" [value]="org.id">{{ org.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Partenaire *</label>
+            <select class="form-control" [(ngModel)]="contract.partnerId" name="partnerId">
+              <option [value]="0">-- Selectionner --</option>
+              <option *ngFor="let p of partners" [value]="p.id">{{ p.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label>Description / Clauses</label>
+            <textarea class="form-control" rows="6" [(ngModel)]="contract.description" name="description"
+              placeholder="Les clauses seront generees automatiquement par AI..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Clauses Section -->
+      <div *ngIf="showClauses" class="mt-4">
+        <div class="card border-success">
+          <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-robot mr-2"></i> Clauses generees par AI</h5>
+            <button type="button" class="btn btn-light btn-sm" (click)="applyClausesToDescription()" *ngIf="aiClauses.length > 0">
+              <i class="fas fa-check mr-1"></i> Appliquer dans Description
+            </button>
+          </div>
+          <div class="card-body">
+
+            <!-- Loading -->
+            <div *ngIf="aiLoading" class="text-center py-4">
+              <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:#2e7d32;"></i>
+              <p class="mt-2 text-muted">Gemini AI analyse le contrat et genere les clauses...</p>
+            </div>
+
+            <!-- Error -->
+            <div *ngIf="aiError" class="alert alert-danger">
+              <i class="fas fa-exclamation-circle mr-2"></i>{{ aiError }}
+            </div>
+
+            <!-- Clauses -->
+            <div *ngFor="let clause of aiClauses" class="mb-3 p-3 border rounded" style="border-left:4px solid #2e7d32 !important;">
+              <div class="d-flex align-items-center mb-2">
+                <span class="badge badge-success mr-2">CLAUSE {{ clause.numero }}</span>
+                <strong style="color:#1a237e;">{{ clause.titre }}</strong>
+              </div>
+              <p class="mb-0 text-muted" style="font-size:0.9rem; line-height:1.6;">{{ clause.contenu }}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary mr-2">
+          <i class="fas fa-save"></i> {{ isEditMode ? 'Update' : 'Save' }}
+        </button>
+        <a routerLink="/admin/contracts" class="btn btn-secondary">
+          <i class="fas fa-times"></i> Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

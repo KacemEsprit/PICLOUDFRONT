@@ -1,0 +1,110 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      {{ isEditMode ? 'Edit Partner' : 'Add Partner' }}
+    </h3>
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="save()">
+
+      <div class="row" *ngIf="preselectedOrgId">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Organization</label>
+            <input type="text" class="form-control"
+                   [value]="'Linked to Organization #' + preselectedOrgId"
+                   disabled>
+            <input type="hidden" [(ngModel)]="partner.organizationId" name="organizationId">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" class="form-control"
+                   [(ngModel)]="partner.name"
+                   name="name" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Industry Sector *</label>
+            <input type="text" class="form-control"
+                   [(ngModel)]="partner.industrySector"
+                   name="industrySector" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Partnership Type *</label>
+            <input type="text" class="form-control"
+                   [(ngModel)]="partner.partnershipType"
+                   name="partnershipType" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" class="form-control"
+                   [(ngModel)]="partner.email"
+                   name="email" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="text" class="form-control"
+                   [(ngModel)]="partner.phoneNumber"
+                   name="phoneNumber" required
+                   placeholder="+21671000000">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Website</label>
+            <input type="text" class="form-control"
+                   [(ngModel)]="partner.website"
+                   name="website">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Status *</label>
+            <select class="form-control"
+                    [(ngModel)]="partner.status"
+                    name="status">
+              <option value="PENDING">PENDING</option>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="SUSPENDED">SUSPENDED</option>
+              <option value="TERMINATED">TERMINATED</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary mr-2">
+            <i class="fas fa-save"></i>
+            {{ isEditMode ? 'Update' : 'Save' }}
+          </button>
+          <a routerLink="/admin/partners" class="btn btn-secondary">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
