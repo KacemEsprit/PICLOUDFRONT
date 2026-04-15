@@ -116,8 +116,7 @@ button {
 }
 
 /* Reset Bootstrap form defaults */
-.form-control,
-.form-select {
+.form-control {
   border: 1px solid var(--border-mid);
   border-radius: var(--radius-sm);
   background: var(--bg-surface);
@@ -127,12 +126,29 @@ button {
   padding: 0 12px;
 }
 
+.form-select {
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  color: var(--text-body);
+  font-size: 0.88rem;
+  height: 40px;
+  padding: 0 36px 0 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 .form-control:focus,
 .form-select:focus {
   border-color: var(--brand-blue);
   box-shadow: 0 0 0 3px rgba(26,115,232,0.12);
   color: var(--text-body);
-  background: var(--bg-surface);
+  background-color: var(--bg-surface);
 }
 
 /* Table Styles */
@@ -260,48 +276,57 @@ button {
 
 /* Icon Buttons */
 .btn-icon {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  transition: all 0.15s;
-  border: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
   cursor: pointer;
-  background: none;
   padding: 0;
+  font-weight: 600;
 }
 
 .btn-icon-edit {
-  background: #fff8e1;
-  color: #f57f17;
+  background: #f57f17;
+  color: #fff;
+  border-color: #f57f17;
 }
 
 .btn-icon-edit:hover {
-  background: #f57f17;
-  color: #fff;
+  background: #e65100;
+  border-color: #e65100;
+  box-shadow: 0 4px 8px rgba(245, 127, 23, 0.4);
+  transform: translateY(-2px);
 }
 
 .btn-icon-delete {
-  background: #fce4ec;
-  color: var(--color-danger);
+  background: #d32f2f;
+  color: #fff;
+  border-color: #d32f2f;
 }
 
 .btn-icon-delete:hover {
-  background: var(--color-danger);
-  color: #fff;
+  background: #b71c1c;
+  border-color: #b71c1c;
+  box-shadow: 0 4px 8px rgba(211, 47, 47, 0.4);
+  transform: translateY(-2px);
 }
 
 .btn-icon-view {
-  background: #e3f2fd;
-  color: var(--brand-blue);
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
 }
 
 .btn-icon-view:hover {
-  background: var(--brand-blue);
-  color: #fff;
+  background: #0d47a1;
+  border-color: #0d47a1;
+  box-shadow: 0 4px 8px rgba(26, 115, 232, 0.4);
+  transform: translateY(-2px);
 }
 
 /* Badges */

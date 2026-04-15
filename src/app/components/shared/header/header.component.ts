@@ -56,6 +56,10 @@ export class HeaderComponent implements OnInit {
     return this.currentRoute.includes('/profile');
   }
 
+  isDocumentsPage(): boolean {
+    return this.currentRoute.includes('/documents');
+  }
+
   getDashboardLink(): string {
     const user = this.currentUser;
     if (!user) return '/home';

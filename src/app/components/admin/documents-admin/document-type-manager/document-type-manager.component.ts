@@ -37,6 +37,10 @@ export class DocumentTypeManagerComponent implements OnInit, OnDestroy {
   selectedTypeForEdit: DocumentType | null = null;
   selectedRoles: string[] = [];
 
+  // Delete confirmation modal state
+  showDeleteConfirm: boolean = false;
+  typeToDelete: number | null = null;
+
   // Available roles
   availableRoles = [
     RoleEnum.ADMIN,
@@ -175,19 +179,39 @@ export class DocumentTypeManagerComponent implements OnInit, OnDestroy {
   }
 
   deleteDocumentType(id: number): void {
-    if (confirm('Are you sure you want to delete this document type?')) {
-      this.documentTypeService.deleteDocumentType(id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.toastService.success('Success', 'Document type deleted');
-            this.loadDocumentTypes();
-          },
-          error: (err) => {
-            this.toastService.error('Error', 'Failed to delete document type');
-          }
-        });
-    }
+    this.typeToDelete = id;
+    this.showDeleteConfirm = true;
+  }
+
+  /**
+   * Cancel delete confirmation
+   */
+  cancelDelete(): void {
+    this.showDeleteConfirm = false;
+    this.typeToDelete = null;
+  }
+
+  /**
+   * Confirm and delete the document type
+   */
+  confirmDeleteType(): void {
+    if (!this.typeToDelete) return;
+
+    const typeId = this.typeToDelete;
+    this.showDeleteConfirm = false;
+    this.typeToDelete = null;
+
+    this.documentTypeService.deleteDocumentType(typeId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Success', 'Document type deleted');
+          this.loadDocumentTypes();
+        },
+        error: (err) => {
+          this.toastService.error('Error', 'Failed to delete document type');
+        }
+      });
   }
 
   toggleRole(role: string): void {

@@ -36,11 +36,17 @@
     </div>
     <div class="card-body" style="padding: 20px;">
       <div class="filters-bar">
+        <input
+          type="text"
+          placeholder="Search by document type, ID, or filename..."
+          [(ngModel)]="searchFilter"
+          (input)="onSearchChange()"
+          class="search-input">
         <select
           class="filter-select"
           [(ngModel)]="selectedStatus"
           (change)="onStatusFilterChange()"
-          style="min-width: 200px;">
+          style="min-width: 200px; margin-left: 12px;">
           <option value="">All Documents</option>
           <option *ngFor="let status of statuses" [value]="status">
             {{ getStatusLabel(status) }}
@@ -66,7 +72,7 @@
   </div>
 
   <!-- Empty State -->
-  <div *ngIf="!(loading$ | async) && filteredDocuments.length === 0" class="table-empty" style="margin-top: 24px;">
+  <div *ngIf="!(loading$ | async) && getFilteredDocuments.length === 0" class="table-empty" style="margin-top: 24px;">
     <i class="fas fa-inbox"></i>
     <div class="table-empty-title">No documents found</div>
     <div class="table-empty-sub">Start by uploading a new document</div>
@@ -77,7 +83,7 @@
   </div>
 
   <!-- Documents Table -->
-  <div *ngIf="!(loading$ | async) && filteredDocuments.length > 0" class="card" style="margin-top: 24px;">
+  <div *ngIf="!(loading$ | async) && getFilteredDocuments.length > 0" class="card" style="margin-top: 24px;">
     <div class="card-header">
       <div class="card-title">
         <i class="fas fa-list"></i>
@@ -96,7 +102,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let doc of filteredDocuments; trackBy: trackByDocument">
+          <tr *ngFor="let doc of getFilteredDocuments; trackBy: trackByDocument">
             <td>
               <div class="cell-entity">
                 <div class="cell-icon">
@@ -143,7 +149,7 @@
     </div>
     <!-- Pagination -->
     <app-pagination
-      *ngIf="filteredDocuments.length > 0"
+      *ngIf="getFilteredDocuments.length > 0"
       [pageNumber]="currentPage"
       [pageSize]="pageSize"
       [totalElements]="totalElements"

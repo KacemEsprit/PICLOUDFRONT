@@ -140,7 +140,7 @@
               <button class="btn-icon btn-icon-view" type="button" (click)="viewDocumentDetails(doc.id!)" title="View">
                 <i class="fas fa-eye"></i>
               </button>
-              <button class="btn-icon btn-icon-delete" type="button" title="Delete">
+              <button class="btn-icon btn-icon-delete" type="button" (click)="deleteDocument(doc.id!)" title="Delete">
                 <i class="fas fa-trash"></i>
               </button>
             </td>
@@ -176,68 +176,73 @@
         <button type="button" class="btn-close" (click)="closeModal()"></button>
       </div>
 
-      <form [formGroup]="uploadForm" class="modal-form">
-        <div class="form-group">
-          <label for="documentTypeId" class="form-label">
-            Document Type
-            <span class="required">*</span>
-          </label>
-          <select id="documentTypeId" formControlName="documentTypeId" class="form-select">
-            <option value="">{{ documentTypes.length > 0 ? 'Select document type...' : 'Loading document types...' }}</option>
-            <option *ngFor="let type of documentTypes" [value]="type.id">
-              {{ type.name }}
-            </option>
-          </select>
-          <div *ngIf="uploadForm.get('documentTypeId')?.invalid && uploadForm.get('documentTypeId')?.touched" class="error-message">
-            <i class="fas fa-exclamation-circle"></i>Document type is required
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="description" class="form-label">Description</label>
-          <textarea id="description"
-                    formControlName="description"
-                    class="form-textarea"
-                    placeholder="Enter document description (optional)"
-                    rows="3"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="file" class="form-label">
-            Upload File
-            <span class="required">*</span>
-          </label>
-          <div class="file-upload-wrapper">
-            <input type="file"
-                   id="file"
-                   class="form-file-input"
-                   (change)="onFileSelected($event)"
-                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-            <label for="file" class="file-upload-label">
-              <i class="fas fa-upload"></i>
-              <span>Choose File</span>
+      <div class="modal-body">
+        <form [formGroup]="uploadForm" class="modal-form">
+          <div class="form-group">
+            <label for="documentTypeId" class="form-label">
+              Document Type
+              <span class="required">*</span>
             </label>
+            <select id="documentTypeId" formControlName="documentTypeId" class="form-select">
+              <option value="">{{ documentTypes.length > 0 ? 'Select document type...' : 'Loading document types...' }}</option>
+              <option *ngFor="let type of documentTypes" [value]="type.id">
+                {{ type.name }}
+              </option>
+            </select>
+            <div *ngIf="uploadForm.get('documentTypeId')?.invalid && uploadForm.get('documentTypeId')?.touched" class="error-message">
+              <i class="fas fa-exclamation-circle"></i>Document type is required
+            </div>
           </div>
-          <p class="form-hint">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG</p>
-          <div *ngIf="uploadForm.get('file')?.invalid && uploadForm.get('file')?.touched" class="error-message">
-            <i class="fas fa-exclamation-circle"></i>File is required
-          </div>
-        </div>
 
-        <div class="form-group" *ngIf="isExpiryRequired()">
-          <label for="expiryDate" class="form-label">
-            Expiry Date
-            <span class="required">*</span>
-          </label>
-          <input type="date"
-                 id="expiryDate"
-                 formControlName="expiryDate"
-                 class="form-input">
-          <div *ngIf="uploadForm.get('expiryDate')?.invalid && uploadForm.get('expiryDate')?.touched" class="error-message">
-            <i class="fas fa-exclamation-circle"></i>Expiry date is required for this document type
+          <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description"
+                      formControlName="description"
+                      class="form-textarea"
+                      placeholder="Enter document description (optional)"
+                      rows="3"></textarea>
           </div>
-        </div>
 
+          <div class="form-group">
+            <label for="file" class="form-label">
+              Upload File
+              <span class="required">*</span>
+            </label>
+            <div class="file-upload-wrapper">
+              <input type="file"
+                     id="file"
+                     class="form-file-input"
+                     (change)="onFileSelected($event)"
+                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+              <label for="file" class="file-upload-label" [class.file-selected]="selectedFile">
+                <i class="fas" [class.fa-check-circle]="selectedFile" [class.fa-upload]="!selectedFile"></i>
+                <span *ngIf="!selectedFile">Choose File</span>
+                <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
+              </label>
+            </div>
+            <p class="form-hint">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG</p>
+            <div *ngIf="uploadForm.get('file')?.invalid && uploadForm.get('file')?.touched" class="error-message">
+              <i class="fas fa-exclamation-circle"></i>File is required
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="isExpiryRequired()">
+            <label for="expiryDate" class="form-label">
+              Expiry Date
+              <span class="required">*</span>
+            </label>
+            <input type="date"
+                   id="expiryDate"
+                   formControlName="expiryDate"
+                   class="form-input">
+            <div *ngIf="uploadForm.get('expiryDate')?.invalid && uploadForm.get('expiryDate')?.touched" class="error-message">
+              <i class="fas fa-exclamation-circle"></i>Expiry date is required for this document type
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">
             <i class="fas fa-times"></i>Cancel
@@ -246,7 +251,28 @@
             <i class="fas fa-upload"></i>Upload Document
           </button>
         </div>
-      </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="showDeleteConfirm" class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fas fa-trash text-red"></i> Confirm Delete</div>
+        <button type="button" class="btn-close" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this document? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="cancelDelete()">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
     </div>
   </div>
 
@@ -267,18 +293,18 @@
           <div class="detail-content">
             <div class="detail-row">
               <label class="detail-label">Document Type:</label>
-              <span class="detail-value">{{ selectedDocument.documentType.name }}</span>
+              <span class="detail-value">{{ selectedDocument!.documentType.name }}</span>
             </div>
             <div class="detail-row">
               <label class="detail-label">User ID:</label>
-              <span class="detail-value">{{ selectedDocument.userId }}</span>
+              <span class="detail-value">{{ selectedDocument!.userId }}</span>
             </div>
             <div class="detail-row">
               <label class="detail-label">Status:</label>
               <span class="detail-value">
-                <span class="status-badge" [ngClass]="getStatusClass(selectedDocument.status)">
+                <span class="status-badge" [ngClass]="getStatusClass(selectedDocument!.status)">
                   <span class="status-dot"></span>
-                  {{ selectedDocument.status }}
+                  {{ selectedDocument!.status }}
                 </span>
               </span>
             </div>
@@ -286,19 +312,19 @@
               <label class="detail-label">Upload Date:</label>
               <span class="detail-value">
                 <i class="fas fa-calendar-alt"></i>
-                {{ selectedDocument.uploadDate | date: 'medium' }}
+                {{ selectedDocument!.uploadDate | date: 'medium' }}
               </span>
             </div>
-            <div class="detail-row" *ngIf="selectedDocument.expiryDate">
+            <div class="detail-row" *ngIf="selectedDocument!.expiryDate">
               <label class="detail-label">Expiry Date:</label>
               <span class="detail-value">
                 <i class="fas fa-calendar-check"></i>
-                {{ selectedDocument.expiryDate | date: 'medium' }}
+                {{ selectedDocument!.expiryDate | date: 'medium' }}
               </span>
             </div>
             <div class="detail-row">
               <label class="detail-label">File Hash:</label>
-              <span class="detail-value text-monospace">{{ selectedDocument.fileHash }}</span>
+              <span class="detail-value text-monospace">{{ selectedDocument!.fileHash }}</span>
             </div>
           </div>
         </div>
@@ -324,10 +350,10 @@
         <button type="button" class="btn btn-secondary" (click)="closeDetailModal()">
           <i class="fas fa-times"></i>Close
         </button>
-        <button type="button" class="btn btn-danger" (click)="rejectDocument(selectedDocument.id!)" *ngIf="selectedDocument.status === 'PENDING' || selectedDocument.status === 'VALID'">
+        <button type="button" class="btn btn-danger" (click)="rejectDocument(selectedDocument!.id!)" *ngIf="selectedDocument!.status === 'PENDING' || selectedDocument!.status === 'VALID'">
           <i class="fas fa-times-circle"></i> Reject
         </button>
-        <button type="button" class="btn btn-success" (click)="approveDocument(selectedDocument.id!)" *ngIf="selectedDocument.status === 'PENDING' || selectedDocument.status === 'REJECTED'">
+        <button type="button" class="btn btn-success" (click)="approveDocument(selectedDocument!.id!)" *ngIf="selectedDocument!.status === 'PENDING' || selectedDocument!.status === 'REJECTED'">
           <i class="fas fa-check-circle"></i> Approve
         </button>
       </div>

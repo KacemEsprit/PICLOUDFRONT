@@ -146,6 +146,28 @@
   box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
 }
 
+/* Search Input Styles */
+.search-input {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 0.9rem;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+.search-input:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
 /* Table Styles */
 .table-wrapper {
   overflow-x: auto;

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -45,6 +45,10 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
   showDetailModal: boolean = false;
   selectedDocument: LegalDocument | null = null;
 
+  // Delete confirmation modal state
+  showDeleteConfirm: boolean = false;
+  documentToDelete: number | null = null;
+
   // Direct URL base for files served from htdocs
   private fileServerUrl = 'http://localhost:8081/pidev-uploads/';
 
@@ -54,7 +58,8 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
     public documentService: DocumentService,
     private documentTypeService: DocumentTypeService,
     private toastService: ToastService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
     this.loading$ = this.documentService.loading$;
     this.error$ = this.documentService.error$;
@@ -121,12 +126,14 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
     this.showUploadForm = true;
     this.initializeForm();
     this.selectedFile = null;
+    this.cdr.markForCheck();
   }
 
   closeModal(): void {
     this.showUploadForm = false;
     this.uploadForm.reset();
     this.selectedFile = null;
+    this.cdr.markForCheck();
   }
 
   onFileSelected(event: any): void {
@@ -358,12 +365,14 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
     if (document) {
       this.selectedDocument = document;
       this.showDetailModal = true;
+      this.cdr.markForCheck();
     }
   }
 
   closeDetailModal(): void {
     this.showDetailModal = false;
     this.selectedDocument = null;
+    this.cdr.markForCheck();
   }
 
   /**
@@ -430,6 +439,47 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
       default:
         return 'status-pending';
     }
+  }
+
+  /**
+   * Show delete confirmation modal
+   */
+  deleteDocument(documentId: number): void {
+    this.documentToDelete = documentId;
+    this.showDeleteConfirm = true;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Cancel delete confirmation
+   */
+  cancelDelete(): void {
+    this.showDeleteConfirm = false;
+    this.documentToDelete = null;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Confirm and delete the document
+   */
+  confirmDelete(): void {
+    if (!this.documentToDelete) return;
+
+    const documentId = this.documentToDelete;
+    this.showDeleteConfirm = false;
+    this.documentToDelete = null;
+    this.cdr.markForCheck();
+
+    this.documentService.forceDeleteDocument(documentId).subscribe(
+      () => {
+        this.toastService.success('Success', 'Document deleted successfully');
+        // Refresh the document list
+        this.loadDocuments();
+      },
+      (err) => {
+        this.toastService.error('Error', err.message || 'Failed to delete document');
+      }
+    );
   }
 
   Math = Math;

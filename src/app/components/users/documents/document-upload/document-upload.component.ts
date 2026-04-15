@@ -45,14 +45,12 @@ export class DocumentUploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('🔵 DocumentUploadComponent initialized');
     this.loadDocumentTypes();
 
     // Subscribe to documentTypes$ from service
     this.documentTypeService.documentTypes$
       .pipe(takeUntil(this.destroy$))
       .subscribe(types => {
-        console.log('✅ Document types received from service:', types);
         this.documentTypes = types;
       });
   }
@@ -63,17 +61,15 @@ export class DocumentUploadComponent implements OnInit, OnDestroy {
   }
 
   loadDocumentTypes(): void {
-    console.log('🟡 loadDocumentTypes() called');
-
     this.documentTypeService
       .getDocumentTypes(0, 100)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (page) => {
-          console.log('✅ Document types loaded:', page.content);
+          // Document types loaded successfully
         },
         error: (error) => {
-          console.error('❌ Error loading document types:', error);
+          console.error('Error loading document types:', error);
           this.toastService.error('Error', 'Failed to load document types: ' + (error?.message || 'Unknown error'));
         }
       });
@@ -89,18 +85,10 @@ export class DocumentUploadComponent implements OnInit, OnDestroy {
   }
 
   onFileSelected(event: any): void {
-    console.log('🟡 onFileSelected called');
-    console.log('🟡 Event:', event);
-    console.log('🟡 Event target:', event.target);
-    console.log('🟡 Event target files:', event.target?.files);
-
     const file = event.target.files[0];
-    console.log('🟡 Selected file:', file);
 
     if (file) {
       this.handleFileSelection(file);
-    } else {
-      console.warn('⚠️ No file selected');
     }
   }
 

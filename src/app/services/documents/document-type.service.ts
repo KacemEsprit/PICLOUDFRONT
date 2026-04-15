@@ -32,7 +32,7 @@ export class DocumentTypeService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<Page<DocumentType>>(this.apiUrl, { params }).pipe(
+    return this.http.get<Page<DocumentType>>(this.publicApiUrl, { params }).pipe(
       tap(response => {
         this.documentTypesSubject.next(response.content);
         this.loadingSubject.next(false);

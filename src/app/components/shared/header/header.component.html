@@ -1,11 +1,12 @@
 <!-- Navigation Navbar -->
 <nav class="navbar">
   <div class="navbar-container">
-    <!-- Left Section: Title + Home Link + Dashboard Link -->
+    <!-- Left Section: Title + Home Link + Dashboard Link + Documents Link -->
     <div class="navbar-left">
       <h1 class="navbar-title">{{ title }}</h1>
       <a routerLink="/home" class="home-link" [class.active]="isHomePage()">Home</a>
       <a *ngIf="isAuthenticated$ | async" [routerLink]="getDashboardLink()" class="dashboard-link" [class.active]="isDashboardPage()">Dashboard</a>
+      <a *ngIf="isAuthenticated$ | async" routerLink="/documents" class="documents-link" [class.active]="isDocumentsPage()">Documents</a>
     </div>
 
     <!-- Center Section: Spacer -->

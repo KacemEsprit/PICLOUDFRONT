@@ -24,11 +24,14 @@
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 1200;
   animation: fadeIn 0.2s ease-out;
-  padding: 16px;
+  padding: 20px 20px;
+  overflow-y: auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 @keyframes fadeIn {
@@ -38,15 +41,17 @@
 
 /* Modal Box */
 .upload-modal-box {
-  width: min(600px, calc(100vw - 32px));
-  max-height: calc(100vh - 64px);
-  overflow-y: auto;
-  background: var(--bg-surface);
-  border-radius: var(--radius-md);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease-out;
-  display: flex;
-  flex-direction: column;
+  width: min(720px, calc(100vw - 40px)) !important;
+  background: var(--bg-surface) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  animation: slideUp 0.3s ease-out !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-shrink: 0 !important;
+  max-height: none !important;
+  max-width: none !important;
+  overflow: visible !important;
 }
 
 @keyframes slideUp {
@@ -109,9 +114,10 @@
 
 /* Modal Body */
 .upload-modal-body {
-  padding: 24px;
-  overflow-y: auto;
-  flex: 1;
+  padding: 32px !important;
+  flex: 1 !important;
+  overflow: visible !important;
+  max-height: none !important;
 }
 
 .upload-modal-body .alert {
@@ -132,16 +138,32 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
-.upload-modal-body .form-select,
 .upload-modal-body .form-control {
   height: 40px;
   border: 1px solid var(--border-mid);
   border-radius: var(--radius-sm);
   font-size: 0.88rem;
   color: var(--text-body);
+  padding: 0 12px;
+}
+
+.upload-modal-body .form-select {
+  height: 40px;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  color: var(--text-body);
+  padding: 0 36px 0 12px;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .upload-modal-body .form-select:focus,
@@ -152,7 +174,7 @@
 }
 
 .upload-modal-body .mb-3 {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .upload-modal-body .text-danger {
@@ -235,7 +257,7 @@
   background-color: var(--bg-page);
   transition: all 0.25s ease;
   cursor: pointer;
-  padding: 2rem;
+  padding: 1.5rem !important;
 }
 
 .upload-drop-zone:hover {

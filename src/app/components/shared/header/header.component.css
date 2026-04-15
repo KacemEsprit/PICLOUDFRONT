@@ -119,6 +119,28 @@ html[data-theme='light'] .navbar-title {
   color: #0d47a1;
 }
 
+.documents-link {
+  font-size: 1rem;
+  color: #1a73e8;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+}
+
+.documents-link:hover {
+  color: #0d47a1;
+  border-bottom-color: #1a73e8;
+}
+
+.documents-link.active {
+  border-bottom-color: #1a73e8;
+  color: #0d47a1;
+}
+
 .profile-link {
   font-size: 1rem;
   color: #1a73e8;

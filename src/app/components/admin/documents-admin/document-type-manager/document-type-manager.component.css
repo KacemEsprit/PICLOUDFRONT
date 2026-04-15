@@ -237,6 +237,67 @@
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content.modal-sm {
+  max-width: 450px;
+  max-height: 90vh;
+  padding: 0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-light);
+  background: #f8f9ff;
+  flex-shrink: 0;
+}
+
+.modal-header .modal-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a237e;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-header .btn-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-light);
+  background: #f8f9ff;
+  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .modal-content h2 {
@@ -354,6 +415,11 @@ textarea.form-control {
   .role-checkboxes {
     grid-template-columns: 1fr;
   }
+}
+
+/* Utility Classes */
+.text-red {
+  color: #d32f2f;
 }
 
 

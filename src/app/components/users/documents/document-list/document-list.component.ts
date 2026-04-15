@@ -18,7 +18,6 @@ import { PaginationComponent } from '../../../shared/pagination/pagination.compo
 })
 export class DocumentListComponent implements OnInit, OnDestroy {
   documents: LegalDocument[] = [];
-  filteredDocuments: LegalDocument[] = [];
 
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
@@ -31,6 +30,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
 
   // Filters
   selectedStatus: DocumentStatusEnum | '' = '';
+  searchFilter: string = ''; // Search by document type, filename, document ID
   statuses = [
     DocumentStatusEnum.PENDING,
     DocumentStatusEnum.VALID,
@@ -66,7 +66,6 @@ export class DocumentListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: Page<LegalDocument>) => {
           this.documents = response.content;
-          this.applyFilters();
           this.totalElements = response.totalElements;
           this.totalPages = response.totalPages;
           this.currentPage = response.pageNumber;
@@ -78,12 +77,43 @@ export class DocumentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  applyFilters(): void {
+  /**
+   * Filter documents based on search term and status filter
+   * This is a client-side filter for instant search results
+   */
+  get getFilteredDocuments(): LegalDocument[] {
+    let filtered = this.documents;
+
+    // Apply status filter
     if (this.selectedStatus) {
-      this.filteredDocuments = this.documents.filter(doc => doc.status === this.selectedStatus);
-    } else {
-      this.filteredDocuments = this.documents;
+      filtered = filtered.filter(doc => doc.status === this.selectedStatus);
     }
+
+    // Apply search filter
+    if (this.searchFilter.trim()) {
+      const searchTerm = this.searchFilter.toLowerCase();
+      filtered = filtered.filter(doc => {
+        // Search by document type name
+        const docTypeMatch = doc.documentType?.name?.toLowerCase().includes(searchTerm);
+        // Search by document ID
+        const docIdMatch = doc.id?.toString().includes(searchTerm);
+        // Search by filename (if available in documentUrl)
+        const filenameMatch = doc.documentUrl?.toLowerCase().includes(searchTerm);
+
+        return docTypeMatch || docIdMatch || filenameMatch;
+      });
+    }
+
+    return filtered;
+  }
+
+  onSearchChange(): void {
+    // Client-side search, no need to reload documents
+    // The search filter is applied via the getFilteredDocuments getter
+  }
+
+  applyFilters(): void {
+    // Filters are now applied via the getFilteredDocuments getter
   }
 
   onStatusFilterChange(): void {
