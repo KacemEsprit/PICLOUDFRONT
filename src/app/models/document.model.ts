@@ -36,6 +36,7 @@ export interface DocumentType {
 export interface LegalDocument {
   id: number;
   userId: number;
+  username?: string; // Optional username field
   documentTypeId: number; // Helper field derived from documentType.id
   documentType: DocumentType; // Full DocumentType object
   documentUrl: string;

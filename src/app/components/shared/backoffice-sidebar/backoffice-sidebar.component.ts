@@ -19,7 +19,8 @@ export class BackofficeSidebarComponent implements OnInit {
       label: 'Admin',
       items: [
         { icon: 'fa-users', label: 'User Management', path: '/admin/users' },
-        { icon: 'fa-file', label: 'Document Management', path: '/admin/documents' }
+        { icon: 'fa-file', label: 'Document Management', path: '/admin/documents' },
+        { icon: 'fa-history', label: 'Audit Log', path: '/admin/audit-log' }
       ]
     }
   ];

@@ -21,19 +21,34 @@
     <div class="stat-card stat-card-blue">
       <div class="stat-card-header">
         <div>
-          <div class="stat-card-value">12,450</div>
+          <div class="stat-card-value">{{ loadingStats ? '...' : (totalUsers | number) }}</div>
           <div class="stat-card-label">Total Users</div>
           <div class="stat-card-sub">Active in platform</div>
         </div>
         <i class="fas fa-users stat-card-icon"></i>
       </div>
       <div class="stat-card-footer">
-        <i class="fas fa-arrow-up"></i>
-        <span>+8.2% from last month</span>
+        <i class="fas fa-sync-alt"></i>
+        <span>Real-time data</span>
       </div>
     </div>
 
     <div class="stat-card stat-card-green">
+      <div class="stat-card-header">
+        <div>
+          <div class="stat-card-value">{{ loadingStats ? '...' : (totalDocuments | number) }}</div>
+          <div class="stat-card-label">Number of Documents</div>
+          <div class="stat-card-sub">All documents</div>
+        </div>
+        <i class="fas fa-file-alt stat-card-icon"></i>
+      </div>
+      <div class="stat-card-footer">
+        <i class="fas fa-sync-alt"></i>
+        <span>Real-time data</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card-orange">
       <div class="stat-card-header">
         <div>
           <div class="stat-card-value">348</div>
@@ -45,21 +60,6 @@
       <div class="stat-card-footer">
         <i class="fas fa-arrow-up"></i>
         <span>+12.5% from last month</span>
-      </div>
-    </div>
-
-    <div class="stat-card stat-card-orange">
-      <div class="stat-card-header">
-        <div>
-          <div class="stat-card-value">89</div>
-          <div class="stat-card-label">Pending Reports</div>
-          <div class="stat-card-sub">Needs review</div>
-        </div>
-        <i class="fas fa-exclamation-circle stat-card-icon"></i>
-      </div>
-      <div class="stat-card-footer">
-        <i class="fas fa-arrow-down"></i>
-        <span>-2.1% from last month</span>
       </div>
     </div>
 
@@ -134,56 +134,31 @@
             <i class="fas fa-file-alt"></i>
             Manage Documents
           </a>
-          <a class="quick-action-btn qa-orange" routerLink="/admin/dashboard">
-            <i class="fas fa-chart-bar"></i>
-            View Reports
-          </a>
-          <a class="quick-action-btn qa-purple" routerLink="/admin/dashboard">
-            <i class="fas fa-cog"></i>
-            System Settings
-          </a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Recent Activity -->
+  <!-- Document Expiry Alerts and User Activity -->
+  <div class="dashboard-alerts-section" style="margin-top: 24px;">
+    <!-- Document Expiry Alerts -->
+    <app-document-expiry-alerts></app-document-expiry-alerts>
+  </div>
+
+  <!-- User Activity Log -->
   <div class="card" style="margin-top: 24px;">
     <div class="card-header">
       <div class="card-title">
-        <i class="fas fa-history"></i>
-        Recent Activity
+        <i class="fas fa-user-clock"></i>
+        System Audit Log
       </div>
     </div>
     <div class="card-body">
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">New user registration</div>
-          <div class="recent-item-sub">Agent - Ahmed Mohamed</div>
-        </div>
-        <div class="text-hint">2 hours ago</div>
-      </div>
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">Document submitted for review</div>
-          <div class="recent-item-sub">License Plate - TN 123 ABC</div>
-        </div>
-        <div class="text-hint">5 hours ago</div>
-      </div>
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">System backup completed</div>
-          <div class="recent-item-sub">Database - Full sync</div>
-        </div>
-        <div class="text-hint">1 day ago</div>
-      </div>
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">User account locked</div>
-          <div class="recent-item-sub">Security - Failed login attempts</div>
-        </div>
-        <div class="text-hint">2 days ago</div>
-      </div>
+      <app-user-activity-log
+        [showAllLogs]="true"
+        [pageSize]="10"
+        [showPagination]="true">
+      </app-user-activity-log>
     </div>
   </div>
 </div>

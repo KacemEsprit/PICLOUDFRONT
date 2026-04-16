@@ -115,6 +115,7 @@
             <th>User</th>
             <th>Status</th>
             <th>Upload Date</th>
+            <th>Expiry Date</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -124,7 +125,7 @@
               <span class="fw-600">{{ doc.documentType.name || 'Unknown' }}</span>
             </td>
             <td>
-              <span class="cell-date">User #{{ doc.userId }}</span>
+              <span class="cell-date">{{ doc.username || ('User #' + doc.userId) }}</span>
             </td>
             <td>
               <span class="status-badge" [ngClass]="getStatusClass(doc.status)">
@@ -135,6 +136,10 @@
             <td class="cell-date">
               <i class="fas fa-calendar-alt"></i>
               {{ doc.uploadDate | date: 'short' }}
+            </td>
+            <td class="cell-date">
+              <i class="fas fa-calendar-check"></i>
+              {{ doc.expiryDate ? (doc.expiryDate | date: 'short') : '—' }}
             </td>
             <td class="cell-actions">
               <button class="btn-icon btn-icon-view" type="button" (click)="viewDocumentDetails(doc.id!)" title="View">
@@ -321,10 +326,6 @@
                 <i class="fas fa-calendar-check"></i>
                 {{ selectedDocument!.expiryDate | date: 'medium' }}
               </span>
-            </div>
-            <div class="detail-row">
-              <label class="detail-label">File Hash:</label>
-              <span class="detail-value text-monospace">{{ selectedDocument!.fileHash }}</span>
             </div>
           </div>
         </div>

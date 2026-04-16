@@ -11,6 +11,7 @@ import { AgentDhasbordComponent } from './components/users/agent/agent-dhasbord/
 import { OperatorDhasbordComponent } from './components/users/operator/operator-dhasbord/operator-dhasbord.component';
 import { PassengerDhasbordComponent } from './components/users/passenger/passenger-dhasbord/passenger-dhasbord.component';
 import { AdminUserManagementComponent } from './components/admin/users/admin-user-management.component';
+import { AuditLogComponent } from './components/admin/audit-log/audit-log.component';
 import { AuthGuard } from './guards/auth.guard';
 import { FrontofficeLayoutComponent } from './components/shared/frontoffice-layout/frontoffice-layout.component';
 import { BackofficeLayoutComponent } from './components/shared/backoffice-layout/backoffice-layout.component';
@@ -74,7 +75,8 @@ const routes: Routes = [
       { path: 'users', component: AdminUserManagementComponent },
       { path: 'admin-dhasbord/users', component: AdminUserManagementComponent },
       { path: 'documents', component: AdminDocumentListComponent },
-      { path: 'documents/types', component: DocumentTypeManagerComponent }
+      { path: 'documents/types', component: DocumentTypeManagerComponent },
+      { path: 'audit-log', component: AuditLogComponent }
     ]
   },
 

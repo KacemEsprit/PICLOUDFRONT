@@ -39,6 +39,11 @@ import { AuthService } from './services/auth/auth.service';
 import { JwtInterceptor } from './services/auth/jwt.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 
+// Feature Modules
+import { UserActivityLogModule } from './components/admin/user-activity-log/user-activity-log.module';
+import { DocumentExpiryAlertsModule } from './components/admin/document-expiry-alerts/document-expiry-alerts.module';
+import { AuditLogModule } from './components/admin/audit-log/audit-log.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -74,7 +79,10 @@ import { AuthGuard } from './guards/auth.guard';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    UserActivityLogModule,
+    DocumentExpiryAlertsModule,
+    AuditLogModule
   ],
   providers: [
     AuthService,
