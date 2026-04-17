@@ -58,23 +58,94 @@
 }
 
 .stat-card-blue {
-  background: #fff;
+  background: #f8fafd;
   border: 1px solid #e3f2fd;
+  border-left: 4px solid #1a73e8;
 }
 
 .stat-card-green {
-  background: #fff;
+  background: #f8fcf9;
   border: 1px solid #e8f5e9;
+  border-left: 4px solid #2e7d32;
 }
 
 .stat-card-orange {
-  background: #fff;
+  background: #fffcf5;
   border: 1px solid #fff8e1;
+  border-left: 4px solid #f57f17;
 }
 
 .stat-card-purple {
-  background: #fff;
+  background: #fbf8fd;
   border: 1px solid #f3e5f5;
+  border-left: 4px solid #7b1fa2;
+}
+
+.stat-card-red {
+  background: #fef7f7;
+  border: 1px solid #ffebee;
+  border-left: 4px solid #d32f2f;
+}
+
+.stat-card-indigo {
+  background: #f7f5fc;
+  border: 1px solid #ede7f6;
+  border-left: 4px solid #3f51b5;
+}
+
+/* Stat Card Color Variants - Value and Icon Colors */
+.stat-card-blue .stat-card-value {
+  color: #1a73e8;
+}
+
+.stat-card-blue .stat-card-icon {
+  color: #1a73e8;
+  opacity: 0.2;
+}
+
+.stat-card-green .stat-card-value {
+  color: #2e7d32;
+}
+
+.stat-card-green .stat-card-icon {
+  color: #2e7d32;
+  opacity: 0.2;
+}
+
+.stat-card-orange .stat-card-value {
+  color: #f57f17;
+}
+
+.stat-card-orange .stat-card-icon {
+  color: #f57f17;
+  opacity: 0.2;
+}
+
+.stat-card-purple .stat-card-value {
+  color: #7b1fa2;
+}
+
+.stat-card-purple .stat-card-icon {
+  color: #7b1fa2;
+  opacity: 0.2;
+}
+
+.stat-card-red .stat-card-value {
+  color: #d32f2f;
+}
+
+.stat-card-red .stat-card-icon {
+  color: #d32f2f;
+  opacity: 0.2;
+}
+
+.stat-card-indigo .stat-card-value {
+  color: #3f51b5;
+}
+
+.stat-card-indigo .stat-card-icon {
+  color: #3f51b5;
+  opacity: 0.2;
 }
 
 .stat-card-header {
@@ -179,19 +250,23 @@
 }
 
 .qa-blue {
-  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  background: #1a73e8;
 }
 
 .qa-green {
-  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  background: #2e7d32;
 }
 
 .qa-orange {
-  background: linear-gradient(135deg, #f57f17, #e65100);
+  background: #f57f17;
+}
+
+.qa-red {
+  background: #d32f2f;
 }
 
 .qa-purple {
-  background: linear-gradient(135deg, #7b1fa2, #4a148c);
+  background: #7b1fa2;
 }
 
 /* Recent Activity */

@@ -10,10 +10,6 @@
       <h1 class="page-title">Admin Dashboard</h1>
       <p class="page-subtitle">Manage your platform and users</p>
     </div>
-    <a class="btn btn-primary" routerLink="/admin/documents">
-      <i class="fas fa-file-plus"></i>
-      Manage Documents
-    </a>
   </div>
 
   <!-- Stats Grid -->
@@ -48,33 +44,33 @@
       </div>
     </div>
 
-    <div class="stat-card stat-card-orange">
+    <div class="stat-card stat-card-red">
       <div class="stat-card-header">
         <div>
-          <div class="stat-card-value">348</div>
-          <div class="stat-card-label">Active Bookings</div>
-          <div class="stat-card-sub">All transports</div>
+          <div class="stat-card-value">{{ loadingStats ? '...' : (criticalExpiryAlerts | number) }}</div>
+          <div class="stat-card-label">Critical Expiry Alerts</div>
+          <div class="stat-card-sub">Expiring within 7 days</div>
         </div>
-        <i class="fas fa-check-circle stat-card-icon"></i>
+        <i class="fas fa-exclamation-circle stat-card-icon"></i>
       </div>
       <div class="stat-card-footer">
-        <i class="fas fa-arrow-up"></i>
-        <span>+12.5% from last month</span>
+        <i class="fas fa-clock"></i>
+        <span>Action required</span>
       </div>
     </div>
 
-    <div class="stat-card stat-card-purple">
+    <div class="stat-card stat-card-indigo">
       <div class="stat-card-header">
         <div>
-          <div class="stat-card-value">$45.2K</div>
-          <div class="stat-card-label">Revenue</div>
-          <div class="stat-card-sub">This month</div>
+          <div class="stat-card-value">{{ loadingStats ? '...' : (todayAuditLogs | number) }}</div>
+          <div class="stat-card-label">Today's Audit Logs</div>
+          <div class="stat-card-sub">System activities</div>
         </div>
-        <i class="fas fa-dollar-sign stat-card-icon"></i>
+        <i class="fas fa-history stat-card-icon"></i>
       </div>
       <div class="stat-card-footer">
-        <i class="fas fa-arrow-up"></i>
-        <span>+5.3% from last month</span>
+        <i class="fas fa-sync-alt"></i>
+        <span>Real-time tracking</span>
       </div>
     </div>
   </div>
@@ -133,6 +129,14 @@
           <a class="quick-action-btn qa-green" routerLink="/admin/documents">
             <i class="fas fa-file-alt"></i>
             Manage Documents
+          </a>
+          <a class="quick-action-btn qa-red" routerLink="/admin/expiry-alerts">
+            <i class="fas fa-exclamation-circle"></i>
+            Document Expiry Alerts
+          </a>
+          <a class="quick-action-btn qa-purple" routerLink="/admin/audit-log">
+            <i class="fas fa-history"></i>
+            Audit Log
           </a>
         </div>
       </div>

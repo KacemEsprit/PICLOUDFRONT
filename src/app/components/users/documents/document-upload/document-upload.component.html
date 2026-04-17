@@ -105,10 +105,10 @@
               </div>
             </div>
 
-            <!-- Expiry Date Field (if required) -->
-            <div class="mb-3" *ngIf="isExpiryRequired()">
+            <!-- Expiry Date Field (Optional) -->
+            <div class="mb-3">
               <label for="expiryDate" class="form-label">
-                Expiry Date <span class="text-danger">*</span>
+                Expiry Date
               </label>
               <input
                 type="date"
@@ -116,8 +116,9 @@
                 class="form-control"
                 formControlName="expiryDate"
                 [class.is-invalid]="uploadForm.get('expiryDate')?.invalid && uploadForm.get('expiryDate')?.touched">
+              <small class="text-muted d-block mt-1">Optional - Leave blank if this document doesn't expire</small>
               <div class="invalid-feedback">
-                Expiry date is required and cannot be in the past
+                Please provide a valid date
               </div>
             </div>
           </form>

@@ -47,6 +47,55 @@
     </div>
   </div>
 
+  <!-- Search and Filter Section -->
+  <div *ngIf="!loading && !error" class="search-filter-section">
+    <div class="search-container">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search by username, document type..."
+        [value]="searchQuery"
+        (input)="onSearchChange($event)">
+    </div>
+
+    <div class="filter-controls">
+      <div class="filter-group">
+        <label>Document Type:</label>
+        <select
+          class="filter-select"
+          [value]="selectedDocumentType"
+          (change)="onDocumentTypeFilterChange($event)">
+          <option value="">All Types</option>
+          <option *ngFor="let type of getUniqueDocumentTypes()" [value]="type">
+            {{ type }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status:</label>
+        <select
+          class="filter-select"
+          [value]="selectedStatus"
+          (change)="onStatusFilterChange($event)">
+          <option value="">All Status</option>
+          <option *ngFor="let status of getUniqueStatuses()" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </div>
+
+      <button
+        class="btn-clear-filters"
+        *ngIf="searchQuery || selectedDocumentType || selectedStatus"
+        (click)="clearFilters()">
+        <i class="fas fa-times"></i>
+        Clear Filters
+      </button>
+    </div>
+  </div>
+
   <!-- Tab Navigation -->
   <div *ngIf="!loading && !error" class="tab-navigation">
     <button
@@ -110,7 +159,7 @@
           <div class="document-details">
             <div class="detail-item">
               <i class="fas fa-user"></i>
-              <span>User ID: {{ doc.userId }}</span>
+              <span>User: {{ doc.username || 'N/A' }}</span>
             </div>
             <div class="detail-item">
               <i class="fas fa-calendar"></i>
@@ -130,17 +179,21 @@
         </div>
 
         <div class="document-actions">
-          <button class="action-btn view-btn" title="View Document">
+          <button
+            class="action-btn view-btn"
+            title="View Document"
+            [disabled]="!canDownloadDocument(doc)"
+            (click)="viewDocument(doc)">
             <i class="fas fa-eye"></i>
             <span class="tooltip">View</span>
           </button>
-          <button class="action-btn renew-btn" title="Request Renewal">
-            <i class="fas fa-redo"></i>
-            <span class="tooltip">Renew</span>
-          </button>
-          <button class="action-btn notify-btn" title="Notify User">
-            <i class="fas fa-bell"></i>
-            <span class="tooltip">Notify</span>
+          <button
+            class="action-btn download-btn"
+            title="Download Document"
+            [disabled]="!canDownloadDocument(doc)"
+            (click)="downloadDocument(doc)">
+            <i class="fas fa-download"></i>
+            <span class="tooltip">Download</span>
           </button>
         </div>
       </div>

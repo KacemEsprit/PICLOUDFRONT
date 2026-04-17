@@ -17,6 +17,8 @@ export class AdminDhasbordComponent implements OnInit {
 
   totalUsers: number = 0;
   totalDocuments: number = 0;
+  criticalExpiryAlerts: number = 0;
+  todayAuditLogs: number = 0;
   loadingStats: boolean = true;
 
   constructor(
@@ -51,11 +53,46 @@ export class AdminDhasbordComponent implements OnInit {
     this.documentService.searchDocuments({ page: 0, size: 1, documentTypeId: undefined, userId: undefined, status: undefined }).subscribe({
       next: (response) => {
         this.totalDocuments = response.totalElements;
-        this.loadingStats = false;
       },
       error: (error) => {
         console.error('Error fetching total documents:', error);
         this.totalDocuments = 0;
+      }
+    });
+
+    // Fetch critical expiry alerts (documents expiring within 7 days)
+    this.documentExpiryService.getCriticalExpiringDocuments(0, 1).subscribe({
+      next: (response) => {
+        this.criticalExpiryAlerts = response.totalElements;
+      },
+      error: (error) => {
+        console.error('Error fetching critical expiry alerts:', error);
+        this.criticalExpiryAlerts = 0;
+      }
+    });
+
+    // Fetch today's audit logs
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const dateFrom = today.toISOString().split('T')[0];
+    const dateTo = tomorrow.toISOString().split('T')[0];
+
+    this.userActivityService.searchActivityLogs({
+      dateFrom: dateFrom,
+      dateTo: dateTo,
+      page: 0,
+      size: 1
+    }).subscribe({
+      next: (response) => {
+        this.todayAuditLogs = response.totalElements;
+        this.loadingStats = false;
+      },
+      error: (error) => {
+        console.error('Error fetching today\'s audit logs:', error);
+        this.todayAuditLogs = 0;
         this.loadingStats = false;
       }
     });

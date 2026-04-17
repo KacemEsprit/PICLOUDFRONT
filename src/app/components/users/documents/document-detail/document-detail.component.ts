@@ -11,7 +11,7 @@ import { StatusBadgeComponent } from '../../../shared/status-badge/status-badge.
 @Component({
   selector: 'app-document-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, StatusBadgeComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './document-detail.component.html',
   styleUrls: ['./document-detail.component.css']
 })

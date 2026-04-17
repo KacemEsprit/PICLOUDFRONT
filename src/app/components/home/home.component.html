@@ -1,43 +1,69 @@
 <div class="home-page">
-  <div class="home-container">
-    <div class="hero-section">
-      <h1>TRANSIT TN</h1>
-      <p class="tagline">Tunisia's Smart Transportation Platform</p>
-
-      <div class="hero-content">
-        <p>Move Smart. Connect Tunisia. Simplify Mobility.</p>
-        <p class="hero-subtitle">Transform transportation across Tunisia with seamless, real-time journey planning and unified payment solutions.</p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <!-- Hero Tag -->
+      <div class="hero-tag">
+        <i class="fas fa-map-marker"></i> Tunisia's smart transport platform
       </div>
 
-      <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🗺️</div>
-          <h3>Smart Planning</h3>
-          <p>Real-time multimodal journey planning for all transport modes</p>
-        </div>
+      <!-- Main Title -->
+      <h1>We think about <span>Transport</span>, so you don't have to.</h1>
 
-        <div class="feature-card">
-          <div class="feature-icon">💳</div>
-          <h3>Seamless Payments</h3>
-          <p>Unified payment system with secure digital transactions</p>
-        </div>
+      <!-- Description -->
+      <p>If you need to get anywhere, you need TransEasier. Real-time schedules, maps, carpooling and parking — all in one place.</p>
 
-        <div class="feature-card">
-          <div class="feature-icon">📍</div>
-          <h3>Live Tracking</h3>
-          <p>Real-time location tracking and arrival notifications</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">👥</div>
-          <h3>For Everyone</h3>
-          <p>Designed for passengers, operators, agents, and admins</p>
-      </div>
-
-      <div class="cta-buttons">
-        <a routerLink="/login" class="btn btn-primary">Sign In</a>
-        <a routerLink="/register" class="btn btn-secondary">Create Account</a>
+      <!-- Action Buttons -->
+      <div class="hero-actions">
+        <button class="btn-hero-primary" routerLink="/login">
+          <i class="fas fa-bus"></i> View Schedules
+        </button>
+        <button class="btn-hero-outline" routerLink="/register">
+          <i class="fas fa-car"></i> Find a Ride
+        </button>
       </div>
     </div>
-  </div>
+
+    <!-- Stats at Bottom -->
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">50+</div>
+        <div class="hero-stat-label">Bus Lines</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">12</div>
+        <div class="hero-stat-label">Metro Stations</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">3</div>
+        <div class="hero-stat-label">TGM Lines</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">1k+</div>
+        <div class="hero-stat-label">Daily Users</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">Why Choose TransEasier?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-map-marker"></i></div>
+        <h5>GPS Tracking</h5>
+        <p>See real-time arrival updates directly from the maps. Track buses, metros and TGM live.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-calendar"></i></div>
+        <h5>Public Transport Schedules</h5>
+        <p>Access departure and arrival times for all public means of transport through the platform.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-tv"></i></div>
+        <h5>Connected Panels</h5>
+        <p>Smart panels at each station showing temperature, humidity and traffic conditions in real-time.</p>
+      </div>
+    </div>
+  </section>
 </div>

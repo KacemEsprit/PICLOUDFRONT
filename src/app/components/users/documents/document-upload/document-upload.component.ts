@@ -203,6 +203,16 @@ export class DocumentUploadComponent implements OnInit, OnDestroy {
         this.toastService.error('Error', 'Expiry date cannot be in the past');
         return;
       }
+    } else {
+      // Optional expiry date validation - only validate if provided
+      const expiryDate = this.uploadForm.get('expiryDate')?.value;
+      if (expiryDate) {
+        const selectedDate = new Date(expiryDate);
+        if (selectedDate < new Date()) {
+          this.toastService.error('Error', 'Expiry date cannot be in the past');
+          return;
+        }
+      }
     }
 
     this.uploadInProgress = true;
