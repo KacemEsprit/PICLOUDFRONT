@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Contract } from '../../../../models/organization-partner/contract';
 import { ContractService } from '../../../../services/contract.service';
+import { ReportsService } from '../../../../services/reports.service';
 
 @Component({
   selector: 'app-contract-list',
@@ -25,7 +26,18 @@ export class ContractListComponent implements OnInit {
   errorMessage = "";
   showErrorModal = false;
 
-  constructor(private contractService: ContractService, private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  // Weekly Report
+  reportLoading = false;
+  showReportModal = false;
+  reportSuccess = false;
+  reportMessage = "";
+
+  constructor(
+    private contractService: ContractService,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef,
+    private reportsService: ReportsService
+  ) {}
 
   ngOnInit(): void {
     this.loadContracts();
@@ -82,7 +94,6 @@ export class ContractListComponent implements OnInit {
     this.http.get<any>(`/api/contracts/signature/${contractId}/status`).subscribe({
       next: (status) => {
         this.signatureMap[contractId] = status;
-        // Force Angular change detection
         this.signatureMap = { ...this.signatureMap };
       }
     });
@@ -91,7 +102,6 @@ export class ContractListComponent implements OnInit {
   isSigned(contractId: number): boolean {
     const s = this.signatureMap[contractId];
     if (s) return s.isSigned === true;
-    // Fallback - check from contracts list
     const c = this.contracts.find(x => x.id === contractId);
     return c?.isSigned === true;
   }
@@ -111,21 +121,39 @@ export class ContractListComponent implements OnInit {
       });
     }
   }
+
+  sendWeeklyReport(): void {
+    this.reportLoading = true;
+    this.reportsService.triggerWeeklyReport().subscribe({
+      next: (result) => {
+        this.reportLoading = false;
+        this.reportSuccess = true;
+        this.reportMessage = result.message || "Rapport envoye avec succes !";
+        this.showReportModal = true;
+      },
+      error: (err) => {
+        this.reportLoading = false;
+        this.reportSuccess = false;
+        this.reportMessage = err.error?.message || "Erreur lors de l'envoi du rapport.";
+        this.showReportModal = true;
+      }
+    });
+  }
+sendExpirationAlert(): void {
+    this.reportLoading = true;
+    this.reportsService.triggerExpirationAlert().subscribe({
+      next: (result) => {
+        this.reportLoading = false;
+        this.reportSuccess = true;
+        this.reportMessage = result.message || "Alerte expiration envoyee !";
+        this.showReportModal = true;
+      },
+      error: (err) => {
+        this.reportLoading = false;
+        this.reportSuccess = false;
+        this.reportMessage = err.error?.message || "Erreur lors du declenchement de l'alerte.";
+        this.showReportModal = true;
+      }
+    });
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,33 +1,39 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h3 class="card-title mb-0">{{ isEditMode ? 'Edit Contract' : 'Add Contract' }}</h3>
-    <button type="button" class="btn btn-success" (click)="generateClauses()" [disabled]="aiLoading">
-      <i class="fas" [class.fa-robot]="!aiLoading" [class.fa-spinner]="aiLoading" [class.fa-spin]="aiLoading"></i>
-      {{ aiLoading ? 'Generation en cours...' : 'Generer Clauses avec AI' }}
+    <button type="button" class="btn btn-success" (click)="generateClauses()">
+      <i class="fas fa-robot"></i> Generate Clauses with AI
     </button>
   </div>
   <div class="card-body">
-    <form (ngSubmit)="save()">
+    <form (ngSubmit)="save()" #contractForm="ngForm" novalidate>
+
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>Contract Type *</label>
-            <select class="form-control" [(ngModel)]="contract.contractType" name="contractType">
+            <select class="form-control" [(ngModel)]="contract.contractType" name="contractType" required #cType="ngModel"
+              [class.is-invalid]="cType.invalid && cType.touched">
+              <option value="">-- Select Type --</option>
               <option value="COMMERCIAL">COMMERCIAL</option>
               <option value="TECHNICAL">TECHNICAL</option>
               <option value="INSTITUTIONAL">INSTITUTIONAL</option>
             </select>
+            <div class="invalid-feedback" *ngIf="cType.invalid && cType.touched">Contract type is required.</div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Status *</label>
-            <select class="form-control" [(ngModel)]="contract.status" name="status">
+            <select class="form-control" [(ngModel)]="contract.status" name="status" required #cStatus="ngModel"
+              [class.is-invalid]="cStatus.invalid && cStatus.touched">
+              <option value="">-- Select Status --</option>
               <option value="DRAFT">DRAFT</option>
               <option value="ACTIVE">ACTIVE</option>
               <option value="EXPIRED">EXPIRED</option>
               <option value="TERMINATED">TERMINATED</option>
             </select>
+            <div class="invalid-feedback" *ngIf="cStatus.invalid && cStatus.touched">Status is required.</div>
           </div>
         </div>
       </div>
@@ -36,13 +42,22 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Start Date *</label>
-            <input type="date" class="form-control" [(ngModel)]="contract.startDate" name="startDate" required>
+            <input type="date" class="form-control" [(ngModel)]="contract.startDate" name="startDate"
+              required #startDate="ngModel"
+              [class.is-invalid]="startDate.invalid && startDate.touched">
+            <div class="invalid-feedback" *ngIf="startDate.invalid && startDate.touched">Start date is required.</div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>End Date *</label>
-            <input type="date" class="form-control" [(ngModel)]="contract.endDate" name="endDate" required>
+            <input type="date" class="form-control" [(ngModel)]="contract.endDate" name="endDate"
+              required #endDate="ngModel"
+              [class.is-invalid]="endDate.invalid && endDate.touched">
+            <div class="invalid-feedback" *ngIf="endDate.invalid && endDate.touched">End date is required.</div>
+            <small class="text-danger" *ngIf="contract.startDate && contract.endDate && contract.endDate <= contract.startDate">
+              <i class="fas fa-exclamation-circle"></i> End date must be after start date.
+            </small>
           </div>
         </div>
       </div>
@@ -50,65 +65,68 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Organisation *</label>
-            <select class="form-control" [(ngModel)]="contract.organizationId" name="organizationId">
-              <option [value]="0">-- Selectionner --</option>
+            <label>Organization *</label>
+            <select class="form-control" [(ngModel)]="contract.organizationId" name="organizationId" required #orgId="ngModel"
+              [class.is-invalid]="orgId.invalid && orgId.touched">
+              <option value="">-- Select Organization --</option>
               <option *ngFor="let org of organizations" [value]="org.id">{{ org.name }}</option>
             </select>
+            <div class="invalid-feedback" *ngIf="orgId.invalid && orgId.touched">Organization is required.</div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Partenaire *</label>
-            <select class="form-control" [(ngModel)]="contract.partnerId" name="partnerId">
-              <option [value]="0">-- Selectionner --</option>
+            <label>Partner *</label>
+            <select class="form-control" [(ngModel)]="contract.partnerId" name="partnerId" required #pId="ngModel"
+              [class.is-invalid]="pId.invalid && pId.touched">
+              <option value="">-- Select Partner --</option>
               <option *ngFor="let p of partners" [value]="p.id">{{ p.name }}</option>
             </select>
+            <div class="invalid-feedback" *ngIf="pId.invalid && pId.touched">Partner is required.</div>
           </div>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-12">
-          <div class="form-group">
-            <label>Description / Clauses</label>
-            <textarea class="form-control" rows="6" [(ngModel)]="contract.description" name="description"
-              placeholder="Les clauses seront generees automatiquement par AI..."></textarea>
-          </div>
-        </div>
+      <div class="form-group">
+        <label>Description / Clauses <small class="text-muted">(max 5000 chars)</small></label>
+        <textarea class="form-control" [(ngModel)]="contract.description" name="description"
+          maxlength="5000" rows="6" #desc="ngModel"
+          placeholder="Clauses will be auto-generated by AI..."></textarea>
+        <small class="text-muted" *ngIf="contract.description">{{ contract.description.length }}/5000 chars</small>
+      </div>
+
+      <!-- Validation Summary -->
+      <div class="alert alert-danger mt-3" *ngIf="formSubmitted && contractForm.invalid">
+        <i class="fas fa-exclamation-triangle mr-2"></i>
+        <strong>Please fix the errors before submitting</strong>
       </div>
 
       <!-- AI Clauses Section -->
-      <div *ngIf="showClauses" class="mt-4">
-        <div class="card border-success">
-          <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="fas fa-robot mr-2"></i> Clauses generees par AI</h5>
-            <button type="button" class="btn btn-light btn-sm" (click)="applyClausesToDescription()" *ngIf="aiClauses.length > 0">
-              <i class="fas fa-check mr-1"></i> Appliquer dans Description
-            </button>
+      <div *ngIf="showClauses" class="mt-3 card border-primary">
+        <div class="card-header" style="background:linear-gradient(135deg,#1a237e,#1a73e8); color:white;">
+          <h5 class="mb-0"><i class="fas fa-robot mr-2"></i>AI Generated Clauses</h5>
+        </div>
+        <div class="card-body">
+          <!-- Loading -->
+          <div *ngIf="aiLoading" class="text-center py-3">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-2">Generating clauses...</p>
           </div>
-          <div class="card-body">
 
-            <!-- Loading -->
-            <div *ngIf="aiLoading" class="text-center py-4">
-              <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:#2e7d32;"></i>
-              <p class="mt-2 text-muted">Gemini AI analyse le contrat et genere les clauses...</p>
+          <!-- Error -->
+          <div *ngIf="aiError" class="alert alert-danger">
+            <i class="fas fa-exclamation-circle mr-2"></i>{{ aiError }}
+          </div>
+
+          <!-- Clauses -->
+          <div *ngIf="aiClauses.length > 0 && !aiLoading">
+            <div *ngFor="let clause of aiClauses" class="mb-3 p-3" style="background:#f8f9ff; border-left:4px solid #1a73e8; border-radius:8px;">
+              <h6 style="color:#1a237e;">CLAUSE {{ clause.numero }} - {{ clause.titre }}</h6>
+              <p class="mb-0" style="color:#555; font-size:0.9rem; line-height:1.6;">{{ clause.contenu }}</p>
             </div>
-
-            <!-- Error -->
-            <div *ngIf="aiError" class="alert alert-danger">
-              <i class="fas fa-exclamation-circle mr-2"></i>{{ aiError }}
-            </div>
-
-            <!-- Clauses -->
-            <div *ngFor="let clause of aiClauses" class="mb-3 p-3 border rounded" style="border-left:4px solid #2e7d32 !important;">
-              <div class="d-flex align-items-center mb-2">
-                <span class="badge badge-success mr-2">CLAUSE {{ clause.numero }}</span>
-                <strong style="color:#1a237e;">{{ clause.titre }}</strong>
-              </div>
-              <p class="mb-0 text-muted" style="font-size:0.9rem; line-height:1.6;">{{ clause.contenu }}</p>
-            </div>
-
+            <button type="button" class="btn btn-success mt-2" (click)="applyClausesToDescription()">
+              <i class="fas fa-check mr-2"></i>Apply Clauses to Description
+            </button>
           </div>
         </div>
       </div>
@@ -117,10 +135,13 @@
         <button type="submit" class="btn btn-primary mr-2">
           <i class="fas fa-save"></i> {{ isEditMode ? 'Update' : 'Save' }}
         </button>
-        <a routerLink="/admin/contracts" class="btn btn-secondary">
+        <button type="button" class="btn btn-secondary" routerLink="/admin/contracts">
           <i class="fas fa-times"></i> Cancel
-        </a>
+        </button>
       </div>
+
     </form>
   </div>
 </div>
+
+

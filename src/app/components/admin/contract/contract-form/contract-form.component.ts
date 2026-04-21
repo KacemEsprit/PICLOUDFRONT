@@ -25,6 +25,7 @@ export class ContractFormComponent implements OnInit {
   };
 
   isEditMode = false;
+  formSubmitted = false;
   id?: number;
   partners: any[] = [];
   organizations: any[] = [];
@@ -55,7 +56,11 @@ export class ContractFormComponent implements OnInit {
     if (this.id) {
       this.isEditMode = true;
       this.contractService.getById(this.id).subscribe({
-        next: (data) => this.contract = data
+        next: (data) => {
+          if (data.startDate) data.startDate = new Date(data.startDate).toISOString().split("T")[0];
+          if (data.endDate) data.endDate = new Date(data.endDate).toISOString().split("T")[0];
+          this.contract = data;
+        }
       });
     }
   }
@@ -133,6 +138,7 @@ export class ContractFormComponent implements OnInit {
   }
 
   save(): void {
+    this.formSubmitted = true;
     // Convert to numbers and fix dates
     this.contract.organizationId = +this.contract.organizationId!;
     this.contract.partnerId = +this.contract.partnerId!;
@@ -154,6 +160,9 @@ export class ContractFormComponent implements OnInit {
     }
   }
 }
+
+
+
 
 
 

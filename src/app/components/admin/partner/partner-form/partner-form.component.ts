@@ -23,6 +23,7 @@ export class PartnerFormComponent implements OnInit {
   };
 
   isEditMode = false;
+  formSubmitted = false;
   id?: number;
   preselectedOrgId: number | null = null;
 
@@ -49,6 +50,7 @@ export class PartnerFormComponent implements OnInit {
   }
 
   save(): void {
+    this.formSubmitted = true;
     if (this.isEditMode && this.id) {
       this.partnerService.update(this.id, this.partner).subscribe({
         next: () => this.router.navigate(['/admin/partners']),
@@ -62,6 +64,7 @@ export class PartnerFormComponent implements OnInit {
     }
   }
 }
+
 
 
 

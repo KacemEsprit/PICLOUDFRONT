@@ -1,189 +1,182 @@
-<div class="admin-page">
-  <!-- Page Header -->
-  <div class="page-header">
-    <div>
-      <div class="breadcrumb">
-        <span>Admin</span>
-        <span>/</span>
-        <span>Dashboard</span>
-      </div>
-      <h1 class="page-title">Admin Dashboard</h1>
-      <p class="page-subtitle">Manage your platform and users</p>
-    </div>
-    <a class="btn btn-primary" routerLink="/admin/documents">
-      <i class="fas fa-file-plus"></i>
-      Manage Documents
-    </a>
+<div style="padding:20px;">
+
+  <!-- Header -->
+  <div style="margin-bottom:20px;">
+    <small class="text-muted">Admin / Dashboard</small>
+    <h2 style="color:#1a237e; font-weight:700; margin:0;">Admin Dashboard</h2>
+    <p class="text-muted mb-0">Real-time statistics of TransitTN platform</p>
   </div>
 
-  <!-- Stats Grid -->
-  <div class="stats-grid">
-    <div class="stat-card stat-card-blue">
-      <div class="stat-card-header">
-        <div>
-          <div class="stat-card-value">12,450</div>
-          <div class="stat-card-label">Total Users</div>
-          <div class="stat-card-sub">Active in platform</div>
-        </div>
-        <i class="fas fa-users stat-card-icon"></i>
-      </div>
-      <div class="stat-card-footer">
-        <i class="fas fa-arrow-up"></i>
-        <span>+8.2% from last month</span>
-      </div>
-    </div>
+  <!-- Main Stats Cards -->
+  <div class="row">
 
-    <div class="stat-card stat-card-green">
-      <div class="stat-card-header">
-        <div>
-          <div class="stat-card-value">348</div>
-          <div class="stat-card-label">Active Bookings</div>
-          <div class="stat-card-sub">All transports</div>
-        </div>
-        <i class="fas fa-check-circle stat-card-icon"></i>
-      </div>
-      <div class="stat-card-footer">
-        <i class="fas fa-arrow-up"></i>
-        <span>+12.5% from last month</span>
-      </div>
-    </div>
-
-    <div class="stat-card stat-card-orange">
-      <div class="stat-card-header">
-        <div>
-          <div class="stat-card-value">89</div>
-          <div class="stat-card-label">Pending Reports</div>
-          <div class="stat-card-sub">Needs review</div>
-        </div>
-        <i class="fas fa-exclamation-circle stat-card-icon"></i>
-      </div>
-      <div class="stat-card-footer">
-        <i class="fas fa-arrow-down"></i>
-        <span>-2.1% from last month</span>
-      </div>
-    </div>
-
-    <div class="stat-card stat-card-purple">
-      <div class="stat-card-header">
-        <div>
-          <div class="stat-card-value">$45.2K</div>
-          <div class="stat-card-label">Revenue</div>
-          <div class="stat-card-sub">This month</div>
-        </div>
-        <i class="fas fa-dollar-sign stat-card-icon"></i>
-      </div>
-      <div class="stat-card-footer">
-        <i class="fas fa-arrow-up"></i>
-        <span>+5.3% from last month</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Content Grid -->
-  <div class="grid-2">
-    <!-- Admin Profile Card -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <i class="fas fa-user-circle"></i>
-          Your Profile
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="detail-grid">
-          <div class="detail-field" *ngIf="currentUser$ | async as user">
-            <div class="detail-label">Full Name</div>
-            <div class="detail-value">{{ user.name }}</div>
+    <!-- Organizations -->
+    <div class="col-md-3 mb-3">
+      <div style="background:linear-gradient(135deg,#1a73e8,#1a237e); border-radius:14px; padding:20px; color:white; height:140px;">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+          <div>
+            <div style="font-size:2.2rem; font-weight:700;">{{ stats.totalOrganizations }}</div>
+            <div style="font-size:0.9rem; opacity:0.9;">Total Organizations</div>
+            <div style="font-size:0.75rem; opacity:0.8; margin-top:6px;"><i class="fas fa-check-circle mr-1"></i>{{ stats.activeOrganizations }} active</div>
           </div>
-          <div class="detail-field" *ngIf="currentUser$ | async as user">
-            <div class="detail-label">Username</div>
-            <div class="detail-value">{{ user.username }}</div>
-          </div>
-          <div class="detail-field" *ngIf="currentUser$ | async as user">
-            <div class="detail-label">Email</div>
-            <div class="detail-value">{{ user.email }}</div>
-          </div>
-          <div class="detail-field" *ngIf="currentUser$ | async as user">
-            <div class="detail-label">Role</div>
-            <div class="detail-value">
-              <span class="status-badge status-active">
-                <span class="status-dot"></span>
-                {{ user.role }}
-              </span>
-            </div>
+          <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:10px;">
+            <i class="fas fa-building" style="font-size:1.6rem;"></i>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Quick Actions Card -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <i class="fas fa-bolt"></i>
-          Quick Actions
+    <!-- Partners -->
+    <div class="col-md-3 mb-3">
+      <div style="background:linear-gradient(135deg,#2e7d32,#1b5e20); border-radius:14px; padding:20px; color:white; height:140px;">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+          <div>
+            <div style="font-size:2.2rem; font-weight:700;">{{ stats.totalPartners }}</div>
+            <div style="font-size:0.9rem; opacity:0.9;">Total Partners</div>
+            <div style="font-size:0.75rem; opacity:0.8; margin-top:6px;"><i class="fas fa-check-circle mr-1"></i>{{ stats.activePartners }} active</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:10px;">
+            <i class="fas fa-handshake" style="font-size:1.6rem;"></i>
+          </div>
         </div>
       </div>
-      <div class="card-body">
-        <div class="quick-actions">
-          <a class="quick-action-btn qa-blue" routerLink="/admin/users">
-            <i class="fas fa-people-arrows"></i>
-            Manage Users
-          </a>
-          <a class="quick-action-btn qa-green" routerLink="/admin/documents">
-            <i class="fas fa-file-alt"></i>
-            Manage Documents
-          </a>
-          <a class="quick-action-btn qa-orange" routerLink="/admin/dashboard">
-            <i class="fas fa-chart-bar"></i>
-            View Reports
-          </a>
-          <a class="quick-action-btn qa-purple" routerLink="/admin/dashboard">
-            <i class="fas fa-cog"></i>
-            System Settings
-          </a>
+    </div>
+
+    <!-- Contracts -->
+    <div class="col-md-3 mb-3">
+      <div style="background:linear-gradient(135deg,#f57f17,#e65100); border-radius:14px; padding:20px; color:white; height:140px;">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+          <div>
+            <div style="font-size:2.2rem; font-weight:700;">{{ stats.totalContracts }}</div>
+            <div style="font-size:0.9rem; opacity:0.9;">Total Contracts</div>
+            <div style="font-size:0.75rem; opacity:0.8; margin-top:6px;"><i class="fas fa-bolt mr-1"></i>{{ stats.activeContracts }} active</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:10px;">
+            <i class="fas fa-file-contract" style="font-size:1.6rem;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signed / Fraud -->
+    <div class="col-md-3 mb-3">
+      <div style="background:linear-gradient(135deg,#c62828,#b71c1c); border-radius:14px; padding:20px; color:white; height:140px;">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+          <div>
+            <div style="font-size:2.2rem; font-weight:700;">{{ stats.signedContracts }}</div>
+            <div style="font-size:0.9rem; opacity:0.9;">Signed Contracts</div>
+            <div style="font-size:0.75rem; opacity:0.8; margin-top:6px;"><i class="fas fa-shield-alt mr-1"></i>{{ stats.fraudContracts }} fraud detected</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.2); padding:12px; border-radius:10px;">
+            <i class="fas fa-signature" style="font-size:1.6rem;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Secondary Cards -->
+  <div class="row">
+
+    <!-- Expiring Contracts Alert -->
+    <div class="col-md-6 mb-3">
+      <div style="background:white; border-left:5px solid #f57f17; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08); height:180px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+          <h5 style="color:#e65100; margin:0;"><i class="fas fa-exclamation-triangle mr-2"></i>Expiring Soon</h5>
+          <span style="background:#fff3e0; color:#e65100; padding:6px 14px; border-radius:20px; font-size:0.9rem; font-weight:600;">
+            {{ stats.expiringContracts }} contracts
+          </span>
+        </div>
+        <p class="text-muted mb-2">Contracts expiring within 30 days</p>
+        <a routerLink="/admin/contracts/reminders" class="btn btn-warning btn-sm">
+          <i class="fas fa-bell mr-1"></i> View Reminders
+        </a>
+      </div>
+    </div>
+
+    <!-- Signature Rate -->
+    <div class="col-md-6 mb-3">
+      <div style="background:white; border-left:5px solid #2e7d32; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08); height:180px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+          <h5 style="color:#1b5e20; margin:0;"><i class="fas fa-signature mr-2"></i>Signature Rate</h5>
+          <span style="background:#e8f5e9; color:#2e7d32; padding:6px 14px; border-radius:20px; font-size:0.9rem; font-weight:600;">
+            {{ getSignedPercentage() }}%
+          </span>
+        </div>
+        <div style="background:#f0f2f5; height:10px; border-radius:5px; overflow:hidden;">
+          <div [style.width.%]="getSignedPercentage()" style="height:100%; background:linear-gradient(90deg,#2e7d32,#4caf50); transition:width 0.5s;"></div>
+        </div>
+        <p class="text-muted mt-2 mb-0"><small>{{ stats.signedContracts }}/{{ stats.totalContracts }} contracts digitally signed</small></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row">
+
+    <!-- Contracts by Type -->
+    <div class="col-md-6 mb-3">
+      <div style="background:white; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <h5 style="color:#1a237e;"><i class="fas fa-chart-pie mr-2"></i>Contracts by Type</h5>
+        <div *ngFor="let type of stats.contractsByType | keyvalue" class="mb-2 mt-3">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span><strong>{{ type.key }}</strong></span>
+            <span class="text-muted">{{ type.value }} contracts</span>
+          </div>
+          <div style="background:#f0f2f5; height:8px; border-radius:4px; overflow:hidden;">
+            <div [style.width.%]="getPercent(type.value, stats.totalContracts)"
+              style="height:100%; background:linear-gradient(90deg,#1a73e8,#1a237e);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Organizations by Coverage -->
+    <div class="col-md-6 mb-3">
+      <div style="background:white; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <h5 style="color:#1a237e;"><i class="fas fa-bus mr-2"></i>Coverage Distribution</h5>
+        <div *ngFor="let cov of stats.organizationsByCoverage | keyvalue" class="mb-2 mt-3">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span>
+              <i class="fas" [class.fa-bus]="cov.key==='BUS'" [class.fa-train]="cov.key==='TRAIN'" [class.fa-subway]="cov.key==='METRO'" [class.fa-car]="cov.key==='LOUAGE'" [class.fa-ship]="cov.key==='BATAH'"></i>
+              <strong> {{ cov.key }}</strong>
+            </span>
+            <span class="text-muted">{{ cov.value }} organizations</span>
+          </div>
+          <div style="background:#f0f2f5; height:8px; border-radius:4px; overflow:hidden;">
+            <div [style.width.%]="getPercent(cov.value, stats.totalOrganizations)"
+              style="height:100%; background:linear-gradient(90deg,#2e7d32,#4caf50);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row mt-3">
+    <div class="col-12">
+      <div style="background:white; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <h5 style="color:#1a237e;"><i class="fas fa-bolt mr-2"></i>Quick Actions</h5>
+        <div class="row mt-3">
+          <div class="col-md-3 mb-2">
+            <a routerLink="/admin/organizations/new" class="btn btn-primary w-100"><i class="fas fa-plus mr-1"></i> New Organization</a>
+          </div>
+          <div class="col-md-3 mb-2">
+            <a routerLink="/admin/partners/new" class="btn btn-success w-100"><i class="fas fa-plus mr-1"></i> New Partner</a>
+          </div>
+          <div class="col-md-3 mb-2">
+            <a routerLink="/admin/contracts/new" class="btn btn-warning w-100"><i class="fas fa-plus mr-1"></i> New Contract</a>
+          </div>
+          <div class="col-md-3 mb-2">
+            <a routerLink="/admin/contracts/reminders" class="btn btn-danger w-100"><i class="fas fa-bell mr-1"></i> Send Reminders</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Recent Activity -->
-  <div class="card" style="margin-top: 24px;">
-    <div class="card-header">
-      <div class="card-title">
-        <i class="fas fa-history"></i>
-        Recent Activity
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">New user registration</div>
-          <div class="recent-item-sub">Agent - Ahmed Mohamed</div>
-        </div>
-        <div class="text-hint">2 hours ago</div>
-      </div>
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">Document submitted for review</div>
-          <div class="recent-item-sub">License Plate - TN 123 ABC</div>
-        </div>
-        <div class="text-hint">5 hours ago</div>
-      </div>
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">System backup completed</div>
-          <div class="recent-item-sub">Database - Full sync</div>
-        </div>
-        <div class="text-hint">1 day ago</div>
-      </div>
-      <div class="recent-item">
-        <div>
-          <div class="recent-item-main">User account locked</div>
-          <div class="recent-item-sub">Security - Failed login attempts</div>
-        </div>
-        <div class="text-hint">2 days ago</div>
-      </div>
-    </div>
-  </div>
 </div>
+

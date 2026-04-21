@@ -19,6 +19,7 @@ export class OrganizationFormComponent implements OnInit {
   };
   isEditMode = false;
   id?: number;
+  formSubmitted = false;
 
   governorates = [
     'Tunis', 'Ariana', 'Ben Arous', 'Manouba', 'Nabeul', 'Zaghouan',
@@ -108,7 +109,18 @@ export class OrganizationFormComponent implements OnInit {
     });
   }
 
+  getFieldError(field: string, form: any): string {
+    const control = form.controls[field];
+    if (!control || !control.errors) return "";
+    if (control.errors["required"]) return "This field is required.";
+    if (control.errors["minlength"]) return "Minimum " + control.errors["minlength"].requiredLength + " characters required.";
+    if (control.errors["maxlength"]) return "Maximum " + control.errors["maxlength"].requiredLength + " characters allowed.";
+    if (control.errors["pattern"]) return "Invalid format.";
+    return "Invalid value.";
+  }
+
   save(): void {
+    this.formSubmitted = true;
     const saveOrg = (orgId: number) => {
       // Save zones
       const existing = this.existingZones.map(z => z.governorate);
@@ -161,3 +173,5 @@ export class OrganizationFormComponent implements OnInit {
     }
   }
 }
+
+

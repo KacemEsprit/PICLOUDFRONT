@@ -26,7 +26,7 @@ export class BackofficeSidebarComponent implements OnInit {
       label: 'Gestion',
       items: [
         { icon: 'fa-building', label: 'Organizations', path: '/admin/organizations' },
-        { icon: 'fa-handshake-o', label: 'Partners', path: '/admin/partners' },
+        { icon: 'fa-handshake', label: 'Partners', path: '/admin/partners' },
         { icon: 'fa-file-text', label: 'Contracts', path: '/admin/contracts' },
         { icon: 'fa-bell', label: 'Rappels Contrats', path: '/admin/contracts/reminders' }
       ]
@@ -44,4 +44,5 @@ export class BackofficeSidebarComponent implements OnInit {
     return this.router.url.includes(path);
   }
 }
+
 
