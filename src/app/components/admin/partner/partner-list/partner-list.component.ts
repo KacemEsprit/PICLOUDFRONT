@@ -81,7 +81,7 @@ export class PartnerListComponent implements OnInit {
   openContract(partnerId: number): void {
     const contractId = this.contractMap[partnerId];
     if (contractId) {
-      window.open(`http://localhost:8081/api/pdf/contract/${partnerId}`, "_blank");
+      this.loadContractsForPartner(partnerId);
     } else {
       alert("Aucun contrat disponible pour ce partenaire");
     }
@@ -95,6 +95,32 @@ export class PartnerListComponent implements OnInit {
       });
     }
   }
+// Contracts modal
+  showContractsModal = false;
+  contractsModalLoading = false;
+  selectedPartnerContracts: any[] = [];
+  selectedPartnerName = '';
+
+  loadContractsForPartner(partnerId: number): void {
+    this.showContractsModal = true;
+    this.contractsModalLoading = true;
+    this.selectedPartnerContracts = [];
+    const partner = this.partners.find(p => p.id === partnerId);
+    this.selectedPartnerName = partner ? partner.name : 'Partenaire';
+
+    this.http.get<any[]>(`http://localhost:8081/api/contracts/partner/${partnerId}`).subscribe({
+      next: (contracts) => {
+        this.selectedPartnerContracts = contracts || [];
+        this.contractsModalLoading = false;
+      },
+      error: () => {
+        this.selectedPartnerContracts = [];
+        this.contractsModalLoading = false;
+      }
+    });
+  }
+
+  downloadContractPdf(contractId: number, partnerName: string, orgName: string): void {
+    window.open(`http://localhost:8081/api/pdf/contract/${contractId}`, '_blank');
+  }
 }
-
-

@@ -20,7 +20,7 @@
       <i class="fas fa-plus"></i> Add Contract
     </a>
 
-    <button (click)="sendWeeklyReport()" [disabled]="reportLoading" style="margin-left:10px; background:linear-gradient(135deg,#ff9800,#e65100); color:white; padding:9px 20px; border-radius:10px; border:none; font-weight:600; font-size:0.9rem; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(255,152,0,0.3);" [style.opacity]="reportLoading ? '0.6' : '1'" [style.cursor]="reportLoading ? 'not-allowed' : 'pointer'" title="Envoyer rapport hebdo via n8n">
+    <button (click)="sendWeeklyReport()" [disabled]="reportLoading" style="margin-left:10px; background:linear-gradient(135deg,#ff9800,#e65100); color:white; padding:9px 20px; border-radius:10px; border:none; font-weight:600; font-size:0.9rem; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(255,152,0,0.3);" [style.opacity]="reportLoading ? '0.6' : '1'" [style.cursor]="reportLoading ? 'not-allowed' : 'pointer'" title="Envoyér rapport hebdo via n8n">
       <i class="fas" [class.fa-envelope]="!reportLoading" [class.fa-spinner]="reportLoading" [class.fa-spin]="reportLoading"></i>
       {{ reportLoading ? 'Envoi...' : 'Send Weekly Report' }}
     </button>
@@ -112,7 +112,7 @@
               {{ contract.organizationName }}
             </span>
           <span *ngIf="!contract.organizationName"
-                style="color:#bbb; font-style:italic; font-size:0.85rem;">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>
+                style="color:#bbb; font-style:italic; font-size:0.85rem;">ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â</span>
         </td>
 
         <!-- Partner -->
@@ -124,7 +124,7 @@
               {{ contract.partnerName }}
             </span>
           <span *ngIf="!contract.partnerName"
-                style="color:#bbb; font-style:italic; font-size:0.85rem;">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>
+                style="color:#bbb; font-style:italic; font-size:0.85rem;">ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â</span>
         </td>
 
         <!-- Actions -->
@@ -150,7 +150,7 @@
               <!-- Sign Button -->
               <button *ngIf="!isSigned(contract.id!)" (click)="signContract(contract.id!)"
                 style="width:32px; height:32px; border-radius:8px; background:#e8f5e9; color:#2e7d32; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;"
-                title="Signer numeriquement"
+                title="Signer numériquement"
                 onmouseover="this.style.background='#2e7d32'; this.style.color='white'"
                 onmouseout="this.style.background='#e8f5e9'; this.style.color='#2e7d32'">
                 <i class="fas fa-signature" style="font-size:0.8rem;"></i>
@@ -201,16 +201,16 @@
 <div *ngIf="showConfirmModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;">
   <div style="background:white; border-radius:16px; padding:30px; max-width:450px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <div style="background:linear-gradient(135deg,#1a237e,#1a73e8); border-radius:10px; padding:20px; text-align:center; margin-bottom:20px;">
-      <div style="font-size:2.5rem; margin-bottom:8px;">??</div>
-      <h4 style="color:white; margin:0; font-weight:700;">Signature Numerique</h4>
+      <div style="font-size:3rem; margin-bottom:10px; color:#ffd700;"><i class="fas fa-file-signature"></i></div>
+      <h4 style="color:white; margin:0; font-weight:700;">Signature Numérique</h4>
       <p style="color:rgba(255,255,255,0.8); margin:5px 0 0; font-size:0.9rem;">Confirmation requise</p>
     </div>
     <div style="background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:15px; margin-bottom:20px;">
       <p style="color:#1a237e; margin:0; font-weight:600; text-align:center;">
-        Voulez-vous signer numeriquement ce contrat avec SHA-256 ?
+        Voulez-vous signer numériquement ce contrat avec SHA-256 ?
       </p>
       <p style="color:#555; margin:8px 0 0; font-size:0.85rem; text-align:center;">
-        Cette action est irreversible. Un hash unique sera genere pour garantir l'integrite du contrat.
+        Cette action est irréversible. Un hash unique sera généré pour garantir l'intégrité du contrat.
       </p>
     </div>
     <div style="display:flex; gap:10px;">
@@ -228,7 +228,7 @@
 <div *ngIf="showErrorModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;">
   <div style="background:white; border-radius:16px; padding:30px; max-width:450px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <div style="background:linear-gradient(135deg,#b71c1c,#d32f2f); border-radius:10px; padding:20px; text-align:center; margin-bottom:20px;">
-      <div style="font-size:2.5rem; margin-bottom:8px;">?</div>
+      <div style="font-size:3rem; margin-bottom:10px; color:#fff;"><i class="fas fa-exclamation-triangle"></i></div>
       <h4 style="color:white; margin:0; font-weight:700;">Erreur de Signature</h4>
     </div>
     <div style="background:#ffebee; border:1px solid #ffcdd2; border-radius:8px; padding:15px; margin-bottom:20px;">
@@ -246,16 +246,16 @@
 <div *ngIf="showConfirmModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;">
   <div style="background:white; border-radius:16px; padding:30px; max-width:450px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <div style="background:linear-gradient(135deg,#1a237e,#1a73e8); border-radius:10px; padding:20px; text-align:center; margin-bottom:20px;">
-      <div style="font-size:2.5rem; margin-bottom:8px;">??</div>
-      <h4 style="color:white; margin:0; font-weight:700;">Signature Numerique</h4>
+      <div style="font-size:3rem; margin-bottom:10px; color:#ffd700;"><i class="fas fa-file-signature"></i></div>
+      <h4 style="color:white; margin:0; font-weight:700;">Signature Numérique</h4>
       <p style="color:rgba(255,255,255,0.8); margin:5px 0 0; font-size:0.9rem;">Confirmation requise</p>
     </div>
     <div style="background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:15px; margin-bottom:20px;">
       <p style="color:#1a237e; margin:0; font-weight:600; text-align:center;">
-        Voulez-vous signer numeriquement ce contrat avec SHA-256 ?
+        Voulez-vous signer numériquement ce contrat avec SHA-256 ?
       </p>
       <p style="color:#555; margin:8px 0 0; font-size:0.85rem; text-align:center;">
-        Cette action est irreversible. Un hash unique sera genere pour garantir l'integrite du contrat.
+        Cette action est irréversible. Un hash unique sera généré pour garantir l'intégrité du contrat.
       </p>
     </div>
     <div style="display:flex; gap:10px;">
@@ -273,7 +273,7 @@
 <div *ngIf="showErrorModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;">
   <div style="background:white; border-radius:16px; padding:30px; max-width:450px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <div style="background:linear-gradient(135deg,#b71c1c,#d32f2f); border-radius:10px; padding:20px; text-align:center; margin-bottom:20px;">
-      <div style="font-size:2.5rem; margin-bottom:8px;">?</div>
+      <div style="font-size:3.5rem; margin-bottom:10px; color:#4caf50; background:white; width:80px; height:80px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;"><i class="fas fa-check-circle"></i></div>
       <h4 style="color:white; margin:0; font-weight:700;">Erreur de Signature</h4>
     </div>
     <div style="background:#ffebee; border:1px solid #ffcdd2; border-radius:8px; padding:15px; margin-bottom:20px;">
@@ -293,9 +293,9 @@
     
     <!-- Header -->
     <div style="background:linear-gradient(135deg,#1a237e,#1a73e8); border-radius:10px; padding:20px; text-align:center; margin-bottom:20px;">
-      <div style="font-size:2.5rem; margin-bottom:8px;">?</div>
-      <h4 style="color:white; margin:0; font-weight:700;">CONTRAT SIGNE AVEC SUCCES</h4>
-      <p style="color:rgba(255,255,255,0.8); margin:5px 0 0; font-size:0.9rem;">Signature numerique SHA-256 generee</p>
+      <div style="font-size:3rem; margin-bottom:10px; color:#fff;"><i class="fas fa-exclamation-triangle"></i></div>
+      <h4 style="color:white; margin:0; font-weight:700;">CONTRAT SIGNÃ‰ AVEC SUCCÃˆS</h4>
+      <p style="color:rgba(255,255,255,0.8); margin:5px 0 0; font-size:0.9rem;">Signature numérique SHA-256 générée</p>
     </div>
 
     <!-- Success Message -->
@@ -307,10 +307,10 @@
 
     <!-- Signature Details -->
     <div style="background:#f8f9ff; border-left:4px solid #1a73e8; border-radius:0 8px 8px 0; padding:15px; margin-bottom:20px;">
-      <h6 style="color:#1a237e; margin:0 0 12px;"><i class="fas fa-key mr-2"></i>Details de la Signature Numerique</h6>
+      <h6 style="color:#1a237e; margin:0 0 12px;"><i class="fas fa-key mr-2"></i>Détails de la Signature Numérique</h6>
       <div style="font-size:0.85rem; color:#555;">
         <div class="mb-2"><strong>Contrat ID:</strong> #{{ signResult?.contractId }}</div>
-        <div class="mb-2"><strong>Signe par:</strong> {{ signResult?.signedBy }}</div>
+        <div class="mb-2"><strong>Signé par:</strong> {{ signResult?.signedBy }}</div>
         <div class="mb-2"><strong>Date & Heure:</strong> {{ signResult?.signedAt | date:'dd/MM/yyyy HH:mm:ss' }}</div>
         <div class="mb-2">
           <strong>Hash Contenu:</strong>
@@ -327,7 +327,7 @@
     <div style="background:#fff3e0; border:1px solid #ffcc80; border-radius:8px; padding:12px; margin-bottom:20px;">
       <p style="color:#e65100; margin:0; font-size:0.85rem;">
         <i class="fas fa-info-circle mr-1"></i>
-        Ce hash SHA-256 garantit l'integrite du contrat. Toute modification sera detectee comme une fraude.
+        Ce hash SHA-256 garantit l'intégrité du contrat. Toute modification sera détectée comme une fraude.
       </p>
     </div>
 
@@ -344,12 +344,17 @@
     <!-- Header -->
     <div [style.background]="verifyResult?.fraudDetected ? 'linear-gradient(135deg,#b71c1c,#d32f2f)' : 'linear-gradient(135deg,#1b5e20,#2e7d32)'"
          style="border-radius:10px; padding:20px; text-align:center; margin-bottom:20px;">
-      <div style="font-size:2.5rem; margin-bottom:8px;">
-        <i class="fas" [class.fa-exclamation-triangle]="verifyResult?.fraudDetected" [class.fa-check-circle]="!verifyResult?.fraudDetected" style="font-size:2.5rem; color:white;"></i>
+      <div style="margin-bottom:10px;">
+        <div style="width:70px; height:70px; margin:0 auto; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+          <i class="fas" [class.fa-exclamation-triangle]="verifyResult?.fraudDetected" [class.fa-check-circle]="!verifyResult?.fraudDetected" style="font-size:2.5rem; color:white;"></i>
+        </div>
       </div>
       <h4 style="color:white; margin:0; font-weight:700;">
-        <i class="fas" [class.fa-exclamation-triangle]="verifyResult?.fraudDetected" [class.fa-check-circle]="!verifyResult?.fraudDetected" style="font-size:2.5rem; color:white;"></i>
+        {{ verifyResult?.fraudDetected ? 'FRAUDE DÉTECTÉE' : 'Signature Valide' }}
       </h4>
+      <p style="color:rgba(255,255,255,0.85); margin:5px 0 0; font-size:0.9rem;">
+        {{ verifyResult?.fraudDetected ? 'Contenu modifié après signature' : 'Intégrité du contrat garantie' }}
+      </p>
     </div>
 
     <!-- Message -->
@@ -363,9 +368,9 @@
 
     <!-- Details -->
     <div style="background:#f8f9ff; border-radius:8px; padding:15px; margin-bottom:20px;">
-      <h6 style="color:#1a237e; margin:0 0 10px;">Details de la Signature</h6>
+      <h6 style="color:#1a237e; margin:0 0 10px;">Détails de la Signature</h6>
       <div style="font-size:0.85rem; color:#555;">
-        <div class="mb-1"><strong>Signe par:</strong> {{ verifyResult?.signedBy }}</div>
+        <div class="mb-1"><strong>Signé par:</strong> {{ verifyResult?.signedBy }}</div>
         <div class="mb-1"><strong>Date signature:</strong> {{ verifyResult?.signedAt | date:'dd/MM/yyyy HH:mm' }}</div>
         <div class="mb-1"><strong>Hash contenu:</strong> <code style="font-size:0.75rem;">{{ verifyResult?.contentHash?.substring(0,20) }}...</code></div>
         <div><strong>Hash signature:</strong> <code style="font-size:0.75rem;">{{ verifyResult?.signatureHash?.substring(0,20) }}...</code></div>
@@ -385,8 +390,8 @@
       <div style="font-size:2.5rem; margin-bottom:8px; color:white;">
         <i class="fas" [class.fa-check-circle]="reportSuccess" [class.fa-exclamation-triangle]="!reportSuccess"></i>
       </div>
-      <h4 style="color:white; margin:0; font-weight:700;">{{ reportSuccess ? 'Rapport Envoye !' : 'Erreur' }}</h4>
-      <p style="color:rgba(255,255,255,0.85); margin:5px 0 0; font-size:0.9rem;">{{ reportSuccess ? 'Automatisation n8n declenchee avec succes' : 'Une erreur est survenue' }}</p>
+      <h4 style="color:white; margin:0; font-weight:700;">{{ reportSuccess ? 'Rapport Envoyé !' : 'Erreur' }}</h4>
+      <p style="color:rgba(255,255,255,0.85); margin:5px 0 0; font-size:0.9rem;">{{ reportSuccess ? 'Automatisation n8n déclenchée avec succès' : 'Une erreur est survenue' }}</p>
     </div>
     <div [style.background]="reportSuccess ? '#e8f5e9' : '#ffebee'" style="border:1px solid #c8e6c9; border-radius:8px; padding:15px; margin-bottom:20px;">
       <p [style.color]="reportSuccess ? '#2e7d32' : '#c62828'" style="margin:0; font-weight:600;">
