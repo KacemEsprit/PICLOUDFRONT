@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Organization } from '../../../../models/organization-partner/organization';
@@ -172,6 +172,140 @@ export class OrganizationFormComponent implements OnInit {
       });
     }
   }
+
+  // Logo URL safety check
+  showLogoModal = false;
+  logoCheckLoading = false;
+  logoCheckResult: 'safe' | 'danger' | 'unknown' | null = null;
+  logoCheckMessage = '';
+  pendingLogoUrl = '';
+
+  checkLogoUrl(): void {
+    const url = (this.organization.logo || '').trim();
+
+    // Cas base64
+    if (!url || url.startsWith('data:')) {
+      this.pendingLogoUrl = url;
+      this.logoCheckResult = 'unknown';
+      this.logoCheckMessage = 'Image base64 locale detectee. Impossible de verifier la source via API. Utilisez une URL externe pour une verification complete.';
+      this.showLogoModal = true;
+      return;
+    }
+
+    // Validation format URL
+    let urlObj: URL;
+    try {
+      urlObj = new URL(url);
+    } catch {
+      this.pendingLogoUrl = url;
+      this.logoCheckResult = 'danger';
+      this.logoCheckMessage = 'URL invalide ou malformee. Verifiez que le lien commence par https://.';
+      this.showLogoModal = true;
+      return;
+    }
+
+    // HTTP non securise
+    if (urlObj.protocol === 'http:') {
+      this.pendingLogoUrl = url;
+      this.logoCheckResult = 'danger';
+      this.logoCheckMessage = 'URL non securisee (HTTP). Utilisez HTTPS pour proteger votre site.';
+      this.showLogoModal = true;
+      return;
+    }
+
+    // Ouvrir modal + demarrer analyse
+    this.pendingLogoUrl = url;
+    this.logoCheckLoading = true;
+    this.logoCheckResult = null;
+    this.logoCheckMessage = '';
+    this.showLogoModal = true;
+
+    const hostname = urlObj.hostname.toLowerCase();
+
+    // Patterns dangereux connus
+    const dangerousPatterns = [
+      /bit\.ly|tinyurl\.com|goo\.gl|t\.co|shorturl/i,
+      /\.(tk|ml|ga|cf|gq)$/i,
+      /malware|phishing|virus|hack|crack|exploit/i,
+      /free.*download|crack.*software/i,
+    ];
+
+    // Domaines de confiance
+    const trustedDomains = [
+      /\.(gov\.tn|gov|edu|ac\.)$/i,
+      /wikipedia\.org|wikimedia\.org/i,
+      /githubusercontent\.com|github\.com|gitlab\.com/i,
+      /cloudinary\.com|imgur\.com|ibb\.co/i,
+      /googleapis\.com|gstatic\.com|google\.com/i,
+      /microsoft\.com|azure\.com|office\.com/i,
+      /amazonaws\.com|s3\.|cloudfront\.net/i,
+      /unsplash\.com|pexels\.com|pixabay\.com/i,
+      /cdn\.|static\.|assets\./i,
+      /tunisietelecom\.tn|topnet\.tn|orange\.tn/i,
+    ];
+
+    const isDangerous = dangerousPatterns.some(p => p.test(hostname));
+    const isTrusted = trustedDomains.some(p => p.test(hostname));
+
+    if (isDangerous) {
+      this.logoCheckResult = 'danger';
+      this.logoCheckMessage = 'Domaine suspect detecte: ' + hostname + '. Ce domaine est connu pour des activites malveillantes.';
+      this.logoCheckLoading = false;
+      return;
+    }
+
+    // Appel API URLScan.io - recherche si le domaine a deja ete analyse
+    const apiUrl = '/urlscan/api/v1/search/?q=domain:' + hostname + '&size=1';
+
+    this.http.get<any>(apiUrl).subscribe({
+      next: (response) => {
+        const results = response?.results || [];
+        if (results.length > 0) {
+          const scan = results[0];
+          const verdicts = scan?.verdicts?.overall;
+          if (verdicts?.malicious === true) {
+            this.logoCheckResult = 'danger';
+            this.logoCheckMessage = 'DANGER: Le domaine ' + hostname + ' a ete signale comme malveillant par URLScan.io. Ne pas utiliser cette URL.';
+          } else if (verdicts?.score > 50) {
+            this.logoCheckResult = 'danger';
+            this.logoCheckMessage = 'ATTENTION: Score de risque eleve (' + verdicts.score + '/100) pour ' + hostname + ' selon URLScan.io.';
+          } else if (isTrusted) {
+            this.logoCheckResult = 'safe';
+            this.logoCheckMessage = 'Domaine verifie et de confiance: ' + hostname + '. Aucune menace detectee par URLScan.io.';
+          } else {
+            this.logoCheckResult = 'safe';
+            this.logoCheckMessage = 'Domaine analyse par URLScan.io: ' + hostname + '. Aucune menace detectee. Score: ' + (verdicts?.score || 0) + '/100.';
+          }
+        } else if (isTrusted) {
+          this.logoCheckResult = 'safe';
+          this.logoCheckMessage = 'Domaine de confiance reconnu: ' + hostname + '. Aucun historique malveillant.';
+        } else {
+          this.logoCheckResult = 'unknown';
+          this.logoCheckMessage = 'Domaine ' + hostname + ' non repertorie dans URLScan.io. Verifiez manuellement la fiabilite de cette source.';
+        }
+        this.logoCheckLoading = false;
+      },
+      error: () => {
+        // Si API indisponible, fallback sur analyse locale
+        if (isTrusted) {
+          this.logoCheckResult = 'safe';
+          this.logoCheckMessage = 'Domaine de confiance reconnu localement: ' + hostname + '. (API URLScan.io indisponible)';
+        } else {
+          this.logoCheckResult = 'unknown';
+          this.logoCheckMessage = 'Impossible de contacter l API de verification pour ' + hostname + '. Verifiez manuellement.';
+        }
+        this.logoCheckLoading = false;
+      }
+    });
+  }
+  applyLogoUrl(): void {
+    this.organization.logo = this.pendingLogoUrl;
+    this.showLogoModal = false;
+  }
+
+  rejectLogoUrl(): void {
+    this.organization.logo = '';
+    this.pendingLogoUrl = '';
+    this.showLogoModal = false;
+  }
 }
-
-

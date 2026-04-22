@@ -1,10 +1,18 @@
-{
+﻿{
   "/api": {
     "target": "http://localhost:8081",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
       "^/api": "/api"
+    }
+  },
+  "/urlscan": {
+    "target": "https://urlscan.io",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/urlscan": ""
     }
   }
 }
