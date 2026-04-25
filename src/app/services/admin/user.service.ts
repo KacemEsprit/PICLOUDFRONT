@@ -32,6 +32,7 @@ export interface UserDto {
   role: string;
   cin?: number;
   enabled: boolean;
+  inactivatedUntil?: string; // ISO datetime when user becomes active again, null if permanent or no ban
   createdAt?: string;
   updatedAt?: string;
   photoUrl?: string; // Base64 or blob URL for display
@@ -118,6 +119,15 @@ export class UserService {
 
   updateUserStatus(id: number, enabled: boolean): Observable<UserDto> {
     return this.http.patch<UserDto>(`${this.apiUrl}/${id}/status`, { enabled });
+  }
+
+  banUser(id: number, durationDays: number | null): Observable<UserDto> {
+    // durationDays: 1, 3, 7, 30 for temporary bans, or null for permanent ban
+    return this.http.patch<UserDto>(`${this.apiUrl}/${id}/ban`, { durationDays });
+  }
+
+  unbanUser(id: number): Observable<UserDto> {
+    return this.http.patch<UserDto>(`${this.apiUrl}/${id}/unban`, {});
   }
 
   deleteUser(id: number): Observable<void> {

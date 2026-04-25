@@ -32,9 +32,9 @@
     <div class="stat-card stat-card-green">
       <div class="stat-card-header">
         <div>
-          <div class="stat-card-value">{{ loadingStats ? '...' : (totalDocuments | number) }}</div>
-          <div class="stat-card-label">Number of Documents</div>
-          <div class="stat-card-sub">All documents</div>
+          <div class="stat-card-value">{{ loadingStats ? '...' : (pendingDocuments | number) }}</div>
+          <div class="stat-card-label">Pending Documents</div>
+          <div class="stat-card-sub">Awaiting review</div>
         </div>
         <i class="fas fa-file-alt stat-card-icon"></i>
       </div>

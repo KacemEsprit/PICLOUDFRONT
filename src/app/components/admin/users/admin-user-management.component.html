@@ -165,6 +165,14 @@
               <button class="btn-icon btn-icon-view" type="button" (click)="openUserModal('view', user)" title="View">
                 <i class="fas fa-eye"></i>
               </button>
+              <button
+                class="btn-icon"
+                [ngClass]="isUserBanned(user) ? 'btn-icon-success' : 'btn-icon-warning'"
+                type="button"
+                [title]="isUserBanned(user) ? 'Activate user' : 'Deactivate user'"
+                (click)="isUserBanned(user) ? toggleStatus(user) : openBanModal(user)">
+                <i [ngClass]="isUserBanned(user) ? 'fas fa-check-circle' : 'fas fa-ban'"></i>
+              </button>
               <button class="btn-icon btn-icon-delete" type="button" (click)="openConfirmDelete(user)" title="Delete">
                 <i class="fas fa-trash"></i>
               </button>
@@ -197,6 +205,59 @@
     (close)="closeUserModal()"
     (save)="onUserSaved($event)">
   </app-user-modal>
+
+  <!-- Ban Duration Modal -->
+  <div *ngIf="showBanModal" class="modal-overlay" (click)="closeBanModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <i class="fas fa-ban" style="color: #d32f2f;"></i>
+          Deactivate User: {{ banUserTarget?.username }}
+        </h2>
+        <button class="modal-close" (click)="closeBanModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-description">
+          Select for how long to deactivate this user. They will not be able to access their account during the deactivation period.
+        </p>
+        <div class="ban-options">
+          <button class="ban-option-btn" (click)="banUserForDuration(1)">
+            <i class="fas fa-hourglass-start"></i>
+            <div class="ban-option-title">1 Day</div>
+            <div class="ban-option-desc">24 hours</div>
+          </button>
+          <button class="ban-option-btn" (click)="banUserForDuration(3)">
+            <i class="fas fa-hourglass-half"></i>
+            <div class="ban-option-title">3 Days</div>
+            <div class="ban-option-desc">72 hours</div>
+          </button>
+          <button class="ban-option-btn" (click)="banUserForDuration(7)">
+            <i class="fas fa-calendar-check"></i>
+            <div class="ban-option-title">1 Week</div>
+            <div class="ban-option-desc">7 days</div>
+          </button>
+          <button class="ban-option-btn" (click)="banUserForDuration(30)">
+            <i class="fas fa-calendar-alt"></i>
+            <div class="ban-option-title">1 Month</div>
+            <div class="ban-option-desc">30 days</div>
+          </button>
+          <button class="ban-option-btn ban-permanent" (click)="banUserForDuration(null)">
+            <i class="fas fa-lock"></i>
+            <div class="ban-option-title">Permanent</div>
+            <div class="ban-option-desc">Indefinitely</div>
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeBanModal()">
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Confirmation Modal -->
   <app-confirmation-modal

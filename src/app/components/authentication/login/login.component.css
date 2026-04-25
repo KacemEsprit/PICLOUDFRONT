@@ -347,6 +347,15 @@
   color: var(--error);
 }
 
+.alert.alert-error:has-text("deactivated", "banned") {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: #dc2626;
+  border-width: 2px;
+  padding: 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+}
+
 .alert.alert-success {
   background: rgba(22, 163, 74, 0.05);
   border-color: rgba(22, 163, 74, 0.2);
@@ -361,6 +370,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 2px;
+  font-size: 18px;
 }
 
 .alert-danger {

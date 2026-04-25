@@ -17,12 +17,14 @@ export class AdminUserManagementComponent implements OnInit {
   showUserModal = false;
   showConfirmModal = false;
   showQuickView = false;
+  showBanModal = false;
   userModalMode: 'create' | 'edit' | 'view' = 'create';
   selectedUser?: UserDto;
   confirmTitle = 'Confirm deletion';
   confirmMessage = 'This action cannot be undone.';
   confirmAction: 'deleteSingle' | 'deleteSelected' = 'deleteSelected';
   confirmTargetId?: number;
+  banUserTarget?: UserDto;
 
   filters: UserFilterParams = {
     page: 0,
@@ -80,10 +82,13 @@ export class AdminUserManagementComponent implements OnInit {
     this.errorMessage = '';
     this.userService.getUsers(this.filters).subscribe({
       next: response => {
-        this.users = response.content || [];
-        this.stats.total = response.totalElements;
+        // Filter out admin users
+        this.users = (response.content || []).filter(user => user.role !== 'ADMIN');
+
+        // Calculate stats excluding admins
+        this.stats.total = this.users.length;
         this.stats.active = this.users.filter(user => user.enabled).length;
-        this.stats.admins = this.users.filter(user => user.role === 'ADMIN').length;
+        this.stats.admins = (response.content || []).filter(user => user.role === 'ADMIN').length; // Show actual admin count but don't include in total
         this.stats.agents = this.users.filter(user => user.role === 'AGENT').length;
         this.stats.operators = this.users.filter(user => user.role === 'OPERATOR').length;
         this.stats.passengers = this.users.filter(user => user.role === 'PASSENGER').length;
@@ -321,17 +326,68 @@ export class AdminUserManagementComponent implements OnInit {
   }
 
   toggleStatus(user: UserDto): void {
-    this.userService.updateUserStatus(user.id!, !user.enabled).subscribe({
+    const newStatus = !user.enabled;
+
+    if (newStatus) {
+      // Enabling user = Unbanning
+      this.userService.unbanUser(user.id!).subscribe({
+        next: updatedUser => {
+          user.enabled = updatedUser.enabled;
+          user.inactivatedUntil = updatedUser.inactivatedUntil;
+          this.toastService.info('Status updated', `${updatedUser.username} has been activated.`);
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.toastService.error('Update failed', 'Unable to activate user.');
+        }
+      });
+    } else {
+      // Disabling user = Open ban duration selector
+      this.openBanModal(user);
+    }
+  }
+
+  openBanModal(user: UserDto): void {
+    this.banUserTarget = user;
+    this.showBanModal = true;
+  }
+
+  closeBanModal(): void {
+    this.showBanModal = false;
+    this.banUserTarget = undefined;
+  }
+
+  banUserForDuration(durationDays: number | null): void {
+    if (!this.banUserTarget?.id) return;
+
+    const durationText = durationDays === null ? 'permanently' : `for ${durationDays} day${durationDays !== 1 ? 's' : ''}`;
+
+    this.userService.banUser(this.banUserTarget.id, durationDays).subscribe({
       next: updatedUser => {
-        user.enabled = updatedUser.enabled;
-        const statusText = updatedUser.enabled ? 'activated' : 'deactivated';
-        this.toastService.info('Status updated', `${updatedUser.username} has been ${statusText}.`);
+        this.banUserTarget!.enabled = updatedUser.enabled;
+        this.banUserTarget!.inactivatedUntil = updatedUser.inactivatedUntil;
+        this.toastService.success('User deactivated', `${updatedUser.username} has been deactivated ${durationText}.`);
+        this.closeBanModal();
         this.cdr.markForCheck();
       },
       error: () => {
-        this.toastService.error('Update failed', 'Unable to change status.');
+        this.toastService.error('Deactivate failed', 'Unable to deactivate the user.');
       }
     });
+  }
+
+  isUserBanned(user: UserDto): boolean {
+    return !user.enabled;
+  }
+
+  getBanExpiryText(inactivatedUntil?: string): string {
+    if (!inactivatedUntil) return '—';
+    const date = new Date(inactivatedUntil);
+    const now = new Date();
+    if (date <= now) {
+      return 'Expired';
+    }
+    return `Until ${date.toLocaleDateString()}`;
   }
 
   sortBy(column: string): void {

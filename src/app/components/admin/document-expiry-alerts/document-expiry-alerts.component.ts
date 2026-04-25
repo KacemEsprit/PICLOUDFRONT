@@ -12,6 +12,8 @@ import { takeUntil, debounceTime } from 'rxjs/operators';
   styleUrls: ['./document-expiry-alerts.component.css']
 })
 export class DocumentExpiryAlertsComponent implements OnInit, OnDestroy {
+  private readonly fileServerUrl = 'http://localhost:8081/pidev-uploads/';
+
   criticalDocuments: LegalDocument[] = [];
   upcomingDocuments: LegalDocument[] = [];
   expiredDocuments: LegalDocument[] = [];
@@ -181,12 +183,28 @@ export class DocumentExpiryAlertsComponent implements OnInit, OnDestroy {
 
   private getFullDocumentUrl(documentUrl: string): string {
     if (!documentUrl) return '';
-    // If it's already a full URL (starts with http), return as-is
-    if (documentUrl.startsWith('http')) {
-      return documentUrl;
+
+    // Normalize Windows path separators to URL separators.
+    let normalizedPath = documentUrl.replace(/\\/g, '/').trim();
+
+    // If the backend sends a full URL, keep only the pathname for normalization.
+    if (normalizedPath.startsWith('http://') || normalizedPath.startsWith('https://')) {
+      try {
+        normalizedPath = new URL(normalizedPath).pathname;
+      } catch {
+        normalizedPath = normalizedPath.replace(/^https?:\/\/[^/]+\/?/, '');
+      }
     }
-    // Otherwise construct it with the backend base URL
-    return `http://localhost:8081${documentUrl.startsWith('/') ? '' : '/'}${documentUrl}`;
+
+    // Remove any absolute prefix up to and including pidev-uploads/.
+    if (normalizedPath.includes('pidev-uploads/')) {
+      normalizedPath = normalizedPath.split('pidev-uploads/')[1];
+    }
+
+    // Ensure we don't keep leading slashes when appending to fileServerUrl.
+    normalizedPath = normalizedPath.replace(/^\/+/, '');
+
+    return `${this.fileServerUrl}${normalizedPath}`;
   }
 
   viewDocument(document: LegalDocument): void {

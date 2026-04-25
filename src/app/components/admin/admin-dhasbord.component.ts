@@ -16,7 +16,7 @@ export class AdminDhasbordComponent implements OnInit {
   currentUser: User | null = null;
 
   totalUsers: number = 0;
-  totalDocuments: number = 0;
+  pendingDocuments: number = 0;
   criticalExpiryAlerts: number = 0;
   todayAuditLogs: number = 0;
   loadingStats: boolean = true;
@@ -49,14 +49,14 @@ export class AdminDhasbordComponent implements OnInit {
       }
     });
 
-    // Fetch total documents
-    this.documentService.searchDocuments({ page: 0, size: 1, documentTypeId: undefined, userId: undefined, status: undefined }).subscribe({
+    // Fetch pending documents
+    this.documentService.getPendingDocuments(0, 1).subscribe({
       next: (response) => {
-        this.totalDocuments = response.totalElements;
+        this.pendingDocuments = response.totalElements;
       },
       error: (error) => {
-        console.error('Error fetching total documents:', error);
-        this.totalDocuments = 0;
+        console.error('Error fetching pending documents:', error);
+        this.pendingDocuments = 0;
       }
     });
 
@@ -71,23 +71,24 @@ export class AdminDhasbordComponent implements OnInit {
       }
     });
 
-    // Fetch today's audit logs
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const dateFrom = today.toISOString().split('T')[0];
-    const dateTo = tomorrow.toISOString().split('T')[0];
-
+    // Fetch today's audit logs - get all logs and filter by date on frontend
     this.userActivityService.searchActivityLogs({
-      dateFrom: dateFrom,
-      dateTo: dateTo,
       page: 0,
-      size: 1
+      size: 100
     }).subscribe({
       next: (response) => {
-        this.todayAuditLogs = response.totalElements;
+        // Filter logs from today on the frontend
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const todayLogs = response.content.filter(log => {
+          const logDate = new Date(log.timestamp);
+          return logDate >= today && logDate < tomorrow;
+        });
+
+        this.todayAuditLogs = todayLogs.length;
         this.loadingStats = false;
       },
       error: (error) => {

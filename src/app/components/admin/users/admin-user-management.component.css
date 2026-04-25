@@ -1071,5 +1071,233 @@ select:focus {
   }
 }
 
+/* Ban Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #e8ecf0;
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-description {
+  margin: 0 0 20px;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.ban-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ban-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  border: 2px solid #e8ecf0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.ban-option-btn i {
+  font-size: 1.8rem;
+  color: #1a73e8;
+}
+
+.ban-option-btn:hover {
+  border-color: #1a73e8;
+  background: #f0f7ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.1);
+}
+
+.ban-option-btn.ban-permanent i {
+  color: #d32f2f;
+}
+
+.ban-option-btn.ban-permanent:hover {
+  border-color: #d32f2f;
+  background: #fff0f0;
+}
+
+.ban-option-title {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.ban-option-desc {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #e8ecf0;
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #e8ecf0;
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.btn-secondary:hover {
+  background: #e8e8e8;
+  border-color: #d0d0d0;
+}
+
+/* Ban icon button */
+.btn-icon-warning {
+  color: #fff;
+  border-color: #ff9800;
+  background-color: #ff9800;
+  font-weight: 600;
+}
+
+.btn-icon-warning:hover {
+  background-color: #f57c00;
+  border-color: #f57c00;
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-icon-success {
+  color: #fff;
+  border-color: #2e7d32;
+  background-color: #2e7d32;
+  font-weight: 600;
+}
+
+.btn-icon-success:hover {
+  background-color: #1b5e20;
+  border-color: #1b5e20;
+  box-shadow: 0 4px 8px rgba(46, 125, 50, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Ban status badge */
+.status-banned {
+  background: #ffebee;
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.status-banned .status-dot {
+  background: #d32f2f;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

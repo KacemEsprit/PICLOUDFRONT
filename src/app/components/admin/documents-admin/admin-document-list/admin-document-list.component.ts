@@ -9,11 +9,12 @@ import { DocumentTypeService } from '../../../../services/documents/document-typ
 import { ToastService } from '../../../../services/shared/toast.service';
 import { LegalDocument, DocumentType, Page, DocumentStatusEnum } from '../../../../models/document.model';
 import { PaginationComponent } from '../../../shared/pagination/pagination.component';
+import { TextGeneratorComponent } from '../../../shared/text-generator/text-generator.component';
 
 @Component({
   selector: 'app-admin-document-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, TextGeneratorComponent],
   templateUrl: './admin-document-list.component.html',
   styleUrls: ['./admin-document-list.component.css']
 })
@@ -27,6 +28,11 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
   currentPage: number = 0;
   pageSize: number = 10;
   totalElements: number = 0;
+
+  // Stats
+  totalDocuments: number = 0;
+  pendingReview: number = 0;
+  approvedDocuments: number = 0;
 
   // Filters
   statusFilter: string = '';
@@ -218,10 +224,59 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
           console.log('✅ Admin documents loaded:', page.content);
           this.documents = page.content;
           this.totalElements = page.totalElements;
+          this.calculateStats();
         },
         error: (error) => {
           console.error('❌ Error loading admin documents:', error);
           this.toastService.error('Error', 'Failed to load documents: ' + (error?.message || 'Unknown error'));
+        }
+      });
+  }
+
+  calculateStats(): void {
+    // Set total documents from current page load
+    this.totalDocuments = this.totalElements;
+
+    // Fetch pending documents
+    const pendingCriteria = {
+      page: 0,
+      size: 100,
+      status: 'PENDING' as DocumentStatusEnum
+    };
+
+    this.documentService
+      .searchDocuments(pendingCriteria)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (page) => {
+          this.pendingReview = page.totalElements;
+          console.log('📊 Pending documents count:', this.pendingReview);
+        },
+        error: (error) => {
+          console.error('❌ Error fetching pending stats:', error);
+          this.pendingReview = 0;
+        }
+      });
+
+    // Fetch approved documents
+    const approvedCriteria = {
+      page: 0,
+      size: 100,
+      status: 'VALID' as DocumentStatusEnum
+    };
+
+    this.documentService
+      .searchDocuments(approvedCriteria)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (page) => {
+          this.approvedDocuments = page.totalElements;
+          console.log('📊 Approved documents count:', this.approvedDocuments);
+          console.log('📊 Stats updated - Total:', this.totalDocuments, 'Pending:', this.pendingReview, 'Approved:', this.approvedDocuments);
+        },
+        error: (error) => {
+          console.error('❌ Error fetching approved stats:', error);
+          this.approvedDocuments = 0;
         }
       });
   }
@@ -367,6 +422,35 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
       this.showDetailModal = true;
       this.cdr.markForCheck();
     }
+  }
+
+  buildSummaryContext(doc: LegalDocument): string {
+    const fileName = doc.documentUrl ? doc.documentUrl.split('/').pop() || 'N/A' : 'N/A';
+    const statusText = doc.status ? doc.status.replace(/_/g, ' ') : 'Unknown';
+
+    const parts: string[] = [
+      `Document Type: ${doc.documentType?.name || 'Unknown'}`,
+      `Status: ${statusText}`,
+      `Uploaded By: ${doc.username || `User #${doc.userId}`}`,
+      `Upload Date: ${this.formatSummaryDate(doc.uploadDate)}`,
+      `Expiry Date: ${this.formatSummaryDate(doc.expiryDate)}`,
+      `File Name: ${fileName}`
+    ];
+
+    return parts.join('\n');
+  }
+
+  private formatSummaryDate(value: string | null | undefined): string {
+    if (!value) {
+      return 'N/A';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return date.toLocaleString();
   }
 
   closeDetailModal(): void {

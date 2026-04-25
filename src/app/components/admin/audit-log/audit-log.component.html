@@ -50,6 +50,27 @@
             </select>
           </div>
 
+          <!-- Date Range Filters -->
+          <div class="filter-group">
+            <label for="dateFrom">From Date</label>
+            <input
+              id="dateFrom"
+              type="date"
+              class="form-control"
+              formControlName="dateFrom"
+              (change)="onDateChange()">
+          </div>
+
+          <div class="filter-group">
+            <label for="dateTo">To Date</label>
+            <input
+              id="dateTo"
+              type="date"
+              class="form-control"
+              formControlName="dateTo"
+              (change)="onDateChange()">
+          </div>
+
           <!-- Reset Filters Button -->
           <div class="filter-actions">
             <button
@@ -115,7 +136,7 @@
               </div>
 
               <div class="activity-details">
-                <p class="activity-description">{{ log.description }}</p>
+                <p class="activity-description" *ngIf="!shouldHideDescription(log.description)">{{ log.description }}</p>
                 <div class="activity-meta">
                   <span class="meta-item" *ngIf="log.resourceName">
                     <i class="fas fa-tag"></i>
@@ -123,7 +144,7 @@
                   </span>
                   <span class="meta-item" *ngIf="log.ipAddress">
                     <i class="fas fa-map-marker-alt"></i>
-                    {{ log.ipAddress }}
+                    {{ getLocationFromIP(log.ipAddress) }}
                   </span>
                   <span class="meta-item" *ngIf="log.resourceType">
                     <i class="fas fa-box"></i>

@@ -151,6 +151,7 @@ export class UserActivityService {
       dateTo?: string;
       page?: number;
       size?: number;
+      sort?: string;
     }
   ): Observable<AuditLogResponse> {
     this.loadingSubject.next(true);
@@ -161,6 +162,7 @@ export class UserActivityService {
     if (filters.resourceType) params = params.set('resourceType', filters.resourceType);
     if (filters.dateFrom) params = params.set('dateFrom', filters.dateFrom);
     if (filters.dateTo) params = params.set('dateTo', filters.dateTo);
+    if (filters.sort) params = params.set('sort', filters.sort);
     params = params.set('page', (filters.page || 0).toString());
     params = params.set('size', (filters.size || 20).toString());
 
