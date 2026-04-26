@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+// Composants collegue
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { RegisterComponent } from './components/authentication/register/register.component';
@@ -30,11 +32,28 @@ import { FrontofficeLayoutComponent } from './components/shared/frontoffice-layo
 import { BackofficeLayoutComponent } from './components/shared/backoffice-layout/backoffice-layout.component';
 
 // Shared Components
+import { PaginationComponent } from './components/shared/pagination/pagination.component';
 // StatusBadgeComponent is now standalone
 
 // Pipes
 import { StatusLabelPipe, StatusColorPipe, StatusHexColorPipe } from './pipes/status.pipe';
 
+// MES composants (Rayen)
+import { OrganizationListComponent } from './components/admin/organization/organization-list/organization-list.component';
+import { OrganizationFormComponent } from './components/admin/organization/organization-form/organization-form.component';
+import { OrganizationDetailComponent } from './components/admin/organization/organization-detail/organization-detail.component';
+import { PartnerListComponent as AdminPartnerListComponent } from './components/admin/partner/partner-list/partner-list.component';
+import { PartnerFormComponent } from './components/admin/partner/partner-form/partner-form.component';
+import { ContractListComponent } from './components/admin/contract/contract-list/contract-list.component';
+import { ContractFormComponent } from './components/admin/contract/contract-form/contract-form.component';
+import { OperatorListComponent } from './components/users/operator-partner/operator-list/operator-list.component';
+import { OperatorDetailComponent } from './components/users/operator-partner/operator-detail/operator-detail.component';
+import { PartnerListComponent as UserPartnerListComponent } from './components/users/operator-partner/partner-list/partner-list.component';
+import { MapComponent } from './components/shared/map/map.component';
+import { ContractRemindersComponent } from './components/admin/contract-reminders/contract-reminders.component';
+import { MapPickerComponent } from './components/shared/map-picker/map-picker.component';
+
+// Services & Guards
 import { AuthService } from './services/auth/auth.service';
 import { JwtInterceptor } from './services/auth/jwt.interceptor';
 import { AuthGuard } from './guards/auth.guard';
@@ -70,7 +89,21 @@ import { AuditLogModule } from './components/admin/audit-log/audit-log.module';
     // Pipes
     StatusLabelPipe,
     StatusColorPipe,
-    StatusHexColorPipe
+    StatusHexColorPipe,
+    StatusHexColorPipe,
+    OrganizationListComponent,
+    OrganizationFormComponent,
+    OrganizationDetailComponent,
+    AdminPartnerListComponent,
+    PartnerFormComponent,
+    ContractListComponent,
+    ContractFormComponent,
+    OperatorListComponent,
+    OperatorDetailComponent,
+    UserPartnerListComponent,
+    MapComponent,
+    MapPickerComponent,
+    ContractRemindersComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +115,8 @@ import { AuditLogModule } from './components/admin/audit-log/audit-log.module';
     RouterModule,
     UserActivityLogModule,
     DocumentExpiryAlertsModule,
-    AuditLogModule
+    AuditLogModule,
+    PaginationComponent
   ],
   providers: [
     AuthService,
@@ -97,3 +131,4 @@ import { AuditLogModule } from './components/admin/audit-log/audit-log.module';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

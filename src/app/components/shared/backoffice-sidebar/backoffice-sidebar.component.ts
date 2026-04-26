@@ -21,7 +21,17 @@ export class BackofficeSidebarComponent implements OnInit {
         { icon: 'fa-users', label: 'User Management', path: '/admin/users' },
         { icon: 'fa-file', label: 'Document Management', path: '/admin/documents' },
         { icon: 'fa-calendar-times', label: 'Document Expiry Alerts', path: '/admin/expiry-alerts' },
-        { icon: 'fa-history', label: 'Audit Log', path: '/admin/audit-log' }
+        { icon: 'fa-history', label: 'Audit Log', path: '/admin/audit-log' },
+        { icon: 'fa-file', label: 'Document Management', path: '/admin/documents' }
+      ]
+    },
+    {
+      label: 'Gestion',
+      items: [
+        { icon: 'fa-building', label: 'Organizations', path: '/admin/organizations' },
+        { icon: 'fa-handshake', label: 'Partners', path: '/admin/partners' },
+        { icon: 'fa-file-text', label: 'Contracts', path: '/admin/contracts' },
+        { icon: 'fa-bell', label: 'Rappels Contrats', path: '/admin/contracts/reminders' }
       ]
     }
   ];
@@ -38,3 +48,5 @@ export class BackofficeSidebarComponent implements OnInit {
     return this.router.url.includes(path);
   }
 }
+
+

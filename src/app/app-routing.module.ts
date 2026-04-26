@@ -25,6 +25,19 @@ import { AdminDocumentListComponent } from './components/admin/documents-admin/a
 import { DocumentTypeManagerComponent } from './components/admin/documents-admin/document-type-manager/document-type-manager.component';
 import { ProfileComponent } from './components/users/profile/profile.component';
 
+// MES composants (Rayen)
+import { OrganizationListComponent } from './components/admin/organization/organization-list/organization-list.component';
+import { OrganizationFormComponent } from './components/admin/organization/organization-form/organization-form.component';
+import { OrganizationDetailComponent } from './components/admin/organization/organization-detail/organization-detail.component';
+import { PartnerListComponent as AdminPartnerListComponent } from './components/admin/partner/partner-list/partner-list.component';
+import { PartnerFormComponent } from './components/admin/partner/partner-form/partner-form.component';
+import { ContractListComponent } from './components/admin/contract/contract-list/contract-list.component';
+import { ContractRemindersComponent } from './components/admin/contract-reminders/contract-reminders.component';
+import { ContractFormComponent } from './components/admin/contract/contract-form/contract-form.component';
+import { OperatorListComponent } from './components/users/operator-partner/operator-list/operator-list.component';
+import { OperatorDetailComponent } from './components/users/operator-partner/operator-detail/operator-detail.component';
+import { PartnerListComponent as UserPartnerListComponent } from './components/users/operator-partner/partner-list/partner-list.component';
+
 const routes: Routes = [
   // Authentication routes (without layout)
   { path: 'login', component: LoginComponent },
@@ -33,7 +46,6 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'access-denied', component: AccessDeniedComponent },
 
-  // Frontoffice routes (with frontoffice layout for users: AGENT, OPERATOR, PASSENGER)
   {
     path: '',
     component: FrontofficeLayoutComponent,
@@ -46,8 +58,6 @@ const routes: Routes = [
 
       // Agent routes
       { path: 'agent-dhasbord', component: AgentDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['AGENT'] } },
-
-      // Operator routes
       { path: 'operator-dhasbord', component: OperatorDhasbordComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
 
       // Passenger routes
@@ -57,20 +67,29 @@ const routes: Routes = [
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['AGENT', 'OPERATOR', 'PASSENGER'] } },
 
       // Document Management Routes - User side
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'documents', component: DocumentListComponent, canActivate: [AuthGuard] },
       { path: 'documents/upload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
       { path: 'documents/:id', component: DocumentDetailComponent, canActivate: [AuthGuard] },
-      { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] }
+      { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
+      { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
+      // MES routes user
+      { path: 'operators', component: OperatorListComponent, canActivate: [AuthGuard] },
+      { path: 'operators/:id', component: OperatorDetailComponent, canActivate: [AuthGuard] },
+      { path: 'partners', component: UserPartnerListComponent, canActivate: [AuthGuard] },
+      { path: 'partners/:id', component: UserPartnerListComponent, canActivate: [AuthGuard] }
     ]
   },
 
   // Backoffice routes (with backoffice layout for admin)
+  // Backoffice admin (layout coll�gue)
   {
     path: 'admin',
     component: BackofficeLayoutComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ADMIN'] },
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: AdminDhasbordComponent },
       { path: 'admin-dhasbord', component: AdminDhasbordComponent },
       { path: 'users', component: AdminUserManagementComponent },
@@ -78,7 +97,19 @@ const routes: Routes = [
       { path: 'documents', component: AdminDocumentListComponent },
       { path: 'documents/types', component: DocumentTypeManagerComponent },
       { path: 'audit-log', component: AuditLogComponent },
-      { path: 'expiry-alerts', component: DocumentExpiryAlertsComponent }
+      { path: 'expiry-alerts', component: DocumentExpiryAlertsComponent },
+      // MES routes admin
+      { path: 'organizations', component: OrganizationListComponent },
+      { path: 'organizations/new', component: OrganizationFormComponent },
+      { path: 'organizations/edit/:id', component: OrganizationFormComponent },
+      { path: 'organizations/:id', component: OrganizationDetailComponent },
+      { path: 'partners', component: AdminPartnerListComponent },
+      { path: 'partners/new', component: PartnerFormComponent },
+      { path: 'partners/edit/:id', component: PartnerFormComponent },
+      { path: 'contracts', component: ContractListComponent },
+      { path: 'contracts/new', component: ContractFormComponent },
+      { path: 'contracts/edit/:id', component: ContractFormComponent },
+      { path: 'contracts/reminders', component: ContractRemindersComponent }
     ]
   },
 
@@ -98,3 +129,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+

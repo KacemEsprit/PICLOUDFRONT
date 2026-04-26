@@ -83,8 +83,9 @@
     [totalElements]="totalElements"
     [pageSize]="pageSize"
     [pageNumber]="currentPage"
-    (pageChanged)="onPageChange($any($event))"
-    (pageSizeChanged)="onPageSizeChange($any($event))">
+    [totalPages]="totalPages"
+    (pageChanged)="onPageChange($event)"
+    (pageSizeChanged)="onPageSizeChange($event)">
   </app-pagination>
 
   <!-- Empty State -->
