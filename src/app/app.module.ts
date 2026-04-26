@@ -24,6 +24,9 @@ import { ToastNotificationComponent } from './components/shared/toast-notificati
 import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { ProfileComponent } from './components/users/profile/profile.component';
+import { NotificationListComponent } from './components/users/notifications/notification-list/notification-list.component';
+import { IncidentManagementComponent } from './components/users/agent/incident-management/incident-management.component';
+import { IncidentCreateComponent } from './components/users/agent/incident-create/incident-create.component';
 
 import { BackofficeSidebarComponent } from './components/shared/backoffice-sidebar/backoffice-sidebar.component';
 import { FrontofficeLayoutComponent } from './components/shared/frontoffice-layout/frontoffice-layout.component';
@@ -64,6 +67,9 @@ import { AuditLogModule } from './components/admin/audit-log/audit-log.module';
     HeaderComponent,
     FooterComponent,
     ProfileComponent,
+    NotificationListComponent,
+    IncidentManagementComponent,
+    IncidentCreateComponent,
     BackofficeSidebarComponent,
     FrontofficeLayoutComponent,
     BackofficeLayoutComponent,

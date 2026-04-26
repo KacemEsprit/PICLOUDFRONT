@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../../services/auth/auth.service';
 import { Observable } from 'rxjs';
+import { IncidentNotificationService } from '../../../services/incident-notification/incident-notification.service';
+import { AppNotification } from '../../../models/incident-notification.model';
 
 @Component({
   selector: 'app-header',
@@ -13,10 +15,14 @@ export class HeaderComponent implements OnInit {
   currentUser$!: Observable<User | null>;
   isAuthenticated$!: Observable<boolean>;
   currentRoute: string = '';
+  unreadNotifications$!: Observable<number>;
+  latestNotifications$!: Observable<AppNotification[]>;
+  isNotificationOpen = false;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private incidentNotificationService: IncidentNotificationService
   ) {
     this.router.events.subscribe(() => {
       this.currentRoute = this.router.url;
@@ -26,7 +32,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser$ = this.authService.currentUser$;
     this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.unreadNotifications$ = this.incidentNotificationService.unreadCount$;
+    this.latestNotifications$ = this.incidentNotificationService.notifications$;
     this.currentRoute = this.router.url;
+    if (this.isAuthenticated) {
+      this.incidentNotificationService.refreshNotifications();
+    }
   }
 
   logout(): void {
@@ -60,6 +71,18 @@ export class HeaderComponent implements OnInit {
     return this.currentRoute.includes('/documents');
   }
 
+  isNotificationsPage(): boolean {
+    return this.currentRoute.includes('/notifications');
+  }
+
+  isIncidentsPage(): boolean {
+    return this.currentRoute.includes('/incidents');
+  }
+
+  isAgent(): boolean {
+    return this.currentUser?.role?.toUpperCase() === 'AGENT';
+  }
+
   getDashboardLink(): string {
     const user = this.currentUser;
     if (!user) return '/home';
@@ -85,6 +108,22 @@ export class HeaderComponent implements OnInit {
 
   get isAuthenticated(): boolean {
     return this.authService.isAuthenticated;
+  }
+
+  toggleNotifications(): void {
+    this.isNotificationOpen = !this.isNotificationOpen;
+    if (this.isNotificationOpen) {
+      this.incidentNotificationService.refreshNotifications();
+    }
+  }
+
+  openNotificationsPage(): void {
+    this.isNotificationOpen = false;
+    this.router.navigate(['/notifications']);
+  }
+
+  markAsRead(notificationId: number): void {
+    this.incidentNotificationService.markNotificationAsRead(notificationId).subscribe();
   }
 }
 

@@ -23,6 +23,9 @@ import { DocumentDetailComponent } from './components/users/documents/document-d
 import { AdminDocumentListComponent } from './components/admin/documents-admin/admin-document-list/admin-document-list.component';
 import { DocumentTypeManagerComponent } from './components/admin/documents-admin/document-type-manager/document-type-manager.component';
 import { ProfileComponent } from './components/users/profile/profile.component';
+import { NotificationListComponent } from './components/users/notifications/notification-list/notification-list.component';
+import { IncidentManagementComponent } from './components/users/agent/incident-management/incident-management.component';
+import { IncidentCreateComponent } from './components/users/agent/incident-create/incident-create.component';
 
 const routes: Routes = [
   // Authentication routes (without layout)
@@ -54,6 +57,10 @@ const routes: Routes = [
 
       // User Profile - Accessible by all authenticated users (AGENT, OPERATOR, PASSENGER)
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['AGENT', 'OPERATOR', 'PASSENGER'] } },
+      { path: 'notifications', component: NotificationListComponent, canActivate: [AuthGuard], data: { roles: ['AGENT', 'OPERATOR', 'PASSENGER'] } },
+      { path: 'incidents', redirectTo: 'incidents/create', pathMatch: 'full' },
+      { path: 'incidents/create', component: IncidentCreateComponent, canActivate: [AuthGuard], data: { roles: ['AGENT'] } },
+      { path: 'incidents/list', component: IncidentManagementComponent, canActivate: [AuthGuard], data: { roles: ['AGENT'] } },
 
       // Document Management Routes - User side
       { path: 'documents', component: DocumentListComponent, canActivate: [AuthGuard] },
