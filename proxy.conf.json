@@ -37,6 +37,14 @@
     "secure": false,
     "changeOrigin": true
   },
+
+  "/groq-api": {
+    "target": "https://api.groq.com",
+    "changeOrigin": true,
+    "pathRewrite": { "^/groq-api": "" },
+    "secure": true
+  },
+
   "/urlscan": {
     "target": "https://urlscan.io",
     "secure": true,
