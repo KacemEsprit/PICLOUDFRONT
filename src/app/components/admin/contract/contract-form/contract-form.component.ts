@@ -94,7 +94,7 @@ export class ContractFormComponent implements OnInit {
 
   generateClauses(): void {
     if (!this.contract.partnerId || !this.contract.organizationId) {
-      this.aiError = 'Veuillez selectionner un partenaire et une organisation avant de generer les clauses.';
+      this.aiError = 'Please select a partner and an organization before generating clauses.';
       return;
     }
 
@@ -118,12 +118,12 @@ export class ContractFormComponent implements OnInit {
           const parsed = JSON.parse(clean);
           this.aiClauses = parsed.clauses;
         } catch (e) {
-          this.aiError = 'Erreur lors du parsing de la reponse AI.';
+          this.aiError = 'Error lors du parsing de la reponse AI.';
         }
         this.aiLoading = false;
       },
       error: (err) => {
-        this.aiError = 'Erreur API Gemini: ' + (err.error?.error?.message || err.message);
+        this.aiError = 'Error API Gemini: ' + (err.error?.error?.message || err.message);
         this.aiLoading = false;
       }
     });

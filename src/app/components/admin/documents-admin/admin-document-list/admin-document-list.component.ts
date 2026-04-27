@@ -186,7 +186,7 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           console.log('✅ Document uploaded successfully:', response);
-          this.toastService.success('Success', 'Document uploaded successfully');
+          this.toastService.success('Successs', 'Document uploaded successfully');
           this.closeModal();
           this.loadDocuments();
         },
@@ -345,7 +345,7 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (updatedDoc) => {
           const statusMsg = updatedDoc.status === 'VALID' ? 'approved' : 'toggled to approved';
-          this.toastService.success('Success', `Document ${statusMsg} successfully`);
+          this.toastService.success('Successs', `Document ${statusMsg} successfully`);
           // Update the document in the list
           const index = this.documents.findIndex(d => d.id === documentId);
           if (index !== -1) {
@@ -381,7 +381,7 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (updatedDoc) => {
-          this.toastService.success('Success', 'Document rejected');
+          this.toastService.success('Successs', 'Document rejected');
           // Update the document in the list
           const index = this.documents.findIndex(d => d.id === documentId);
           if (index !== -1) {
@@ -405,7 +405,7 @@ export class AdminDocumentListComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.toastService.success('Success', 'Update request sent');
+            this.toastService.success('Successs', 'Update request sent');
             this.loadDocuments();
           },
           error: (err) => {

@@ -31,7 +31,7 @@ export class ContractListComponent implements OnInit {
   // Weekly Report
   reportLoading = false;
   showReportModal = false;
-  reportSuccess = false;
+  reportSuccesss = false;
   reportMessage = "";
 
   constructor(
@@ -88,7 +88,7 @@ export class ContractListComponent implements OnInit {
         this.verifyResult = result;
         this.showVerifyModal = true;
       },
-      error: () => alert("Erreur lors de la verification")
+      error: () => alert("Error lors de la verification")
     });
   }
 
@@ -116,7 +116,7 @@ export class ContractListComponent implements OnInit {
   }
 
   delete(id: number): void {
-    if (confirm('Voulez-vous supprimer ce contrat ?')) {
+    if (confirm('Do you want to delete this contract?')) {
       this.contractService.delete(id).subscribe({
         next: () => this.loadContracts(),
         error: (err) => console.error(err)
@@ -129,14 +129,14 @@ export class ContractListComponent implements OnInit {
     this.reportsService.triggerWeeklyReport().subscribe({
       next: (result) => {
         this.reportLoading = false;
-        this.reportSuccess = true;
-        this.reportMessage = result.message || "Rapport envoye avec succes !";
+        this.reportSuccesss = true;
+        this.reportMessage = result.message || "Report sent successfully!";
         this.showReportModal = true;
       },
       error: (err) => {
         this.reportLoading = false;
-        this.reportSuccess = false;
-        this.reportMessage = err.error?.message || "Erreur lors de l'envoi du rapport.";
+        this.reportSuccesss = false;
+        this.reportMessage = err.error?.message || "Error lors de l'envoi du rapport.";
         this.showReportModal = true;
       }
     });
@@ -146,14 +146,14 @@ sendExpirationAlert(): void {
     this.reportsService.triggerExpirationAlert().subscribe({
       next: (result) => {
         this.reportLoading = false;
-        this.reportSuccess = true;
-        this.reportMessage = result.message || "Alerte expiration envoyee !";
+        this.reportSuccesss = true;
+        this.reportMessage = result.message || "Expiration alert sent!";
         this.showReportModal = true;
       },
       error: (err) => {
         this.reportLoading = false;
-        this.reportSuccess = false;
-        this.reportMessage = err.error?.message || "Erreur lors du declenchement de l'alerte.";
+        this.reportSuccesss = false;
+        this.reportMessage = err.error?.message || "Error lors du declenchement de l'alerte.";
         this.showReportModal = true;
       }
     });

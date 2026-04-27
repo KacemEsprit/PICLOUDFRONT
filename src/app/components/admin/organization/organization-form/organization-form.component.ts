@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Organization } from '../../../../models/organization-partner/organization';
@@ -150,7 +150,7 @@ export class OrganizationFormComponent implements OnInit {
           status: 'ACTIVE',
           startDate: now.toISOString(),
           endDate: nextYear.toISOString(),
-          description: `Contrat entre organisation ${orgId} et partenaire ${p.name}`,
+          description: `Contract between organization ${orgId} and partner ${p.name}`,
           organizationId: orgId,
           partnerId: p.id
         }).toPromise()),
@@ -271,14 +271,14 @@ export class OrganizationFormComponent implements OnInit {
             this.logoCheckMessage = 'ATTENTION: Score de risque eleve (' + verdicts.score + '/100) pour ' + hostname + ' selon URLScan.io.';
           } else if (isTrusted) {
             this.logoCheckResult = 'safe';
-            this.logoCheckMessage = 'Domaine verifie et de confiance: ' + hostname + '. Aucune menace detectee par URLScan.io.';
+            this.logoCheckMessage = 'Verified and trusted domain: ' + hostname + '. No threat detected by URLScan.io.';
           } else {
             this.logoCheckResult = 'safe';
-            this.logoCheckMessage = 'Domaine analyse par URLScan.io: ' + hostname + '. Aucune menace detectee. Score: ' + (verdicts?.score || 0) + '/100.';
+            this.logoCheckMessage = 'Domain analyzed by URLScan.io: ' + hostname + '. No threat detected. Score: ' + (verdicts?.score || 0) + '/100.';
           }
         } else if (isTrusted) {
           this.logoCheckResult = 'safe';
-          this.logoCheckMessage = 'Domaine de confiance reconnu: ' + hostname + '. Aucun historique malveillant.';
+          this.logoCheckMessage = 'Recognized trusted domain: ' + hostname + '. No malicious history.';
         } else {
           this.logoCheckResult = 'unknown';
           this.logoCheckMessage = 'Domaine ' + hostname + ' non repertorie dans URLScan.io. Verifiez manuellement la fiabilite de cette source.';
@@ -289,7 +289,7 @@ export class OrganizationFormComponent implements OnInit {
         // Si API indisponible, fallback sur analyse locale
         if (isTrusted) {
           this.logoCheckResult = 'safe';
-          this.logoCheckMessage = 'Domaine de confiance reconnu localement: ' + hostname + '. (API URLScan.io indisponible)';
+          this.logoCheckMessage = 'Recognized trusted domain localement: ' + hostname + '. (API URLScan.io indisponible)';
         } else {
           this.logoCheckResult = 'unknown';
           this.logoCheckMessage = 'Impossible de contacter l API de verification pour ' + hostname + '. Verifiez manuellement.';

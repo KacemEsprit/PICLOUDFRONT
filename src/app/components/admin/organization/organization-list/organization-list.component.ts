@@ -64,7 +64,7 @@ export class OrganizationListComponent implements OnInit {
   }
 
   delete(id: number): void {
-    if (confirm('Voulez-vous supprimer cette organisation ?')) {
+    if (confirm('Do you want to delete this organization?')) {
       this.organizationService.delete(id).subscribe({
         next: () => this.loadOrganizations(),
         error: (err) => console.error(err)

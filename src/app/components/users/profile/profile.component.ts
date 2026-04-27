@@ -194,7 +194,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.profileForm.get('cin')?.disable();
           this.loading = false;
           this.fieldErrors = {};
-          this.toastService.success('Success', 'Profile updated successfully');
+          this.toastService.success('Successs', 'Profile updated successfully');
         },
         error: (error) => {
           console.error('Error updating profile:', error);
@@ -268,7 +268,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.photoLoading = false;
           this.photoSelected = false;
           this.selectedFile = null;
-          this.toastService.success('Success', 'Profile photo uploaded successfully');
+          this.toastService.success('Successs', 'Profile photo uploaded successfully');
         },
         error: (error) => {
           console.error('Error uploading photo:', error);
@@ -294,7 +294,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.profile = updatedProfile;
           this.profilePhotoUrl = null;
           this.photoLoading = false;
-          this.toastService.success('Success', 'Profile photo deleted successfully');
+          this.toastService.success('Successs', 'Profile photo deleted successfully');
         },
         error: (error) => {
           console.error('Error deleting photo:', error);
