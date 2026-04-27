@@ -12,6 +12,8 @@
         <a routerLink="/partners" class="home-link" [class.active]="currentRoute.includes('/partners')">Partners</a>
       </ng-container>
       <a *ngIf="isAuthenticated$ | async" routerLink="/documents" class="documents-link" [class.active]="isDocumentsPage()">Documents</a>
+      <a *ngIf="isAuthenticated$ | async" routerLink="/notifications" class="documents-link" [class.active]="isNotificationsPage()">Notifications</a>
+      <a *ngIf="(isAuthenticated$ | async) && isAgent()" routerLink="/incidents/create" class="documents-link" [class.active]="isIncidentsPage()">Incidents</a>
     </div>
 
     <!-- Center Section: Spacer -->
@@ -25,6 +27,32 @@
       <!-- Welcome Message and Logout (when authenticated) -->
       <ng-container *ngIf="isAuthenticated$ | async as isAuth">
         <ng-container *ngIf="isAuth">
+          <div class="notification-wrapper">
+            <button class="notification-btn" (click)="toggleNotifications()">
+              <i class="fas fa-bell"></i>
+              <span class="notification-count" *ngIf="(unreadNotifications$ | async) as unread" [class.hidden]="unread === 0">
+                {{ unread }}
+              </span>
+            </button>
+
+            <div class="notification-dropdown" *ngIf="isNotificationOpen">
+              <div class="notification-dropdown-header">
+                <span>Notifications</span>
+                <button type="button" (click)="openNotificationsPage()">View all</button>
+              </div>
+              <button
+                type="button"
+                class="notification-item"
+                *ngFor="let item of (latestNotifications$ | async)?.slice(0, 5)"
+                (click)="markAsRead(item.id)"
+              >
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.message }}</p>
+              </button>
+              <p class="notification-empty" *ngIf="(latestNotifications$ | async)?.length === 0">No notifications yet.</p>
+            </div>
+          </div>
+
           <span class="user-info">Welcome {{ (currentUser$ | async)?.name }}</span>
           <a routerLink="/profile" class="profile-link" [class.active]="isProfilePage()">Profile</a>
           <button (click)="logout()" class="btn-logout">Logout</button>
