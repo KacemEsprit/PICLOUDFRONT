@@ -23,12 +23,12 @@ export class BackofficeSidebarComponent implements OnInit {
       ]
     },
     {
-      label: 'Gestion',
+      label: 'Management',
       items: [
         { icon: 'fa-building', label: 'Organizations', path: '/admin/organizations' },
         { icon: 'fa-handshake', label: 'Partners', path: '/admin/partners' },
         { icon: 'fa-file-text', label: 'Contracts', path: '/admin/contracts' },
-        { icon: 'fa-bell', label: 'Rappels Contrats', path: '/admin/contracts/reminders' }
+        { icon: 'fa-bell', label: 'Contract Reminders', path: '/admin/contracts/reminders' }
       ]
     }
   ];

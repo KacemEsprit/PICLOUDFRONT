@@ -75,7 +75,7 @@ export class DocumentDetailComponent implements OnInit, OnDestroy {
           link.download = `document-${this.document?.id}.pdf`;
           link.click();
           window.URL.revokeObjectURL(url);
-          this.toastService.success('Success', 'Document downloaded');
+          this.toastService.success('Successs', 'Document downloaded');
         },
         error: (error) => {
           console.error('Error downloading document:', error);

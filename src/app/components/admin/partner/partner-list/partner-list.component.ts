@@ -83,12 +83,12 @@ export class PartnerListComponent implements OnInit {
     if (contractId) {
       this.loadContractsForPartner(partnerId);
     } else {
-      alert("Aucun contrat disponible pour ce partenaire");
+      alert("No contracts available for this partner");
     }
   }
 
   delete(id: number): void {
-    if (confirm("Voulez-vous supprimer ce partenaire ?")) {
+    if (confirm("Do you want to delete this partner?")) {
       this.partnerService.delete(id).subscribe({
         next: () => this.loadPartners(),
         error: (err) => console.error(err)
@@ -106,7 +106,7 @@ export class PartnerListComponent implements OnInit {
     this.contractsModalLoading = true;
     this.selectedPartnerContracts = [];
     const partner = this.partners.find(p => p.id === partnerId);
-    this.selectedPartnerName = partner ? partner.name : 'Partenaire';
+    this.selectedPartnerName = partner ? partner.name : 'Partner';
 
     this.http.get<any[]>(`http://localhost:8081/api/contracts/partner/${partnerId}`).subscribe({
       next: (contracts) => {

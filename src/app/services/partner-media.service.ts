@@ -38,7 +38,7 @@ export class PartnerMediaService {
       return snapshot.docs[0].data() as PartnerMedia;
     }
 
-    console.warn('❌ Aucun média trouvé pour partnerId:', partnerId);
+    console.warn('❌ No media found for partnerId:', partnerId);
     return null;
   }
 }
