@@ -100,6 +100,7 @@
   padding: 1rem;
   cursor: pointer;
   transition: border-color 0.2s ease, transform 0.2s ease;
+  border-radius: 8px;
 }
 
 .notification-card:hover {
@@ -126,11 +127,40 @@
 .notification-date {
   font-size: 0.8rem;
   color: var(--muted-text);
+  white-space: nowrap;
 }
 
 .message {
   margin: 0.75rem 0;
   color: var(--text);
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+/* Notification meta row — delay and status */
+.notification-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 4px;
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+}
+
+.meta-tag i {
+  font-size: 0.75rem;
 }
 
 .status {
@@ -140,6 +170,8 @@
   font-weight: 700;
   color: #f57f17;
   background: rgba(245, 127, 23, 0.15);
+  border-radius: 4px;
+  margin-left: auto;
 }
 
 .status.read {

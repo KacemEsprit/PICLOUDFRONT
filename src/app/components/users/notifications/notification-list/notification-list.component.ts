@@ -58,6 +58,16 @@ export class NotificationListComponent implements OnInit {
     return new Date(value);
   }
 
+  /**
+   * Extract estimated delay from the AI-generated notification message.
+   * The AI messages contain patterns like "Estimated delay: 60 min" or "Est. delay: 30 min".
+   */
+  extractDelay(message: string): string | null {
+    if (!message) return null;
+    const match = message.match(/(?:estimated\s+(?:delay|resolution)[:\s]*|est\.\s*delay[:\s]*)(\d+)\s*min/i);
+    return match ? match[1] + ' min' : null;
+  }
+
   private applyFilters(): void {
     const normalizedSearch = this.searchTerm.trim().toLowerCase();
     this.filteredNotifications = this.notifications.filter((item) => {

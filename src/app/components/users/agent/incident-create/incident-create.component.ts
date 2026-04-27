@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IncidentNotificationService } from '../../../../services/incident-notification/incident-notification.service';
+import { IncidentSummary } from '../../../../models/incident-notification.model';
 
 @Component({
   selector: 'app-incident-create',
@@ -12,8 +13,10 @@ export class IncidentCreateComponent {
   isSubmitting = false;
   feedbackMessage = '';
   feedbackType: 'success' | 'error' = 'success';
-  readonly severityOptions = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
   readonly incidentForm;
+
+  // AI analysis result displayed after submission
+  aiResult: IncidentSummary | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +25,6 @@ export class IncidentCreateComponent {
   ) {
     this.incidentForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      severity: ['', [Validators.required]],
       location: ['', [Validators.required, Validators.maxLength(255)]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]]
     });
@@ -35,17 +37,18 @@ export class IncidentCreateComponent {
     }
 
     this.isSubmitting = true;
+    this.aiResult = null;
     const payload = this.incidentForm.getRawValue() as {
       title: string;
-      severity: string;
       location: string;
       description: string;
     };
 
     this.incidentNotificationService.createIncident(payload).subscribe({
-      next: () => {
+      next: (result) => {
         this.isSubmitting = false;
-        this.feedbackMessage = 'Incident submitted and notifications sent.';
+        this.aiResult = result;
+        this.feedbackMessage = 'Incident submitted successfully! AI has analyzed and classified it.';
         this.feedbackType = 'success';
         this.incidentForm.reset();
       },
@@ -57,12 +60,16 @@ export class IncidentCreateComponent {
     });
   }
 
-  hasError(controlName: 'title' | 'severity' | 'location' | 'description', error: string): boolean {
+  hasError(controlName: 'title' | 'location' | 'description', error: string): boolean {
     const control = this.incidentForm.get(controlName);
     return !!control && control.touched && control.hasError(error);
   }
 
   goToIncidentsList(): void {
     this.router.navigate(['/incidents/list']);
+  }
+
+  dismissAiResult(): void {
+    this.aiResult = null;
   }
 }

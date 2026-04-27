@@ -164,6 +164,93 @@ select:focus {
 
 .incident-item p {
   margin: 0.15rem 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Severity color badges */
+.severity-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.severity-high {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+.severity-medium {
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+}
+
+.severity-low {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+/* AI tag */
+.ai-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 3px;
+  background: #ede7f6;
+  color: #7c4dff;
+  border: 1px solid #d1c4e9;
+  margin-left: 4px;
+}
+
+/* AI meta row under each incident */
+.incident-ai-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.meta-tag.delay {
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+}
+
+.meta-tag.type {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+  text-transform: capitalize;
+}
+
+.meta-tag.confidence {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.meta-tag i {
+  font-size: 0.7rem;
 }
 
 .state {
@@ -187,3 +274,4 @@ select:focus {
     width: 100%;
   }
 }
+

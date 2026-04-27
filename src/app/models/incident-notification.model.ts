@@ -21,7 +21,6 @@ export interface AppNotification {
 export interface IncidentPayload {
   title: string;
   description: string;
-  severity: string;
   location: string;
 }
 
@@ -31,4 +30,10 @@ export interface IncidentSummary {
   severity: string;
   location: string;
   reportedByName: string;
+  // AI-generated fields
+  agentMessage?: string;
+  passengerMessage?: string;
+  estimatedDelayMinutes?: number;
+  incidentType?: string;
+  confidencePercent?: number;
 }

@@ -1,7 +1,7 @@
 <div class="notification-page">
   <div class="page-header">
     <h1>Notifications</h1>
-    <p>Track incident alerts and transport updates.</p>
+    <p>Track incident alerts, AI analysis, and transport updates.</p>
   </div>
 
   <div class="status-banner error" *ngIf="errorMessage">
@@ -50,9 +50,16 @@
         <span class="notification-date">{{ asDate(item.createdAt) | date: 'medium' }}</span>
       </div>
       <p class="message">{{ item.message }}</p>
-      <span class="status" [class.read]="item.status === 'READ'">
-        {{ item.status === 'READ' ? 'Read' : 'Unread' }}
-      </span>
+
+      <!-- AI-enriched details extracted from the message -->
+      <div class="notification-meta">
+        <span class="meta-tag" *ngIf="extractDelay(item.message) as delay">
+          <i class="fas fa-clock"></i> Est. delay: {{ delay }}
+        </span>
+        <span class="status" [class.read]="item.status === 'READ'">
+          {{ item.status === 'READ' ? 'Read' : 'Unread' }}
+        </span>
+      </div>
     </article>
   </div>
 </div>
