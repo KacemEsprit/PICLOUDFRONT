@@ -7,13 +7,29 @@
       <a routerLink="/home" class="home-link" [class.active]="isHomePage()">Home</a>
       <a *ngIf="isAuthenticated$ | async" [routerLink]="getDashboardLink()" class="dashboard-link" [class.active]="isDashboardPage()">Dashboard</a>
       <!-- MES LIENS (visibles quand connect�) -->
-      <ng-container *ngIf="isAuthenticated$ | async">
+      <ng-container *ngIf="(isAuthenticated$ | async) && isPassenger()">
         <a routerLink="/operators" class="home-link" [class.active]="currentRoute.includes('/operators')">Operators</a>
         <a routerLink="/partners" class="home-link" [class.active]="currentRoute.includes('/partners')">Partners</a>
       </ng-container>
       <a *ngIf="isAuthenticated$ | async" routerLink="/documents" class="documents-link" [class.active]="isDocumentsPage()">Documents</a>
       <a *ngIf="isAuthenticated$ | async" routerLink="/notifications" class="documents-link" [class.active]="isNotificationsPage()">Notifications</a>
       <a *ngIf="(isAuthenticated$ | async) && isAgent()" routerLink="/incidents/create" class="documents-link" [class.active]="isIncidentsPage()">Incidents</a>
+
+      <!-- PASSENGER Routes (colleague's features) -->
+      <ng-container *ngIf="(isAuthenticated$ | async) && isPassenger()">
+        <a routerLink="/passenger/plans" class="home-link" [class.active]="currentRoute.includes('/passenger/plans')">Plans</a>
+        <a routerLink="/passenger/subscriptions" class="home-link" [class.active]="currentRoute.includes('/passenger/subscriptions')">My Subscriptions</a>
+        <a routerLink="/passenger/loyalty" class="home-link" [class.active]="currentRoute.includes('/passenger/loyalty')">Loyalty</a>
+      </ng-container>
+
+      <!-- OPERATOR Routes (colleague's features) -->
+      <ng-container *ngIf="(isAuthenticated$ | async) && isOperator()">
+        <a routerLink="/operator/pricing-plans" class="home-link" [class.active]="currentRoute.includes('/operator/pricing-plans')">Plans</a>
+        <a routerLink="/operator/subscriptions" class="home-link" [class.active]="currentRoute.includes('/operator/subscriptions')">Subscriptions</a>
+        <a routerLink="/operator/reductions" class="home-link" [class.active]="currentRoute.includes('/operator/reductions')">Discounts</a>
+        <a routerLink="/operator/loyalty" class="home-link" [class.active]="currentRoute.includes('/operator/loyalty')">Loyalty</a>
+        <a routerLink="/operator/ml" class="home-link" [class.active]="currentRoute.includes('/operator/ml')">ML Analysis</a>
+      </ng-container>
     </div>
 
     <!-- Center Section: Spacer -->

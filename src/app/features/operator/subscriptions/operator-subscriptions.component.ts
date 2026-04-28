@@ -150,9 +150,10 @@ export class OperatorSubscriptionsComponent implements OnInit {
   resetPage() { this.currentPage = 1; }
 
   count(status: string) { return this.subscriptions.filter(s => s.statut === status).length; }
-  planClass(type: string) { return { 'cell-tag-green': type === 'FREE', 'cell-tag-blue': type === 'BASIC', 'cell-tag-purple': type === 'PREMIUM' }; }
+  planClass(type?: string) { return { 'cell-tag-green': type === 'FREE', 'cell-tag-blue': type === 'BASIC', 'cell-tag-purple': type === 'PREMIUM' }; }
   statusClass(s: string) { return { 'status-active': s === 'ACTIVE', 'status-expired': s === 'EXPIRED', 'status-cancelled': s === 'CANCELLED' }; }
-  transportIcon(t: TransportType) {
-    return { 'fa-bus': t === TransportType.BUS, 'fa-subway': t === TransportType.METRO, 'fa-train': t === TransportType.TRAIN, 'fa-tram': t === TransportType.LOUAGE, 'fa-ship': t === TransportType.BATTAH };
+  transportIcon(t?: TransportType | string) {
+    const val = (t as TransportType) || undefined;
+    return { 'fa-bus': val === TransportType.BUS, 'fa-subway': val === TransportType.METRO, 'fa-train': val === TransportType.TRAIN, 'fa-tram': val === TransportType.LOUAGE, 'fa-ship': val === TransportType.BATTAH };
   }
 }

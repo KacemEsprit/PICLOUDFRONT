@@ -173,8 +173,8 @@ import {
       <div *ngIf="actionResult" style="background:var(--bg-header);border-radius:var(--radius-sm);padding:16px">
         <div class="flex-between mb-4">
           <span class="text-muted fs-sm">Suggested action</span>
-          <span style="font-family:monospace;font-size:0.78rem;font-weight:700;background:#fff3e0;color:#e65100;padding:4px 10px;border-radius:8px">
-            {{ actionResult.action }}
+            <span style="font-family:monospace;font-size:0.78rem;font-weight:700;background:#fff3e0;color:#e65100;padding:4px 10px;border-radius:8px">
+            {{ actionResult.suggestedPromoCode || actionResult.suggestedAction }}
           </span>
         </div>
         <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:#fff8e1;border-radius:8px;border-left:3px solid #f57f17;margin-bottom:14px">

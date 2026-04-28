@@ -17,6 +17,18 @@ import { AuthGuard } from './guards/auth.guard';
 import { FrontofficeLayoutComponent } from './components/shared/frontoffice-layout/frontoffice-layout.component';
 import { BackofficeLayoutComponent } from './components/shared/backoffice-layout/backoffice-layout.component';
 
+// Colleague features (passenger / operator)
+import { PassengerPlansComponent } from './features/passenger/plans/passenger-plans.component';
+import { PassengerSubscriptionsComponent } from './features/passenger/subscription/passenger-subscriptions.component';
+import { PassengerLoyaltyComponent } from './features/passenger/loyalty/passenger-loyalty.component';
+import { PaymentSuccessComponent, PaymentCancelComponent } from './features/passenger/payment/payment.component';
+
+import { PricingPlanComponent } from './features/operator/pricing-plan/pricing-plan.component';
+import { ReductionComponent } from './features/operator/reduction/reduction.component';
+import { MlDashboardComponent } from './features/operator/ml-dashboard/ml-dashboard.component';
+import { OperatorSubscriptionsComponent } from './features/operator/subscriptions/operator-subscriptions.component';
+import { OperatorLoyaltyComponent } from './features/operator/loyalty/operator-loyalty.component';
+
 // Document Management Components
 import { DocumentListComponent } from './components/users/documents/document-list/document-list.component';
 import { DocumentUploadComponent } from './components/users/documents/document-upload/document-upload.component';
@@ -80,6 +92,19 @@ const routes: Routes = [
       { path: 'documents/:id', component: DocumentDetailComponent, canActivate: [AuthGuard] },
       { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
       { path: 'documents/:id/reupload', component: DocumentUploadComponent, canActivate: [AuthGuard] },
+      // Passenger feature routes (from colleague)
+      { path: 'passenger/plans', component: PassengerPlansComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
+      { path: 'passenger/subscriptions', component: PassengerSubscriptionsComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
+      { path: 'passenger/loyalty', component: PassengerLoyaltyComponent, canActivate: [AuthGuard], data: { roles: ['PASSENGER'] } },
+      { path: 'payment/success', component: PaymentSuccessComponent },
+      { path: 'payment/cancel', component: PaymentCancelComponent },
+
+      // Operator feature routes (from colleague)
+      { path: 'operator/pricing-plans', component: PricingPlanComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
+      { path: 'operator/subscriptions', component: OperatorSubscriptionsComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
+      { path: 'operator/reductions', component: ReductionComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
+      { path: 'operator/loyalty', component: OperatorLoyaltyComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
+      { path: 'operator/ml', component: MlDashboardComponent, canActivate: [AuthGuard], data: { roles: ['OPERATOR'] } },
       // MES routes user
       { path: 'operators', component: OperatorListComponent, canActivate: [AuthGuard] },
       { path: 'operators/:id', component: OperatorDetailComponent, canActivate: [AuthGuard] },

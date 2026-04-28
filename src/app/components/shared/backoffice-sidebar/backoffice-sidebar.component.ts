@@ -8,7 +8,11 @@ import { AuthService } from '../../../services/auth/auth.service';
   styleUrls: ['./backoffice-sidebar.component.css']
 })
 export class BackofficeSidebarComponent implements OnInit {
-  sidebarSections = [
+  userRole: string = '';
+
+  sidebarSections: any[] = [];
+
+  adminSections = [
     {
       label: 'Main',
       items: [
@@ -36,9 +40,42 @@ export class BackofficeSidebarComponent implements OnInit {
     }
   ];
 
+  operatorSections = [
+    {
+      label: 'Main',
+      items: [
+        { icon: 'fa-th-large', label: 'Dashboard', path: '/operator/dashboard' }
+      ]
+    },
+    {
+      label: 'Subscriptions & Plans',
+      items: [
+        { icon: 'fa-tags', label: 'Pricing Plans', path: '/operator/pricing-plans' },
+        { icon: 'fa-id-card', label: 'Subscriptions', path: '/operator/subscriptions' },
+        { icon: 'fa-percent', label: 'Discounts', path: '/operator/reductions' }
+      ]
+    },
+    {
+      label: 'Analytics & Loyalty',
+      items: [
+        { icon: 'fa-star', label: 'Loyalty Program', path: '/operator/loyalty' },
+        { icon: 'fa-brain', label: 'ML Analysis', path: '/operator/ml' }
+      ]
+    }
+  ];
+
   constructor(private router: Router, private authService: AuthService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const user = this.authService.currentUserValue;
+    this.userRole = user?.role?.toUpperCase() || '';
+
+    if (this.userRole === 'OPERATOR') {
+      this.sidebarSections = this.operatorSections;
+    } else {
+      this.sidebarSections = this.adminSections;
+    }
+  }
 
   navigateTo(path: string): void {
     this.router.navigate([path]);

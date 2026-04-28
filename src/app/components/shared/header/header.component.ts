@@ -35,9 +35,12 @@ export class HeaderComponent implements OnInit {
     this.unreadNotifications$ = this.incidentNotificationService.unreadCount$;
     this.latestNotifications$ = this.incidentNotificationService.notifications$;
     this.currentRoute = this.router.url;
-    if (this.isAuthenticated) {
-      this.incidentNotificationService.refreshNotifications();
-    }
+    this.currentRoute = this.router.url;
+    this.isAuthenticated$.subscribe((auth) => {
+      if (auth) {
+        this.incidentNotificationService.refreshNotifications();
+      }
+    });
   }
 
   logout(): void {
@@ -83,6 +86,14 @@ export class HeaderComponent implements OnInit {
     return this.currentUser?.role?.toUpperCase() === 'AGENT';
   }
 
+  isPassenger(): boolean {
+    return this.currentUser?.role?.toUpperCase() === 'PASSENGER';
+  }
+
+  isOperator(): boolean {
+    return this.currentUser?.role?.toUpperCase() === 'OPERATOR';
+  }
+
   getDashboardLink(): string {
     const user = this.currentUser;
     if (!user) return '/home';
@@ -94,9 +105,9 @@ export class HeaderComponent implements OnInit {
       case 'AGENT':
         return '/agent-dhasbord';
       case 'OPERATOR':
-        return '/operator-dhasbord';
+        return '/operator/dashboard';
       case 'PASSENGER':
-        return '/passenger-dhasbord';
+        return '/passenger/plans';
       default:
         return '/home';
     }

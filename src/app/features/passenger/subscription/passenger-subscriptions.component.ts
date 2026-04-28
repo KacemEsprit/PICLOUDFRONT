@@ -160,6 +160,6 @@ export class PassengerSubscriptionsComponent implements OnInit {
     });
   }
 
-  avatarClass(type: string) { return { 'cell-avatar-green': type === 'FREE', 'cell-avatar-blue': type === 'BASIC', 'cell-avatar-purple': type === 'PREMIUM' }; }
+  avatarClass(type?: string) { return { 'cell-avatar-green': type === 'FREE', 'cell-avatar-blue': type === 'BASIC', 'cell-avatar-purple': type === 'PREMIUM' }; }
   statusClass(s: string) { return { 'status-active': s === 'ACTIVE', 'status-expired': s === 'EXPIRED', 'status-cancelled': s === 'CANCELLED' }; }
 }
