@@ -3,6 +3,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-map',
+
+
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
@@ -49,20 +51,16 @@ export class MapComponent implements OnChanges {
   }
 
   buildMapUrl(): void {
-    const firstZone = this.zones[0];
-    const coords = this.governorateCoords[firstZone.governorate];
-    if (coords) {
-      const [lat, lng] = coords;
-      const offset = 0.001;
-      const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
-      this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    }
-  }
+     const firstZone = this.zones[0];
+     const coords = this.governorateCoords[firstZone.governorate];
+     if (coords) {
+       const [lat, lng] = coords;
+       const offset = 0.001;
+       const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
+       this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+     }
+   }
 }
-
-
-
-
 
 
 

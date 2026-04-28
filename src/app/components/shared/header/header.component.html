@@ -6,10 +6,16 @@
       <h1 class="navbar-title">{{ title }}</h1>
       <a routerLink="/home" class="home-link" [class.active]="isHomePage()">Home</a>
       <a *ngIf="isAuthenticated$ | async" [routerLink]="getDashboardLink()" class="dashboard-link" [class.active]="isDashboardPage()">Dashboard</a>
+      <ng-container *ngIf="isAuthenticated$ | async">
       <!-- MES LIENS (visibles quand connect�) -->
       <ng-container *ngIf="(isAuthenticated$ | async) && isPassenger()">
         <a routerLink="/operators" class="home-link" [class.active]="currentRoute.includes('/operators')">Operators</a>
         <a routerLink="/partners" class="home-link" [class.active]="currentRoute.includes('/partners')">Partners</a>
+        <a routerLink="/ticket/covoiturages" class="home-link" [class.active]="currentRoute === '/ticket/covoiturages'">Carpools</a>
+        <a routerLink="/ticket/my-covoiturages" class="home-link" [class.active]="currentRoute.includes('/ticket/my-covoiturages')">My Carpools</a>
+        <a routerLink="/ticket/tickets" class="home-link" [class.active]="currentRoute.includes('/ticket/tickets')">Tickets</a>
+        <a routerLink="/ticket/reservations" class="home-link" [class.active]="currentRoute.includes('/ticket/reservations')">Reservations</a>
+        <a routerLink="/ticket/ai" class="home-link ai-link" [class.active]="currentRoute.includes('/ticket/ai')">🤖 AI</a>
       </ng-container>
       <a *ngIf="isAuthenticated$ | async" routerLink="/documents" class="documents-link" [class.active]="isDocumentsPage()">Documents</a>
       <a *ngIf="isAuthenticated$ | async" routerLink="/notifications" class="documents-link" [class.active]="isNotificationsPage()">Notifications</a>
@@ -20,24 +26,23 @@
         <a routerLink="/passenger/plans" class="home-link" [class.active]="currentRoute.includes('/passenger/plans')">Plans</a>
         <a routerLink="/passenger/subscriptions" class="home-link" [class.active]="currentRoute.includes('/passenger/subscriptions')">My Subscriptions</a>
         <a routerLink="/passenger/loyalty" class="home-link" [class.active]="currentRoute.includes('/passenger/loyalty')">Loyalty</a>
-      </ng-container>
-
-      <!-- OPERATOR Routes (colleague's features) -->
-      <ng-container *ngIf="(isAuthenticated$ | async) && isOperator()">
-        <a routerLink="/operator/pricing-plans" class="home-link" [class.active]="currentRoute.includes('/operator/pricing-plans')">Plans</a>
-        <a routerLink="/operator/subscriptions" class="home-link" [class.active]="currentRoute.includes('/operator/subscriptions')">Subscriptions</a>
-        <a routerLink="/operator/reductions" class="home-link" [class.active]="currentRoute.includes('/operator/reductions')">Discounts</a>
-        <a routerLink="/operator/loyalty" class="home-link" [class.active]="currentRoute.includes('/operator/loyalty')">Loyalty</a>
-        <a routerLink="/operator/ml" class="home-link" [class.active]="currentRoute.includes('/operator/ml')">ML Analysis</a>
-      </ng-container>
-    </div>
+       </ng-container>
+       <!-- OPERATOR Routes (colleague's features) -->
+       <ng-container *ngIf="(isAuthenticated$ | async) && isOperator()">
+         <a routerLink="/operator/pricing-plans" class="home-link" [class.active]="currentRoute.includes('/operator/pricing-plans')">Plans</a>
+         <a routerLink="/operator/subscriptions" class="home-link" [class.active]="currentRoute.includes('/operator/subscriptions')">Subscriptions</a>
+         <a routerLink="/operator/reductions" class="home-link" [class.active]="currentRoute.includes('/operator/reductions')">Discounts</a>
+         <a routerLink="/operator/loyalty" class="home-link" [class.active]="currentRoute.includes('/operator/loyalty')">Loyalty</a>
+         <a routerLink="/operator/ml" class="home-link" [class.active]="currentRoute.includes('/operator/ml')">ML Analysis</a>
+       </ng-container>
+       </ng-container>
+     </div>
 
     <!-- Center Section: Spacer -->
     <div class="navbar-center">
     </div>
 
     <!-- Right Section: User Info/Welcome Message + Logout + Auth Buttons + Theme Toggle -->
-    <div class="navbar-center"></div>
 
     <div class="navbar-right">
       <!-- Welcome Message and Logout (when authenticated) -->

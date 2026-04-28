@@ -96,7 +96,6 @@ import { AuditLogModule } from './components/admin/audit-log/audit-log.module';
     StatusLabelPipe,
     StatusColorPipe,
     StatusHexColorPipe,
-    StatusHexColorPipe,
     OrganizationListComponent,
     OrganizationFormComponent,
     OrganizationDetailComponent,

@@ -3,6 +3,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-map-picker',
+
+
   templateUrl: './map-picker.component.html',
   styleUrl: './map-picker.component.scss'
 })
@@ -62,10 +64,4 @@ export class MapPickerComponent {
     this.locationSelected.emit(gov);
   }
 }
-
-
-
-
-
-
 

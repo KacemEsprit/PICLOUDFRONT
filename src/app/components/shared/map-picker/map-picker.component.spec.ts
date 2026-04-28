@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MapPickerComponent } from './map-picker.component';
 
 describe('MapPickerComponent', () => {
   let component: MapPickerComponent;

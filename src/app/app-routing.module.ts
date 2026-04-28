@@ -61,12 +61,16 @@ const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'access-denied', component: AccessDeniedComponent },
 
+  // Frontoffice
   {
     path: '',
     component: FrontofficeLayoutComponent,
     children: [
       { path: '', component: HomeComponent },
       { path: 'home', component: HomeComponent },
+      { path: 'agent-dhasbord', component: AgentDhasbordComponent, canActivate: [AuthGuard] },
+      { path: 'operator-dhasbord', component: OperatorDhasbordComponent, canActivate: [AuthGuard] },
+      { path: 'passenger-dhasbord', component: PassengerDhasbordComponent, canActivate: [AuthGuard] },
       { path: 'transit', component: HomeComponent }, // Placeholder
       { path: 'carpool', component: HomeComponent }, // Placeholder
       { path: 'community', component: HomeComponent }, // Placeholder
@@ -109,12 +113,30 @@ const routes: Routes = [
       { path: 'operators', component: OperatorListComponent, canActivate: [AuthGuard] },
       { path: 'operators/:id', component: OperatorDetailComponent, canActivate: [AuthGuard] },
       { path: 'partners', component: UserPartnerListComponent, canActivate: [AuthGuard] },
-      { path: 'partners/:id', component: UserPartnerListComponent, canActivate: [AuthGuard] }
+      { path: 'partners/:id', component: UserPartnerListComponent, canActivate: [AuthGuard] },
+      { path: 'partners', component: UserPartnerListComponent, canActivate: [AuthGuard] }
     ]
   },
 
   // Backoffice routes (with backoffice layout for admin)
   // Backoffice admin (layout coll�gue)
+  // Ticket frontoffice (user)
+  {
+    path: 'ticket',
+    component: FrontofficeLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'covoiturages', loadComponent: () => import('./user-ticket/covoiturage/covoiturage-list/covoiturage-list').then(m => m.CovoiturageListComponent) },
+      { path: 'covoiturages/new', loadComponent: () => import('./user-ticket/covoiturage/covoiturage-form/covoiturage-form').then(m => m.CovoiturageFormComponent) },
+      { path: 'my-covoiturages', loadComponent: () => import('./user-ticket/my-covoiturages/my-covoiturages').then(m => m.MyCovoituragesComponent) },
+      { path: 'reservations', loadComponent: () => import('./user-ticket/reservation/reservation-list/reservation-list').then(m => m.ReservationListComponent) },
+      { path: 'reservations/new', loadComponent: () => import('./user-ticket/reservation/reservation-form/reservation-form').then(m => m.ReservationFormComponent) },
+      { path: 'tickets', loadComponent: () => import('./user-ticket/ticket/ticket-list/ticket-list').then(m => m.TicketListComponent) },
+      { path: 'ai', loadComponent: () => import('./user-ticket/ai-dashboard/ai-dashboard').then(m => m.AIDashboardComponent) }
+    ]
+  },
+
+  // Admin backoffice (tout en un seul bloc)
   {
     path: 'admin',
     component: BackofficeLayoutComponent,
@@ -141,7 +163,15 @@ const routes: Routes = [
       { path: 'contracts', component: ContractListComponent },
       { path: 'contracts/new', component: ContractFormComponent },
       { path: 'contracts/edit/:id', component: ContractFormComponent },
-      { path: 'contracts/reminders', component: ContractRemindersComponent }
+      { path: 'contracts/reminders', component: ContractRemindersComponent },
+      { path: 'ticket/covoiturages', loadComponent: () => import('./admin-ticket/covoiturage/covoiturage-list/covoiturage-list').then(m => m.CovoiturageListComponent) },
+      { path: 'ticket/covoiturages/new', loadComponent: () => import('./admin-ticket/covoiturage/covoiturage-form/covoiturage-form').then(m => m.CovoiturageFormComponent) },
+      { path: 'ticket/covoiturages/edit/:id', loadComponent: () => import('./admin-ticket/covoiturage/covoiturage-form/covoiturage-form').then(m => m.CovoiturageFormComponent) },
+      { path: 'ticket/reservations', loadComponent: () => import('./admin-ticket/reservation/reservation-list/reservation-list').then(m => m.ReservationListComponent) },
+      { path: 'ticket/tickets', loadComponent: () => import('./admin-ticket/ticket/ticket-list/ticket-list').then(m => m.TicketListComponent) },
+      { path: 'ticket/tickets/new', loadComponent: () => import('./admin-ticket/ticket/ticket-form/ticket-form').then(m => m.TicketFormComponent) },
+      { path: 'ticket/tickets/edit/:id', loadComponent: () => import('./admin-ticket/ticket/ticket-form/ticket-form').then(m => m.TicketFormComponent) },
+      { path: 'ai-stats', loadComponent: () => import('./admin-ticket/ai-stats/ai-stats').then(m => m.AIStatsComponent) }
     ]
   },
 

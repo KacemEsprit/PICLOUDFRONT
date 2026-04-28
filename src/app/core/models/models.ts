@@ -12,6 +12,7 @@ export interface User {
   username: string;
   email: string;
   name: string;
+  phone?: string;
   role: RoleEnum;
   transportType?: TransportType;
   isEnabled: boolean;

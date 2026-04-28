@@ -8,7 +8,7 @@ import { Contract } from '../models/contract';
 })
 export class ContractService {
 
-  private apiUrl = '/api/contracts';
+  private apiUrl = 'http://localhost:8081/api/contracts';
 
   constructor(private http: HttpClient) {}
 

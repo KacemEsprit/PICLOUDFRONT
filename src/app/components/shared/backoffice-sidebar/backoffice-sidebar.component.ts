@@ -9,7 +9,6 @@ import { AuthService } from '../../../services/auth/auth.service';
 })
 export class BackofficeSidebarComponent implements OnInit {
   userRole: string = '';
-
   sidebarSections: any[] = [];
 
   adminSections = [
@@ -26,7 +25,15 @@ export class BackofficeSidebarComponent implements OnInit {
         { icon: 'fa-file', label: 'Document Management', path: '/admin/documents' },
         { icon: 'fa-calendar-times', label: 'Document Expiry Alerts', path: '/admin/expiry-alerts' },
         { icon: 'fa-history', label: 'Audit Log', path: '/admin/audit-log' },
-        { icon: 'fa-file', label: 'Document Management', path: '/admin/documents' }
+        { icon: 'fa-brain', label: 'AI Stats & Models', path: '/admin/ai-stats' }
+      ]
+    },
+    {
+      label: 'Ticket & Transport',
+      items: [
+        { icon: 'fa-car', label: 'Carpools', path: '/admin/ticket/covoiturages' },
+        { icon: 'fa-calendar', label: 'Reservations', path: '/admin/ticket/reservations' },
+        { icon: 'fa-ticket', label: 'Tickets', path: '/admin/ticket/tickets' }
       ]
     },
     {
@@ -44,7 +51,10 @@ export class BackofficeSidebarComponent implements OnInit {
     {
       label: 'Main',
       items: [
-        { icon: 'fa-th-large', label: 'Dashboard', path: '/operator/dashboard' }
+        { icon: 'fa-th-large', label: 'Dashboard', path: '/operator/dashboard' },
+        { icon: 'fa-car', label: 'Carpools', path: '/ticket/covoiturages' },
+        { icon: 'fa-calendar', label: 'Reservations', path: '/ticket/reservations' },
+        { icon: 'fa-ticket', label: 'Tickets', path: '/ticket/tickets' }
       ]
     },
     {
@@ -70,11 +80,7 @@ export class BackofficeSidebarComponent implements OnInit {
     const user = this.authService.currentUserValue;
     this.userRole = user?.role?.toUpperCase() || '';
 
-    if (this.userRole === 'OPERATOR') {
-      this.sidebarSections = this.operatorSections;
-    } else {
-      this.sidebarSections = this.adminSections;
-    }
+    this.sidebarSections = this.userRole === 'OPERATOR' ? this.operatorSections : this.adminSections;
   }
 
   navigateTo(path: string): void {
@@ -85,5 +91,3 @@ export class BackofficeSidebarComponent implements OnInit {
     return this.router.url.includes(path);
   }
 }
-
-

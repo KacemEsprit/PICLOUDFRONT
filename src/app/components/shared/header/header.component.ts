@@ -35,7 +35,6 @@ export class HeaderComponent implements OnInit {
     this.unreadNotifications$ = this.incidentNotificationService.unreadCount$;
     this.latestNotifications$ = this.incidentNotificationService.notifications$;
     this.currentRoute = this.router.url;
-    this.currentRoute = this.router.url;
     this.isAuthenticated$.subscribe((auth) => {
       if (auth) {
         this.incidentNotificationService.refreshNotifications();
@@ -137,4 +136,3 @@ export class HeaderComponent implements OnInit {
     this.incidentNotificationService.markNotificationAsRead(notificationId).subscribe();
   }
 }
-
