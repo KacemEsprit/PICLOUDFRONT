@@ -1,0 +1,5 @@
+/* app.component.css — Shell component (just a router-outlet) */
+:host {
+  display: block;
+  min-height: 100vh;
+}

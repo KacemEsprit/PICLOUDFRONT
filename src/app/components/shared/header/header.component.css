@@ -1,0 +1,4 @@
+/* header.component.css — uses global :root variables from styles.css */
+:host {
+  display: block;
+}
