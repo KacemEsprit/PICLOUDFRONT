@@ -65,7 +65,7 @@ export class IncidentManagementComponent implements OnInit {
     const normalizedSearch = this.searchTerm.trim().toLowerCase();
     this.filteredIncidents = this.incidents.filter((incident) => {
       const matchesSeverity =
-        this.isAgent() || this.selectedSeverityFilter === 'ALL' || incident.severity === this.selectedSeverityFilter;
+        this.selectedSeverityFilter === 'ALL' || incident.severity === this.selectedSeverityFilter;
       const searchableText = `${incident.title} ${incident.location} ${incident.reportedByName || ''}`.toLowerCase();
       const matchesSearch = !normalizedSearch || searchableText.includes(normalizedSearch);
       return matchesSeverity && matchesSearch;

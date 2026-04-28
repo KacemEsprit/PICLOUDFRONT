@@ -27,7 +27,7 @@ export interface IncidentPayload {
 export interface IncidentSummary {
   id?: number;
   title: string;
-  severity?: string | null;
+  severity: string;
   location: string;
   reportedByName: string;
   // AI-generated fields

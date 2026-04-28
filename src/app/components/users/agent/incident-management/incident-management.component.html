@@ -2,7 +2,7 @@
   <div class="page-header">
     <div>
       <h1>Incidents List</h1>
-      <p>Consult and filter existing incidents — AI determines severity and delay.</p>
+      <p>Consult and filter existing incidents — severity and delay are determined by AI.</p>
     </div>
     <button type="button" class="btn btn-primary" (click)="goToCreateIncident()" *ngIf="isAgent()">Create Incident</button>
   </div>
@@ -27,7 +27,6 @@
         />
         <select
           class="filter-select"
-          *ngIf="!isAgent()"
           [(ngModel)]="selectedSeverityFilter"
           (change)="onSeverityFilterChange()"
         >
@@ -46,7 +45,7 @@
         <div class="incident-info">
           <h3>{{ incident.title }}</h3>
           <div class="incident-details">
-            <p *ngIf="!isAgent()">
+            <p>
               <strong>Severity:</strong>
               <span class="severity-badge"
                     [class.severity-high]="incident.severity === 'HIGH'"
@@ -55,9 +54,6 @@
                 {{ incident.severity }}
               </span>
               <span class="ai-tag" title="Determined by AI"><i class="fas fa-robot"></i> AI</span>
-            </p>
-            <p *ngIf="isAgent()">
-              <span class="ai-tag" title="Determined by AI"><i class="fas fa-robot"></i> AI-determined</span>
             </p>
             <p><strong>Location:</strong> {{ incident.location }}</p>
             <p><strong>Reported by:</strong> {{ incident.reportedByName || '-' }}</p>
