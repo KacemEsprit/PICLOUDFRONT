@@ -1,0 +1,106 @@
+<div class="row mb-4">
+  <div class="col-12">
+    <h4 style="color:#1a237e; font-weight:700;">
+      <i class="fas fa-bus"></i> Transport Operators
+    </h4>
+    <hr style="border-color:#1a73e8; border-width:2px; width:60px; margin-left:0;">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-4" *ngFor="let op of operators">
+    <div style="background:white; border-radius:16px; overflow:hidden;
+                box-shadow:0 4px 20px rgba(0,0,0,0.08);
+                transition:all 0.3s ease;"
+         onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.15)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.08)'">
+
+      <!-- Card Header -->
+      <div style="background: linear-gradient(135deg, #1a237e, #3949ab);
+                  padding: 25px 20px; text-align:center; position:relative;">
+
+        <!-- Coverage Badge -->
+        <span style="position:absolute; top:12px; right:12px;
+                     background:rgba(255,255,255,0.2); color:white;
+                     padding:3px 12px; border-radius:20px; font-size:0.75rem; font-weight:600;">
+          {{ op.coverageType }}
+        </span>
+
+        <!-- Icon -->
+        <div style="width:75px; height:75px; border-radius:50%;
+                    background:rgba(255,255,255,0.15);
+                    display:flex; align-items:center; justify-content:center;
+                    margin:0 auto 12px; border:3px solid rgba(255,255,255,0.4);">
+          <i class="fas fa-bus" style="font-size:2rem; color:white;"></i>
+        </div>
+
+        <h5 style="color:white; font-weight:700; margin:0; font-size:1.1rem;">
+          {{ op.name }}
+        </h5>
+        <span style="color:rgba(255,255,255,0.75); font-size:0.85rem;">
+          {{ op.acronyme }}
+        </span>
+      </div>
+
+      <!-- Card Body -->
+      <div style="padding:18px;">
+
+        <div style="display:flex; align-items:center; gap:10px;
+                    padding:8px 0; border-bottom:1px solid #f5f5f5;">
+          <div style="width:32px; height:32px; border-radius:8px; background:#e3f2fd;
+                      display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i class="fas fa-envelope" style="color:#1a73e8; font-size:0.8rem;"></i>
+          </div>
+          <span style="color:#666; font-size:0.85rem; overflow:hidden;
+                       text-overflow:ellipsis; white-space:nowrap;">
+            {{ op.email }}
+          </span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;
+                    padding:8px 0; border-bottom:1px solid #f5f5f5;">
+          <div style="width:32px; height:32px; border-radius:8px; background:#fff8e1;
+                      display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i class="fas fa-phone" style="color:#f57f17; font-size:0.8rem;"></i>
+          </div>
+          <span style="color:#666; font-size:0.85rem;">{{ op.phoneNumber }}</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0;">
+          <div style="width:32px; height:32px; border-radius:8px; background:#e8f5e9;
+                      display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i class="fas fa-building" style="color:#2e7d32; font-size:0.8rem;"></i>
+          </div>
+          <span style="color:#666; font-size:0.85rem;">{{ op.type }}</span>
+          <span style="margin-left:auto; background:#e8f5e9; color:#2e7d32;
+                       padding:3px 10px; border-radius:20px; font-size:0.75rem; font-weight:600;">
+            {{ op.status }}
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Card Footer -->
+      <div style="padding:12px 18px; background:#f8f9ff;">
+        <a [routerLink]="['/user/operators', op.id]"
+           style="display:flex; align-items:center; justify-content:center; gap:8px;
+                  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+                  color:white; text-decoration:none; padding:10px;
+                  border-radius:10px; font-weight:600; font-size:0.9rem;
+                  transition:all 0.3s ease;"
+           onmouseover="this.style.opacity='0.9'"
+           onmouseout="this.style.opacity='1'">
+          <i class="fas fa-eye"></i> View Details
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-12" *ngIf="operators.length === 0">
+    <div style="text-align:center; padding:40px; color:#999;">
+      <i class="fas fa-bus" style="font-size:3rem; margin-bottom:15px; display:block;"></i>
+      No operators found.
+    </div>
+  </div>
+</div>

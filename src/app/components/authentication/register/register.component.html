@@ -1,0 +1,184 @@
+<!-- Include Navbar -->
+<app-header></app-header>
+
+<!-- ============================================================
+     REGISTER PAGE — Professional Template
+     ============================================================ -->
+<div class="auth-wrapper">
+  <div class="auth-section">
+    <div class="auth-form-wrapper">
+      <div class="auth-card">
+        <!-- Card Header -->
+        <div class="auth-card-header">
+          <h2>Create Your Account</h2>
+          <p>Join our platform and start managing transportation with us</p>
+        </div>
+
+        <!-- Auth Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab active">Sign Up</button>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="auth-form">
+          <!-- Error Alert -->
+          <div *ngIf="error" class="alert alert-error">
+            <span class="alert-icon">⚠️</span>
+            <span>{{ error }}</span>
+          </div>
+
+          <!-- Success Alert -->
+          <div *ngIf="success" class="alert alert-success">
+            <span class="alert-icon">✓</span>
+            <span>{{ success }}</span>
+          </div>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <!-- Username -->
+            <div class="auth-form-group">
+              <label for="username" class="auth-label">Username</label>
+              <div class="auth-input-wrapper">
+                <input
+                  id="username"
+                  type="text"
+                  class="auth-input"
+                  formControlName="username"
+                  placeholder="Choose a username"
+                  [ngClass]="{'error': submitted && f['username'].errors}" />
+              </div>
+              <div *ngIf="submitted && f['username'].errors" class="auth-error-msg">
+                <div *ngIf="f['username'].errors['required']">Username is required</div>
+                <div *ngIf="f['username'].errors['minlength']">Username must be at least 3 characters</div>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="auth-form-group">
+              <label for="email" class="auth-label">Email Address</label>
+              <div class="auth-input-wrapper">
+                <input
+                  id="email"
+                  type="email"
+                  class="auth-input"
+                  formControlName="email"
+                  placeholder="Enter your email"
+                  [ngClass]="{'error': submitted && f['email'].errors}" />
+              </div>
+              <div *ngIf="submitted && f['email'].errors" class="auth-error-msg">
+                <div *ngIf="f['email'].errors['required']">Email is required</div>
+                <div *ngIf="f['email'].errors['email']">Please enter a valid email</div>
+              </div>
+            </div>
+
+            <!-- Full Name -->
+            <div class="auth-form-group">
+              <label for="name" class="auth-label">Full Name</label>
+              <div class="auth-input-wrapper">
+                <input
+                  id="name"
+                  type="text"
+                  class="auth-input"
+                  formControlName="name"
+                  placeholder="Enter your full name"
+                  [ngClass]="{'error': submitted && f['name'].errors}" />
+              </div>
+              <div *ngIf="submitted && f['name'].errors" class="auth-error-msg">
+                Full name is required
+              </div>
+            </div>
+
+            <!-- CIN (ID Number) -->
+            <div class="auth-form-group">
+              <label for="CIN" class="auth-label">CIN (ID Number)</label>
+              <div class="auth-input-wrapper">
+                <input
+                  id="CIN"
+                  type="text"
+                  class="auth-input"
+                  formControlName="CIN"
+                  placeholder="12345678"
+                  maxlength="8"
+                  inputmode="numeric"
+                  [ngClass]="{'error': submitted && f['CIN'].errors}" />
+              </div>
+              <div *ngIf="submitted && f['CIN'].errors" class="auth-error-msg">
+                <div *ngIf="f['CIN'].errors['required']">CIN is required</div>
+                <div *ngIf="f['CIN'].errors['invalidCin']">CIN must be exactly 8 numeric digits</div>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="auth-form-group">
+              <label for="password" class="auth-label">Password</label>
+              <div class="auth-input-wrapper">
+                <input
+                  id="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="auth-input"
+                  formControlName="password"
+                  placeholder="Enter your password (min 8 characters)"
+                  [ngClass]="{'error': submitted && f['password'].errors}" />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  (click)="togglePasswordVisibility()"
+                  tabindex="-1">
+                  <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </button>
+              </div>
+              <!-- Password Strength Indicator -->
+              <div *ngIf="passwordStrength > 0" class="password-strength-indicator">
+                <div class="strength-bar">
+                  <div
+                    class="strength-progress"
+                    [style.width]="(passwordStrength * 25) + '%'"
+                    [ngClass]="'strength-' + passwordStrength"></div>
+                </div>
+                <div class="strength-text" [style.color]="passwordStrengthColor">
+                  Strength: {{ passwordStrengthText }}
+                </div>
+              </div>
+              <div *ngIf="submitted && f['password'].errors" class="auth-error-msg">
+                <div *ngIf="f['password'].errors['required']">Password is required</div>
+                <div *ngIf="f['password'].errors['minlength']">Password must be at least 8 characters</div>
+              </div>
+            </div>
+
+            <!-- Role Selection -->
+            <div class="auth-form-group">
+              <label for="role" class="auth-label">Select Your Role</label>
+              <div class="auth-select-wrapper">
+                <select
+                  id="role"
+                  class="auth-input"
+                  formControlName="role"
+                  [ngClass]="{'error': submitted && f['role'].errors}">
+                  <option value="">Select a role</option>
+                  <option *ngFor="let option of roleOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
+              <div *ngIf="submitted && f['role'].errors" class="auth-error-msg">
+                Role is required
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-auth" [disabled]="loading">
+              {{ loading ? 'Creating account...' : 'Create Account' }}
+            </button>
+          </form>
+
+          <!-- Login Link -->
+          <div class="auth-bottom-text">
+            Already have an account? <a routerLink="/login">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include Footer -->
+<app-footer></app-footer>

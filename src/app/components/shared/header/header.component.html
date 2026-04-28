@@ -1,0 +1,41 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <h1 class="navbar-title">{{ title }}</h1>
+      <a routerLink="/home" class="home-link" [class.active]="isHomePage()">Home</a>
+      <a *ngIf="isAuthenticated$ | async" [routerLink]="getDashboardLink()" class="dashboard-link" [class.active]="isDashboardPage()">Dashboard</a>
+      <ng-container *ngIf="isAuthenticated$ | async">
+        <a routerLink="/operators" class="home-link" [class.active]="currentRoute.includes('/operators')">Operators</a>
+        <a routerLink="/partners" class="home-link" [class.active]="currentRoute.includes('/partners')">Partners</a>
+        <a routerLink="/ticket/covoiturages" class="home-link" [class.active]="currentRoute === '/ticket/covoiturages'">Carpools</a>
+        <a routerLink="/ticket/my-covoiturages" class="home-link" [class.active]="currentRoute.includes('/ticket/my-covoiturages')">My Carpools</a>
+        <a routerLink="/ticket/tickets" class="home-link" [class.active]="currentRoute.includes('/ticket/tickets')">Tickets</a>
+        <a routerLink="/ticket/reservations" class="home-link" [class.active]="currentRoute.includes('/ticket/reservations')">Reservations</a>
+        <a routerLink="/ticket/ai" class="home-link ai-link" [class.active]="currentRoute.includes('/ticket/ai')">🤖 AI</a>
+      </ng-container>
+    </div>
+
+    <div class="navbar-center"></div>
+
+    <div class="navbar-right">
+      <ng-container *ngIf="isAuthenticated$ | async as isAuth">
+        <ng-container *ngIf="isAuth">
+          <span class="user-info">Welcome {{ (currentUser$ | async)?.name }}</span>
+          <a routerLink="/profile" class="profile-link" [class.active]="isProfilePage()">Profile</a>
+          <button (click)="logout()" class="btn-logout">Logout</button>
+        </ng-container>
+      </ng-container>
+
+      <div class="auth-buttons">
+        <ng-container *ngIf="!(isAuthenticated$ | async)">
+          <a *ngIf="isLoginPage()" href="/register" class="btn-link">Sign Up</a>
+          <a *ngIf="isRegisterPage()" href="/login" class="btn-link">Login</a>
+          <ng-container *ngIf="!isLoginPage() && !isRegisterPage()">
+            <a href="/login" class="btn-link">Login</a>
+            <a href="/register" class="btn-link">Sign Up</a>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</nav>
