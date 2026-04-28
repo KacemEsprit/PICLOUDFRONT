@@ -124,7 +124,7 @@
         <textarea id="description" class="form-control" [(ngModel)]="ticket.description" name="description"
                   rows="2" maxlength="200"
                   #descRef="ngModel"></textarea>
-        <small class="text-muted">{{ (ticket.description?.length || 0) }}/200 characters</small>
+        <small class="text-muted">{{ (ticket.description.length || 0) }}/200 characters</small>
       </div>
 
       <button type="submit" class="btn btn-themed mr-2" [disabled]="ticketForm.invalid || saving">

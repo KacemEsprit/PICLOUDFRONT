@@ -11,6 +11,7 @@ import { LoyaltyAccountResponse, PricingPlan, TransportType, PlanRecommendationR
   selector: 'app-passenger-plans',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['../../feature-styles.css'],
   styles: [`
     .passenger-transport-btns { gap: 12px; align-items: stretch; }
     .passenger-transport-btns .btn { min-height: 44px; padding: 10px 18px; font-size: 0.9rem; }
@@ -116,13 +117,13 @@ import { LoyaltyAccountResponse, PricingPlan, TransportType, PlanRecommendationR
 </div>
 
 <!-- SUBSCRIPTION MODAL -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fas fa-shopping-cart text-blue"></i> Confirm subscription</div>
-      <button class="modal-close" (click)="closeModal()"><i class="fas fa-times"></i></button>
+<div class="custom-modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="custom-modal" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="custom-modal-title"><i class="fas fa-shopping-cart text-blue"></i> Confirm subscription</div>
+      <button class="custom-modal-close" (click)="closeModal()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="modal-body" *ngIf="selectedPlan">
+    <div class="custom-modal-body" *ngIf="selectedPlan">
       <div style="background:var(--bg-header);border-radius:var(--radius-sm);padding:16px;margin-bottom:16px">
         <div class="flex-between mb-4">
           <span class="text-muted">Selected plan</span>
@@ -200,7 +201,7 @@ import { LoyaltyAccountResponse, PricingPlan, TransportType, PlanRecommendationR
         <i class="fas fa-lock"></i> Secured payment via Stripe
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="custom-modal-footer">
       <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
       <button class="btn btn-success" (click)="confirmPayment()" [disabled]="paying">
         <i class="fas fa-spinner fa-spin" *ngIf="paying"></i>
@@ -266,7 +267,10 @@ export class PassengerPlansComponent implements OnInit {
     });
     const userId = this.auth.getUserId();
     if (userId) {
-      this.api.recommendPlan(userId).subscribe(r => this.recommendation = r);
+      this.api.recommendPlan(userId).subscribe({
+        next: (r) => { this.recommendation = r; },
+        error: () => { this.recommendation = null; }
+      });
       this.api.getMySubscriptions(userId).subscribe({
         next: (subs) => { this.hasActiveSubscription = subs.some((s) => s.statut === 'ACTIVE'); },
         error: () => { this.hasActiveSubscription = false; }
@@ -374,6 +378,60 @@ export class PassengerPlansComponent implements OnInit {
     this.paying = true;
 
     const proceed = (validatedCode?: string) => {
+      const fallbackToLegacyPayment = () => {
+        // Compatibility fallback for backends that do not support /payment/initiate/me request shape.
+        const legacyPayload: any = { passengerId, pricingPlanId };
+        if (validatedCode) legacyPayload.codeReduction = validatedCode;
+        if (this.autoRenewal) legacyPayload.autoRenewal = true;
+        if (this.payMode === 'POINTS') {
+          legacyPayload.paymentMode = 'POINTS';
+          legacyPayload.pointsToUse = this.requiredPoints;
+        }
+        this.api.initiatePayment(legacyPayload).subscribe({
+          next: (legacyRes) => {
+            if (!legacyRes?.checkoutUrl || String(legacyRes.checkoutUrl).trim() === '') {
+              this.notif.error('Legacy payment init returned no checkout URL.');
+              this.paying = false;
+              return;
+            }
+            window.location.href = legacyRes.checkoutUrl;
+          },
+          error: (legacyErr) => {
+            // Final fallback for backends configured without Stripe endpoints.
+            if (this.payMode === 'CASH') {
+              this.api.subscribe({
+                pricingPlanId,
+                ...(validatedCode ? { codeReduction: validatedCode } : {})
+              }, passengerId)
+                .subscribe({
+                  next: () => {
+                    this.notif.success('Subscription created successfully.');
+                    this.closeModal();
+                    this.paying = false;
+                    this.router.navigate(['/passenger/subscriptions']);
+                  },
+                  error: (subErr) => {
+                    const subMsg = subErr.error?.message
+                      || (Array.isArray(subErr.error?.errors) ? subErr.error.errors.join(' ') : null)
+                      || subErr.message
+                      || 'Payment/subscription failed. Please contact support.';
+                    this.notif.error(String(subMsg));
+                    this.paying = false;
+                  }
+                });
+              return;
+            }
+
+            const legacyMsg = legacyErr.error?.message
+              || (Array.isArray(legacyErr.error?.errors) ? legacyErr.error.errors.join(' ') : null)
+              || legacyErr.message
+              || 'Error initiating Stripe payment.';
+            this.notif.error(String(legacyMsg));
+            this.paying = false;
+          }
+        });
+      };
+
       this.api.initiatePaymentMe(
         pricingPlanId, validatedCode, this.autoRenewal,
         this.payMode, this.payMode === 'POINTS' ? this.requiredPoints : undefined
@@ -391,6 +449,10 @@ export class PassengerPlansComponent implements OnInit {
           window.location.href = res.checkoutUrl;
         },
         error: (err) => {
+          if (this.payMode === 'CASH' && (err?.status === 500 || err?.status === 404 || err?.status === 400)) {
+            fallbackToLegacyPayment();
+            return;
+          }
           const msg = err.error?.message
             || (Array.isArray(err.error?.errors) ? err.error.errors.join(' ') : null)
             || err.message;

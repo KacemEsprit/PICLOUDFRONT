@@ -26,6 +26,7 @@ interface AdminUserPayload {
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly base = environment.apiBaseUrl.replace(/\/$/, '');
+  private readonly mlBase = (environment.mlApiBaseUrl ?? environment.apiBaseUrl).replace(/\/$/, '');
   constructor(private http: HttpClient) {}
 
   private mapAdminUserToUser(u: AdminUserPayload): User {
@@ -34,9 +35,73 @@ export class ApiService {
              createdAt: u.createdAt };
   }
 
+  private mapPlanFromApi(raw: any): PricingPlan {
+    return {
+      id: raw?.id,
+      nom: raw?.nom,
+      description: raw?.description ?? '',
+      prix: Number(raw?.prix ?? 0),
+      // Backend uses dureeEnMois; frontend UI uses dureeEnJours.
+      dureeEnJours: Number(raw?.dureeEnJours ?? raw?.dureeEnMois ?? 0),
+      type: raw?.type as PricingType,
+      transportType: raw?.transportType,
+      createdByUsername: raw?.createdByUsername,
+    };
+  }
+
+  private mapPlanToApi(plan: PricingPlan): any {
+    return {
+      nom: plan.nom,
+      description: plan.description,
+      prix: plan.prix,
+      // Backend request DTO expects dureeEnMois.
+      dureeEnMois: plan.dureeEnJours,
+      type: plan.type,
+    };
+  }
+
+  private buildCompatiblePaymentPayload(input: {
+    passengerId?: number;
+    pricingPlanId: number;
+    codeReduction?: string;
+    autoRenewal?: boolean;
+    paymentMode?: 'CASH' | 'POINTS';
+    pointsToUse?: number;
+  }): any {
+    const payload: any = {
+      pricingPlanId: input.pricingPlanId,
+      planId: input.pricingPlanId
+    };
+
+    if (input.passengerId != null) {
+      payload.passengerId = input.passengerId;
+      payload.userId = input.passengerId;
+    }
+    if (input.codeReduction && input.codeReduction.trim() !== '') {
+      const code = input.codeReduction.trim().toUpperCase();
+      payload.codeReduction = code;
+      payload.reductionCode = code;
+      payload.promoCode = code;
+    }
+    if (input.autoRenewal === true) {
+      payload.autoRenewal = true;
+      payload.renewal = true;
+    }
+    if (input.paymentMode) {
+      payload.paymentMode = input.paymentMode;
+      payload.mode = input.paymentMode;
+    }
+    if (input.pointsToUse != null) {
+      payload.pointsToUse = input.pointsToUse;
+      payload.points = input.pointsToUse;
+    }
+
+    return payload;
+  }
+
   // ===== AUTH =====
   login(req: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<BackendAuthPayload>(`${this.base}/api/auth/login`, req).pipe(
+    return this.http.post<BackendAuthPayload>(`${this.base}/auth/login`, req).pipe(
       map((res) => ({
         token: res.token,
         user: {
@@ -53,40 +118,50 @@ export class ApiService {
   // ===== USERS =====
   getAllUsers(): Observable<User[]> {
     const params = new HttpParams().set('size', '500').set('page', '0');
-    return this.http.get<SpringPage<AdminUserPayload>>(`${this.base}/api/admin/users`, { params }).pipe(
+    return this.http.get<SpringPage<AdminUserPayload>>(`${this.base}/admin/users`, { params }).pipe(
       map((page) => (page.content ?? []).map((u) => this.mapAdminUserToUser(u)))
     );
   }
   getUserById(id: number): Observable<User> {
-    return this.http.get<AdminUserPayload>(`${this.base}/api/admin/users/${id}`)
+    return this.http.get<AdminUserPayload>(`${this.base}/admin/users/${id}`)
       .pipe(map((u) => this.mapAdminUserToUser(u)));
   }
   setTransportType(userId: number, transportType: TransportType): Observable<unknown> {
-    return this.http.get<AdminUserPayload>(`${this.base}/api/admin/users/${userId}`).pipe(
+    return this.http.get<AdminUserPayload>(`${this.base}/admin/users/${userId}`).pipe(
       switchMap((u) => {
         const body = { username: u.username, email: u.email, name: u.name,
                        role: u.role as RoleEnum, ...(u.cin != null ? { cin: u.cin } : {}),
                        enabled: u.enabled ?? u.isEnabled ?? true, transportType };
-        return this.http.put(`${this.base}/api/admin/users/${userId}`, body);
+        return this.http.put(`${this.base}/admin/users/${userId}`, body);
       })
     );
   }
 
   // ===== PRICING PLANS =====
   getAllPlans(): Observable<PricingPlan[]> {
-    return this.http.get<PricingPlan[]>(`${this.base}/pricing-plans`);
+    return this.http.get<any[]>(`${this.base}/pricing-plans`).pipe(
+      map((rows) => (rows ?? []).map((r) => this.mapPlanFromApi(r)))
+    );
   }
   getPlansByOperator(operatorId: number): Observable<PricingPlan[]> {
-    return this.http.get<PricingPlan[]>(`${this.base}/pricing-plans/operator/${operatorId}`);
+    return this.http.get<any[]>(`${this.base}/pricing-plans/operator/${operatorId}`).pipe(
+      map((rows) => (rows ?? []).map((r) => this.mapPlanFromApi(r)))
+    );
   }
   getPlanById(id: number): Observable<PricingPlan> {
-    return this.http.get<PricingPlan>(`${this.base}/pricing-plans/${id}`);
+    return this.http.get<any>(`${this.base}/pricing-plans/${id}`).pipe(
+      map((r) => this.mapPlanFromApi(r))
+    );
   }
   createPlan(plan: PricingPlan, operatorId: number): Observable<PricingPlan> {
-    return this.http.post<PricingPlan>(`${this.base}/pricing-plans/operator/${operatorId}`, plan);
+    return this.http.post<any>(`${this.base}/pricing-plans/operator/${operatorId}`, this.mapPlanToApi(plan)).pipe(
+      map((r) => this.mapPlanFromApi(r))
+    );
   }
   updatePlan(id: number, plan: PricingPlan, operatorId: number): Observable<PricingPlan> {
-    return this.http.put<PricingPlan>(`${this.base}/pricing-plans/${id}/operator/${operatorId}`, plan);
+    return this.http.put<any>(`${this.base}/pricing-plans/${id}/operator/${operatorId}`, this.mapPlanToApi(plan)).pipe(
+      map((r) => this.mapPlanFromApi(r))
+    );
   }
   deletePlan(id: number, operatorId: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/pricing-plans/${id}/operator/${operatorId}`);
@@ -100,7 +175,17 @@ export class ApiService {
 
   // ===== SUBSCRIPTIONS =====
   subscribe(req: SubscriptionRequest, passengerId: number): Observable<SubscriptionResponse> {
-    return this.http.post<SubscriptionResponse>(`${this.base}/subscriptions/passenger/${passengerId}`, req);
+    const payload: any = {
+      pricingPlanId: req.pricingPlanId,
+      planId: req.pricingPlanId
+    };
+    if (req.codeReduction && req.codeReduction.trim() !== '') {
+      const code = req.codeReduction.trim().toUpperCase();
+      payload.codeReduction = code;
+      payload.reductionCode = code;
+      payload.promoCode = code;
+    }
+    return this.http.post<SubscriptionResponse>(`${this.base}/subscriptions/passenger/${passengerId}`, payload);
   }
   getMySubscriptions(passengerId: number): Observable<SubscriptionResponse[]> {
     return this.http.get<SubscriptionResponse[]>(`${this.base}/subscriptions/passenger/${passengerId}`);
@@ -164,16 +249,25 @@ export class ApiService {
 
   // ===== PAYMENT =====
   initiatePayment(req: PaymentInitRequest): Observable<PaymentInitResponse> {
-    return this.http.post<PaymentInitResponse>(`${this.base}/payment/initiate`, req);
+    return this.http.post<PaymentInitResponse>(
+      `${this.base}/payment/initiate`,
+      this.buildCompatiblePaymentPayload(req as any)
+    );
   }
   initiatePaymentMe(
     pricingPlanId: number, codeReduction?: string, autoRenewal?: boolean,
     paymentMode: 'CASH' | 'POINTS' = 'CASH', pointsToUse?: number,
   ): Observable<PaymentInitResponse> {
-    return this.http.post<PaymentInitResponse>(`${this.base}/payment/initiate/me`, {
-      pricingPlanId, codeReduction, autoRenewal: autoRenewal === true, paymentMode,
-      ...(pointsToUse != null ? { pointsToUse } : {}),
-    });
+    return this.http.post<PaymentInitResponse>(
+      `${this.base}/payment/initiate/me`,
+      this.buildCompatiblePaymentPayload({
+        pricingPlanId,
+        codeReduction,
+        autoRenewal: autoRenewal === true,
+        paymentMode,
+        pointsToUse
+      })
+    );
   }
   updateSubscriptionAutoRenewal(
     subscriptionId: number, passengerId: number, autoRenewal: boolean,
@@ -189,18 +283,18 @@ export class ApiService {
 
   // ===== ML =====
   recommendPlan(passengerId: number): Observable<PlanRecommendationResponse> {
-    return this.http.get<PlanRecommendationResponse>(`${this.base}/ml/recommend/${passengerId}`);
+    return this.http.get<PlanRecommendationResponse>(`${this.mlBase}/ml/recommend/${passengerId}`);
   }
   predictChurn(passengerId: number): Observable<ChurnPredictionResponse> {
-    return this.http.get<ChurnPredictionResponse>(`${this.base}/ml/churn/${passengerId}`);
+    return this.http.get<ChurnPredictionResponse>(`${this.mlBase}/ml/churn/${passengerId}`);
   }
   predictChurnAll(): Observable<ChurnPredictionResponse[]> {
-    return this.http.get<ChurnPredictionResponse[]>(`${this.base}/ml/churn/all`);
+    return this.http.get<ChurnPredictionResponse[]>(`${this.mlBase}/ml/churn/all`);
   }
   predictCLV(passengerId: number): Observable<CLVResponse> {
-    return this.http.get<CLVResponse>(`${this.base}/ml/clv/${passengerId}`);
+    return this.http.get<CLVResponse>(`${this.mlBase}/ml/clv/${passengerId}`);
   }
   sendAction(passengerId: number): Observable<ActionSendResponse> {
-    return this.http.post<ActionSendResponse>(`${this.base}/ml/action/send/${passengerId}`, {});
+    return this.http.post<ActionSendResponse>(`${this.mlBase}/ml/action/send/${passengerId}`, {});
   }
 }

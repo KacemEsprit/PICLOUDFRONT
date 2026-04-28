@@ -58,14 +58,32 @@ export class NotificationListComponent implements OnInit {
     return new Date(value);
   }
 
-  /**
-   * Extract estimated delay from the AI-generated notification message.
-   * The AI messages contain patterns like "Estimated delay: 60 min" or "Est. delay: 30 min".
-   */
-  extractDelay(message: string): string | null {
-    if (!message) return null;
-    const match = message.match(/(?:estimated\s+(?:delay|resolution)[:\s]*|est\.\s*delay[:\s]*)(\d+)\s*min/i);
-    return match ? match[1] + ' min' : null;
+  extractSeverity(title: string, message: string): 'HIGH' | 'MEDIUM' | 'LOW' {
+    const text = `${title || ''} ${message || ''}`.toLowerCase();
+    if (
+      /critical alert|high|fire|gas|chemical|toxic|collision|crash|accident|derail|flood|evacuate/.test(text)
+    ) {
+      return 'HIGH';
+    }
+    if (
+      /warning|medium|delay|broken|medical|injury|collapse|crowd|failure|signal|power|outage|technical|security|threat|fight/.test(text)
+    ) {
+      return 'MEDIUM';
+    }
+    return 'LOW';
+  }
+
+  extractDelay(title: string, message: string): string {
+    const text = `${title || ''} ${message || ''}`;
+    const match = text.match(
+      /(?:estimated\s+(?:delay|resolution)[:\s]*|est\.\s*delay[:\s]*)(\d+)\s*(?:min|minutes)?/i
+    );
+    if (match) return `${match[1]} min`;
+
+    const severity = this.extractSeverity(title, message);
+    if (severity === 'HIGH') return '60 min';
+    if (severity === 'MEDIUM') return '20 min';
+    return '5 min';
   }
 
   private applyFilters(): void {

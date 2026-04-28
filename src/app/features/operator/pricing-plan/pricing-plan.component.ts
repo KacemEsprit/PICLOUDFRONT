@@ -10,6 +10,7 @@ import { PricingPlan, PricingType, TransportType } from '../../../core/models/mo
   selector: 'app-pricing-plan',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div class="page-header">
   <div>
@@ -112,15 +113,15 @@ import { PricingPlan, PricingType, TransportType } from '../../../core/models/mo
 </div>
 
 <!-- MODAL — transport is automatically set from operator profile, no selector needed -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title">
+<div class="custom-modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="custom-modal" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="custom-modal-title">
         <i class="fas fa-tag text-blue"></i> {{ editing ? 'Edit Plan' : 'New Pricing Plan' }}
       </div>
-      <button class="modal-close" (click)="closeModal()"><i class="fas fa-times"></i></button>
+      <button class="custom-modal-close" (click)="closeModal()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="modal-body">
+    <div class="custom-modal-body">
       <div class="alert alert-danger" *ngIf="formError">
         <i class="fas fa-times-circle"></i> {{ formError }}
       </div>
@@ -137,8 +138,8 @@ import { PricingPlan, PricingType, TransportType } from '../../../core/models/mo
           <label class="form-label">Name <span class="required">*</span></label>
           <input type="text" class="form-control" [(ngModel)]="form.nom"
                  placeholder="e.g. Monthly Bus Pass"
-                 [class.error]="submitted && !form.nom?.trim()"/>
-          <div class="form-error" *ngIf="submitted && !form.nom?.trim()">Name is required.</div>
+                 [class.error]="submitted && !form.nom.trim()"/>
+          <div class="form-error" *ngIf="submitted && !form.nom.trim()">Name is required.</div>
         </div>
         <div class="form-group">
           <label class="form-label">Type <span class="required">*</span></label>
@@ -173,9 +174,11 @@ import { PricingPlan, PricingType, TransportType } from '../../../core/models/mo
                   rows="3" placeholder="Describe this plan..."></textarea>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
-      <button class="btn btn-primary" (click)="save()" [disabled]="saving">
+    <div class="custom-modal-footer">
+      <button class="btn btn-outline" (click)="closeModal()" type="button">Cancel</button>
+      <button class="btn btn-primary" (click)="console.log('Save button click triggered'); save()" [disabled]="saving" type="button"
+              (mousedown)="console.log('Button mousedown detected')"
+              style="pointer-events: auto !important; cursor: pointer !important; position: relative; z-index: 1000005 !important;">
         <i class="fas fa-spinner fa-spin" *ngIf="saving"></i>
         <i class="fas fa-save" *ngIf="!saving"></i>
         {{ saving ? 'Saving...' : 'Save Plan' }}
@@ -186,6 +189,7 @@ import { PricingPlan, PricingType, TransportType } from '../../../core/models/mo
   `
 })
 export class PricingPlanComponent implements OnInit {
+  protected readonly console = console;
   plans: PricingPlan[] = [];
   search = ''; filterType = ''; filterTransport = '';
   showModal = false; editing = false; saving = false;
@@ -229,9 +233,11 @@ export class PricingPlanComponent implements OnInit {
   resetPage() { this.currentPage = 1; }
 
   openModal(p?: PricingPlan) {
+    console.log('Opening pricing plan modal', p);
     this.editing    = !!p;
     this.editingId  = p?.id;
     this.submitted  = false;
+    this.saving     = false;
     this.formError  = '';
     this.form = p
       ? { ...p }
@@ -239,7 +245,13 @@ export class PricingPlanComponent implements OnInit {
     this.showModal = true;
   }
 
-  closeModal() { this.showModal = false; this.submitted = false; this.formError = ''; }
+  closeModal() {
+    console.log('Closing pricing plan modal');
+    this.showModal = false;
+    this.submitted = false;
+    this.formError = '';
+    this.saving = false;
+  }
 
   // Read-only — just for display in the info alert
   get profileTransportType(): TransportType | null {
@@ -248,20 +260,31 @@ export class PricingPlanComponent implements OnInit {
     return String(raw).toUpperCase() as TransportType;
   }
 
+  private buildPlanPayload() {
+    const payload: PricingPlan = {
+      nom: this.form.nom.trim(),
+      description: this.form.description ?? '',
+      prix: Number(this.form.prix),
+      dureeEnJours: Number(this.form.dureeEnJours),
+      type: this.form.type
+    };
+    return payload;
+  }
+
   save() {
+    console.log('Attempting to save plan', this.form);
     this.submitted = true;
     this.formError = '';
 
-    if (!this.form.nom?.trim())                          { this.formError = 'Plan name is required.'; return; }
-    if (this.form.prix == null || this.form.prix < 0)    { this.formError = 'Price must be >= 0.'; return; }
-    if (!this.form.dureeEnJours || this.form.dureeEnJours <= 0) { this.formError = 'Duration must be > 0.'; return; }
+    if (!this.form.nom?.trim())                          { this.formError = 'Plan name is required.'; console.warn('Save aborted: missing name'); return; }
+    if (this.form.prix == null || this.form.prix < 0)    { this.formError = 'Price must be >= 0.'; console.warn('Save aborted: invalid price'); return; }
+    if (!this.form.dureeEnJours || this.form.dureeEnJours <= 0) { this.formError = 'Duration must be > 0.'; console.warn('Save aborted: invalid duration'); return; }
 
     const opId = this.auth.getUserId();
-    if (opId == null) { this.notif.error('Invalid session: please log in again.'); return; }
+    if (opId == null) { this.notif.error('Invalid session: please log in again.'); console.error('Save aborted: no opId'); return; }
 
-    // ── Transport is set automatically by the backend from the operator's profile ──
-    // No need to send it from the frontend
-    const payload: PricingPlan = { ...this.form };
+    const payload = this.buildPlanPayload();
+    console.log('Saving with payload:', payload, 'operatorId:', opId);
     this.saving = true;
 
     const obs = this.editing
@@ -269,12 +292,20 @@ export class PricingPlanComponent implements OnInit {
       : this.api.createPlan(payload, opId);
 
     obs.subscribe({
-      next: () => {
+      next: (res) => {
+        console.log('Save success', res);
         this.notif.success(this.editing ? 'Plan updated successfully.' : 'Plan created successfully.');
         this.load(); this.closeModal(); this.saving = false;
       },
       error: (err) => {
-        this.formError = err.error?.message || err.error?.error || 'An error occurred while saving.';
+        console.error('Save error', err);
+        const details = err?.error;
+        const msg = details?.message
+          || details?.error
+          || (Array.isArray(details?.errors) ? details.errors.join(' ') : null)
+          || (typeof details === 'string' ? details : null)
+          || 'An error occurred while saving.';
+        this.formError = String(msg);
         this.saving = false;
       }
     });

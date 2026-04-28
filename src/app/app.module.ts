@@ -55,6 +55,7 @@ import { PartnerListComponent as UserPartnerListComponent } from './components/u
 import { MapComponent } from './components/shared/map/map.component';
 import { ContractRemindersComponent } from './components/admin/contract-reminders/contract-reminders.component';
 import { MapPickerComponent } from './components/shared/map-picker/map-picker.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 
 // Services & Guards
 import { AuthService } from './services/auth/auth.service';
@@ -108,7 +109,8 @@ import { AuditLogModule } from './components/admin/audit-log/audit-log.module';
     UserPartnerListComponent,
     MapComponent,
     MapPickerComponent,
-    ContractRemindersComponent
+    ContractRemindersComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

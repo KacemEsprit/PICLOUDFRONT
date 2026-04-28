@@ -9,6 +9,7 @@ import { SubscriptionResponse } from '../../../core/models/models';
   selector: 'app-payment-success',
   standalone: true,
   imports: [CommonModule, RouterLink],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg-page)">
   <div class="card payment-card" style="text-align:center;padding:40px">
@@ -28,7 +29,7 @@ import { SubscriptionResponse } from '../../../core/models/models';
       <div style="background:var(--bg-header);border-radius:var(--radius-sm);padding:16px;margin-bottom:24px;text-align:left">
         <div class="flex-between mb-4">
           <span class="text-muted">Plan</span>
-          <strong>{{ subscription.pricingPlan?.nom }}</strong>
+          <strong>{{ subscription.pricingPlan.nom }}</strong>
         </div>
         <div class="flex-between mb-4">
           <span class="text-muted">Valid until</span>
@@ -97,6 +98,7 @@ export class PaymentSuccessComponent implements OnInit {
   selector: 'app-payment-cancel',
   standalone: true,
   imports: [CommonModule, RouterLink],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg-page)">
   <div class="card payment-card" style="text-align:center;padding:40px">

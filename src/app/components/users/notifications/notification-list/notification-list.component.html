@@ -53,8 +53,16 @@
 
       <!-- AI-enriched details extracted from the message -->
       <div class="notification-meta">
-        <span class="meta-tag" *ngIf="extractDelay(item.message) as delay">
-          <i class="fas fa-clock"></i> Est. delay: {{ delay }}
+        <span
+          class="meta-tag severity"
+          [class.severity-high]="extractSeverity(item.title, item.message) === 'HIGH'"
+          [class.severity-medium]="extractSeverity(item.title, item.message) === 'MEDIUM'"
+          [class.severity-low]="extractSeverity(item.title, item.message) === 'LOW'"
+        >
+          <i class="fas fa-bolt"></i> Severity: {{ extractSeverity(item.title, item.message) }}
+        </span>
+        <span class="meta-tag delay">
+          <i class="fas fa-clock"></i> Est. delay: {{ extractDelay(item.title, item.message) }}
         </span>
         <span class="status" [class.read]="item.status === 'READ'">
           {{ item.status === 'READ' ? 'Read' : 'Unread' }}

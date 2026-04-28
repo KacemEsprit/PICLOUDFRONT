@@ -10,6 +10,7 @@ import { SubscriptionResponse } from '../../../core/models/models';
   selector: 'app-passenger-subscriptions',
   standalone: true,
   imports: [CommonModule, RouterLink],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div class="page-header">
   <div>
@@ -45,12 +46,12 @@ import { SubscriptionResponse } from '../../../core/models/models';
         <tr *ngFor="let s of paginated">
           <td>
             <div class="cell-entity">
-              <div class="cell-avatar" [ngClass]="avatarClass(s.pricingPlan?.type)">
+              <div class="cell-avatar" [ngClass]="avatarClass(s.pricingPlan.type)">
                 <i class="fas fa-tag"></i>
               </div>
               <div>
-                <div class="cell-entity-name">{{ s.pricingPlan?.nom }}</div>
-                <div class="fs-sm text-muted">{{ s.pricingPlan?.prix | number:'1.2-2' }} DT / {{ s.pricingPlan?.dureeEnJours }} days</div>
+                <div class="cell-entity-name">{{ s.pricingPlan.nom }}</div>
+                <div class="fs-sm text-muted">{{ s.pricingPlan.prix | number:'1.2-2' }} DT / {{ s.pricingPlan.dureeEnJours }} days</div>
               </div>
             </div>
           </td>

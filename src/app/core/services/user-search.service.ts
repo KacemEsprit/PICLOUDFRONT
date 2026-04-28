@@ -13,7 +13,7 @@ export interface UserSuggestion {
 @Injectable({ providedIn: 'root' })
 export class UserSearchService {
 
-  private url = 'http://localhost:8082/api/users/search-autocomplete';
+  private url = 'http://localhost:8081/api/users/search-autocomplete';
 
   constructor(private http: HttpClient) {}
 

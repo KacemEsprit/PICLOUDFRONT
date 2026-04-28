@@ -16,6 +16,7 @@ import {
   selector: 'app-ml-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div class="page-header">
   <div>

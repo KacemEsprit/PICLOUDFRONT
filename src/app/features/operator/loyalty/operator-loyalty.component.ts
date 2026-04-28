@@ -11,6 +11,7 @@ import { LoyaltyAccountResponse } from '../../../core/models/models';
   selector: 'app-operator-loyalty',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div class="page-header">
   <div>

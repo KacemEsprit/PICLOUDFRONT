@@ -10,6 +10,7 @@ import { Reduction } from '../../../core/models/models';
   selector: 'app-reduction',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div class="page-header">
   <div>
@@ -79,13 +80,13 @@ import { Reduction } from '../../../core/models/models';
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fas fa-percent text-orange"></i> {{ editing ? 'Edit Discount' : 'New Discount' }}</div>
-      <button class="modal-close" (click)="closeModal()"><i class="fas fa-times"></i></button>
+<div class="custom-modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="custom-modal" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="custom-modal-title"><i class="fas fa-percent text-orange"></i> {{ editing ? 'Edit Discount' : 'New Discount' }}</div>
+      <button class="custom-modal-close" (click)="closeModal()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="modal-body">
+    <div class="custom-modal-body">
       <div class="alert alert-danger" *ngIf="formError">
         <i class="fas fa-times-circle"></i> {{ formError }}
       </div>
@@ -94,8 +95,8 @@ import { Reduction } from '../../../core/models/models';
           <label class="form-label">Promo Code <span class="required">*</span></label>
           <input type="text" class="form-control" [(ngModel)]="form.code" placeholder="e.g. SUMMER25"
                  style="text-transform:uppercase"
-                 [class.error]="submitted && !form.code?.trim()"/>
-          <div class="form-error" *ngIf="submitted && !form.code?.trim()">Code is required.</div>
+                 [class.error]="submitted && !form.code.trim()"/>
+          <div class="form-error" *ngIf="submitted && !form.code.trim()">Code is required.</div>
         </div>
         <div class="form-group">
           <label class="form-label">Percentage (%) <span class="required">*</span></label>
@@ -122,9 +123,11 @@ import { Reduction } from '../../../core/models/models';
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
-      <button class="btn btn-primary" (click)="save()" [disabled]="saving">
+    <div class="custom-modal-footer">
+      <button class="btn btn-outline" (click)="closeModal()" type="button">Cancel</button>
+      <button class="btn btn-primary" (click)="save()" [disabled]="saving" type="button"
+              (mousedown)="console.log('Button reduction mousedown')"
+              style="pointer-events: auto !important; cursor: pointer !important;">
         <i class="fas fa-spinner fa-spin" *ngIf="saving"></i>
         <i class="fas fa-save" *ngIf="!saving"></i>
         {{ saving ? 'Saving...' : 'Save' }}
@@ -135,6 +138,7 @@ import { Reduction } from '../../../core/models/models';
   `
 })
 export class ReductionComponent implements OnInit {
+  protected readonly console = console;
   reductions: Reduction[] = [];
   search = ''; filterValid = '';
   showModal = false; editing = false; saving = false;
@@ -175,39 +179,52 @@ export class ReductionComponent implements OnInit {
   resetPage() { this.currentPage = 1; }
 
   openModal(r?: Reduction) {
+    console.log('Opening reduction modal', r);
     this.editing = !!r; this.editingId = r?.id;
-    this.submitted = false; this.formError = '';
+    this.submitted = false;
+    this.saving = false;
+    this.formError = '';
     this.form = r ? { ...r } : { code: '', pourcentage: 10, dateExpiration: '', pointsRequis: 50 };
     this.showModal = true;
   }
 
-  closeModal() { this.showModal = false; this.submitted = false; this.formError = ''; }
+  closeModal() {
+    console.log('Closing reduction modal');
+    this.showModal = false;
+    this.submitted = false;
+    this.formError = '';
+    this.saving = false;
+  }
 
   save() {
+    console.log('Attempting to save reduction', this.form);
     this.submitted = true;
     this.formError = '';
 
-    if (!this.form.code?.trim()) { this.formError = 'Promo code is required.'; return; }
+    if (!this.form.code?.trim()) { this.formError = 'Promo code is required.'; console.warn('Save aborted: missing code'); return; }
     if (this.form.pourcentage < 1 || this.form.pourcentage > 100) {
-      this.formError = 'Percentage must be between 1 and 100.'; return;
+      this.formError = 'Percentage must be between 1 and 100.'; console.warn('Save aborted: invalid percentage'); return;
     }
-    if (!this.form.dateExpiration) { this.formError = 'Expiration date is required.'; return; }
-    if (this.form.pointsRequis < 0) { this.formError = 'Points required must be >= 0.'; return; }
+    if (!this.form.dateExpiration) { this.formError = 'Expiration date is required.'; console.warn('Save aborted: missing expiration'); return; }
+    if (this.form.pointsRequis < 0) { this.formError = 'Points required must be >= 0.'; console.warn('Save aborted: invalid points'); return; }
 
     const opId = this.auth.getUserId();
-    if (opId == null) { this.notif.error('Invalid session.'); return; }
+    if (opId == null) { this.notif.error('Invalid session.'); console.error('Save aborted: no opId'); return; }
 
     this.saving = true;
+    console.log('Saving reduction with payload:', this.form, 'operatorId:', opId);
     const obs = this.editing
       ? this.api.updateReduction(this.editingId!, this.form)
       : this.api.createReduction(this.form, opId);
 
     obs.subscribe({
-      next: () => {
+      next: (res) => {
+        console.log('Save reduction success', res);
         this.notif.success(this.editing ? 'Discount updated.' : 'Discount created.');
         this.load(); this.closeModal(); this.saving = false;
       },
       error: (err) => {
+        console.error('Save reduction error', err);
         this.formError = err.error?.message || err.error?.error || 'An error occurred while saving.';
         this.saving = false;
       }

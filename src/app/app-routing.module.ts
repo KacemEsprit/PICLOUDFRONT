@@ -52,6 +52,7 @@ import { ContractFormComponent } from './components/admin/contract/contract-form
 import { OperatorListComponent } from './components/users/operator-partner/operator-list/operator-list.component';
 import { OperatorDetailComponent } from './components/users/operator-partner/operator-detail/operator-detail.component';
 import { PartnerListComponent as UserPartnerListComponent } from './components/users/operator-partner/partner-list/partner-list.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 
 const routes: Routes = [
   // Authentication routes (without layout)
@@ -125,14 +126,15 @@ const routes: Routes = [
     path: 'ticket',
     component: FrontofficeLayoutComponent,
     canActivate: [AuthGuard],
+    data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] },
     children: [
-      { path: 'covoiturages', loadComponent: () => import('./user-ticket/covoiturage/covoiturage-list/covoiturage-list').then(m => m.CovoiturageListComponent) },
-      { path: 'covoiturages/new', loadComponent: () => import('./user-ticket/covoiturage/covoiturage-form/covoiturage-form').then(m => m.CovoiturageFormComponent) },
-      { path: 'my-covoiturages', loadComponent: () => import('./user-ticket/my-covoiturages/my-covoiturages').then(m => m.MyCovoituragesComponent) },
-      { path: 'reservations', loadComponent: () => import('./user-ticket/reservation/reservation-list/reservation-list').then(m => m.ReservationListComponent) },
-      { path: 'reservations/new', loadComponent: () => import('./user-ticket/reservation/reservation-form/reservation-form').then(m => m.ReservationFormComponent) },
-      { path: 'tickets', loadComponent: () => import('./user-ticket/ticket/ticket-list/ticket-list').then(m => m.TicketListComponent) },
-      { path: 'ai', loadComponent: () => import('./user-ticket/ai-dashboard/ai-dashboard').then(m => m.AIDashboardComponent) }
+      { path: 'covoiturages', loadComponent: () => import('./user-ticket/covoiturage/covoiturage-list/covoiturage-list').then(m => m.CovoiturageListComponent), data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] } },
+      { path: 'covoiturages/new', loadComponent: () => import('./user-ticket/covoiturage/covoiturage-form/covoiturage-form').then(m => m.CovoiturageFormComponent), data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] } },
+      { path: 'my-covoiturages', loadComponent: () => import('./user-ticket/my-covoiturages/my-covoiturages').then(m => m.MyCovoituragesComponent), data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] } },
+      { path: 'reservations', loadComponent: () => import('./user-ticket/reservation/reservation-list/reservation-list').then(m => m.ReservationListComponent), data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] } },
+      { path: 'reservations/new', loadComponent: () => import('./user-ticket/reservation/reservation-form/reservation-form').then(m => m.ReservationFormComponent), data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] } },
+      { path: 'tickets', loadComponent: () => import('./user-ticket/ticket/ticket-list/ticket-list').then(m => m.TicketListComponent), data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] } },
+      { path: 'ai', loadComponent: () => import('./user-ticket/ai-dashboard/ai-dashboard').then(m => m.AIDashboardComponent), data: { roles: ['OPERATOR', 'PASSENGER', 'AGENT'] } }
     ]
   },
 
@@ -146,6 +148,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: AdminDhasbordComponent },
       { path: 'admin-dhasbord', component: AdminDhasbordComponent },
+      { path: 'stats-dashboard', component: DashboardComponent },
       { path: 'users', component: AdminUserManagementComponent },
       { path: 'admin-dhasbord/users', component: AdminUserManagementComponent },
       { path: 'documents', component: AdminDocumentListComponent },

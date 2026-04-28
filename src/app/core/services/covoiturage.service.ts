@@ -6,7 +6,7 @@ import { Covoiturage, DriverConfiance, AvisList } from '../models/covoiturage.mo
 @Injectable({ providedIn: 'root' })
 export class CovoiturageService {
 
-  private url = 'http://localhost:8082/api/covoiturages';
+  private url = 'http://localhost:8081/api/covoiturages';
 
   constructor(private http: HttpClient) {}
 

@@ -9,6 +9,7 @@ import { SubscriptionResponse, TransportType } from '../../../core/models/models
   selector: 'app-operator-subscriptions',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  styleUrls: ['../../feature-styles.css'],
   template: `
 <div class="page-header">
   <div>
@@ -79,9 +80,9 @@ import { SubscriptionResponse, TransportType } from '../../../core/models/models
           </td>
           <td>
             <div>
-              <span class="cell-tag" [ngClass]="planClass(s.pricingPlan?.type)">{{ s.pricingPlan?.type }}</span>
-              <div class="fs-sm text-muted mt-4">{{ s.pricingPlan?.nom }}</div>
-              <div class="fs-sm text-muted mt-4" *ngIf="s.pricingPlan?.transportType">
+              <span class="cell-tag" [ngClass]="planClass(s.pricingPlan.type)">{{ s.pricingPlan.type }}</span>
+              <div class="fs-sm text-muted mt-4">{{ s.pricingPlan.nom }}</div>
+              <div class="fs-sm text-muted mt-4" *ngIf="s.pricingPlan.transportType">
                 <i class="fas" [ngClass]="transportIcon(s.pricingPlan.transportType)"></i>
                 {{ s.pricingPlan.transportType }}
               </div>

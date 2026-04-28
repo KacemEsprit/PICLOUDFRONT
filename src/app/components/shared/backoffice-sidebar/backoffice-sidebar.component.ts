@@ -15,7 +15,8 @@ export class BackofficeSidebarComponent implements OnInit {
     {
       label: 'Main',
       items: [
-        { icon: 'fa-th-large', label: 'Dashboard', path: '/admin/dashboard' }
+        { icon: 'fa-th-large', label: 'Dashboard', path: '/admin/dashboard' },
+        { icon: 'fa-chart-line', label: 'Platform Analytics', path: '/admin/stats-dashboard' }
       ]
     },
     {

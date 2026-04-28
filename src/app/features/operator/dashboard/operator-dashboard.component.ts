@@ -10,6 +10,7 @@ import { ChurnPredictionResponse } from '../../../core/models/models';
   selector: 'app-operator-dashboard',
   standalone: true,
   imports: [CommonModule, RouterLink],
+  styleUrls: ['../../feature-styles.css'],
   styles: [`
     .ml-insights-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
     .ml-insight-card {

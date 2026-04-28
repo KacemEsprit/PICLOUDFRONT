@@ -4,7 +4,8 @@ export const environment = {
   // Free tier: 2,500 routing requests/day with real-time traffic
   tomtomApiKey: 'ZYrycBGZZsXnYnK4lF0AhC3G722CnpM4',
   backendBaseUrl: 'http://127.0.0.1:5000',
-  apiBaseUrl: '/api/v1',
+  apiBaseUrl: '/api',
+  mlApiBaseUrl: '/api',
   healthUrl: '/health',
   enableHealthCheck: false
 };

@@ -28,9 +28,14 @@ export class TicketListComponent implements OnInit {
   constructor(private ticketService: TicketService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+    console.log('[TicketListComponent] Component initialized');
     this.ticketService.getTransportTypes().subscribe({
-      next: data => this.transportTypes = data,
-      error: () => {
+      next: data => {
+        console.log('[TicketListComponent] Transport types loaded:', data);
+        this.transportTypes = data;
+      },
+      error: (err) => {
+        console.error('[TicketListComponent] Error loading transport types:', err);
         this.transportTypes = [
           { value: 'BUS', label: 'Bus' },
           { value: 'METRO', label: 'Metro' },
@@ -44,6 +49,7 @@ export class TicketListComponent implements OnInit {
   }
 
   loadTickets(): void {
+    console.log('[TicketListComponent] loadTickets() called, selectedTransport:', this.selectedTransport);
     this.loading = true;
     const obs = this.selectedTransport
       ? this.ticketService.getDisponiblesByTransport(this.selectedTransport)
@@ -51,6 +57,11 @@ export class TicketListComponent implements OnInit {
 
     obs.subscribe({
       next: (data) => {
+        console.log('[TicketListComponent] ✓ Tickets received:', {
+          count: data.length,
+          data: data,
+          timestamp: new Date().toISOString()
+        });
         this.tickets = data;
         this.totalPages = Math.max(1, Math.ceil(data.length / this.pageSize));
         this.currentPage = 1;
@@ -58,13 +69,30 @@ export class TicketListComponent implements OnInit {
         this.loading = false;
         this.cdr.detectChanges();
       },
-      error: () => { this.loading = false; this.cdr.detectChanges(); }
+      error: (err) => {
+        console.error('[TicketListComponent] ✗ Error loading tickets:', {
+          status: err.status,
+          statusText: err.statusText,
+          url: err.url,
+          message: err.message,
+          error: err.error,
+          fullError: err,
+          timestamp: new Date().toISOString()
+        });
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
   filterByTransport(type: string): void {
     this.selectedTransport = this.selectedTransport === type ? '' : type;
     this.loadTickets();
+  }
+
+  debugBackend(): void {
+    console.log('[TicketListComponent] Debug button clicked - calling debugBackend()');
+    this.ticketService.debugBackend();
   }
 
   acheter(ticket: Ticket): void {
