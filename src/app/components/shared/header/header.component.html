@@ -5,8 +5,22 @@
     <div class="navbar-left">
       <h1 class="navbar-title">{{ title }}</h1>
       <a routerLink="/home" class="home-link" [class.active]="isHomePage()">Home</a>
+
+      <!-- Public Transit Links - visible to everyone -->
+      <a routerLink="/public/lines" class="home-link" [class.active]="currentRoute.includes('/public/lines')">Lines</a>
+      <a routerLink="/public/schedules" class="home-link" [class.active]="currentRoute.includes('/public/schedules')">Schedules</a>
+      <a routerLink="/public/trips" class="home-link" [class.active]="currentRoute.includes('/public/trips')">Trips</a>
+      <a routerLink="/public/alerts" class="home-link" [class.active]="currentRoute.includes('/public/alerts')">Alerts</a>
+
       <a *ngIf="isAuthenticated$ | async" [routerLink]="getDashboardLink()" class="dashboard-link" [class.active]="isDashboardPage()">Dashboard</a>
       <ng-container *ngIf="isAuthenticated$ | async">
+
+      <!-- AGENT: link to backoffice fleet management -->
+      <ng-container *ngIf="(isAuthenticated$ | async) && isAgent()">
+        <a routerLink="/admin/vehicles" class="home-link" [class.active]="currentRoute.includes('/admin/')">Fleet Management</a>
+      </ng-container>
+
+      <!-- MES LIENS (visibles quand connecté) -->
       <!-- MES LIENS (visibles quand connect�) -->
       <ng-container *ngIf="(isAuthenticated$ | async) && isPassenger()">
         <a routerLink="/operators" class="home-link" [class.active]="currentRoute.includes('/operators')">Operators</a>

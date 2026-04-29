@@ -20,6 +20,23 @@ export class BackofficeSidebarComponent implements OnInit {
       ]
     },
     {
+      label: 'Fleet',
+      items: [
+        { icon: 'fa-bus', label: 'Vehicles', path: '/admin/vehicles' },
+        { icon: 'fa-wrench', label: 'Maintenance', path: '/admin/maintenance' },
+        { icon: 'fa-user-tie', label: 'Drivers', path: '/admin/drivers' },
+        { icon: 'fa-gas-pump', label: 'Fuel Logs', path: '/admin/fuel-logs' },
+        { icon: 'fa-cogs', label: 'Spare Parts', path: '/admin/spare-parts' },
+        { icon: 'fa-screwdriver-wrench', label: 'Part Usage', path: '/admin/part-usage' },
+        { icon: 'fa-chart-line', label: 'Predictions', path: '/admin/predictions' },
+        { icon: 'fa-map', label: 'Route Map', path: '/admin/route-map' },
+        { icon: 'fa-route', label: 'Lines', path: '/admin/lines' },
+        { icon: 'fa-map-marker-alt', label: 'Stops', path: '/admin/stops' },
+        { icon: 'fa-clock', label: 'Schedules', path: '/admin/schedules' },
+        { icon: 'fa-road', label: 'Trips', path: '/admin/trips' }
+      ]
+    },
+    {
       label: 'Admin',
       items: [
         { icon: 'fa-users', label: 'User Management', path: '/admin/users' },
@@ -53,6 +70,18 @@ export class BackofficeSidebarComponent implements OnInit {
       label: 'Main',
       items: [
         { icon: 'fa-th-large', label: 'Dashboard', path: '/operator/dashboard' },
+        { icon: 'fa-bus', label: 'Vehicles', path: '/admin/vehicles' },
+        { icon: 'fa-wrench', label: 'Maintenance', path: '/admin/maintenance' },
+        { icon: 'fa-user-tie', label: 'Drivers', path: '/admin/drivers' },
+        { icon: 'fa-gas-pump', label: 'Fuel Logs', path: '/admin/fuel-logs' },
+        { icon: 'fa-cogs', label: 'Spare Parts', path: '/admin/spare-parts' },
+        { icon: 'fa-screwdriver-wrench', label: 'Part Usage', path: '/admin/part-usage' },
+        { icon: 'fa-chart-line', label: 'Predictions', path: '/admin/predictions' },
+        { icon: 'fa-map', label: 'Route Map', path: '/admin/route-map' },
+        { icon: 'fa-route', label: 'Lines', path: '/admin/lines' },
+        { icon: 'fa-map-marker-alt', label: 'Stops', path: '/admin/stops' },
+        { icon: 'fa-clock', label: 'Schedules', path: '/admin/schedules' },
+        { icon: 'fa-road', label: 'Trips', path: '/admin/trips' },
         { icon: 'fa-car', label: 'Carpools', path: '/ticket/covoiturages' },
         { icon: 'fa-calendar', label: 'Reservations', path: '/ticket/reservations' },
         { icon: 'fa-ticket', label: 'Tickets', path: '/ticket/tickets' }
@@ -75,6 +104,27 @@ export class BackofficeSidebarComponent implements OnInit {
     }
   ];
 
+  agentSections = [
+    {
+      label: 'Main',
+      items: [
+        { icon: 'fa-th-large', label: 'Dashboard', path: '/admin/dashboard' },
+        { icon: 'fa-bus', label: 'Vehicles', path: '/admin/vehicles' },
+        { icon: 'fa-wrench', label: 'Maintenance', path: '/admin/maintenance' },
+        { icon: 'fa-user-tie', label: 'Drivers', path: '/admin/drivers' },
+        { icon: 'fa-gas-pump', label: 'Fuel Logs', path: '/admin/fuel-logs' },
+        { icon: 'fa-cogs', label: 'Spare Parts', path: '/admin/spare-parts' },
+        { icon: 'fa-screwdriver-wrench', label: 'Part Usage', path: '/admin/part-usage' },
+        { icon: 'fa-chart-line', label: 'Predictions', path: '/admin/predictions' },
+        { icon: 'fa-map', label: 'Route Map', path: '/admin/route-map' },
+        { icon: 'fa-route', label: 'Lines', path: '/admin/lines' },
+        { icon: 'fa-map-marker-alt', label: 'Stops', path: '/admin/stops' },
+        { icon: 'fa-clock', label: 'Schedules', path: '/admin/schedules' },
+        { icon: 'fa-road', label: 'Trips', path: '/admin/trips' }
+      ]
+    }
+  ];
+
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -82,6 +132,13 @@ export class BackofficeSidebarComponent implements OnInit {
     this.userRole = user?.role?.toUpperCase() || '';
 
     this.sidebarSections = this.userRole === 'OPERATOR' ? this.operatorSections : this.adminSections;
+    if (this.userRole === 'OPERATOR') {
+      this.sidebarSections = this.operatorSections;
+    } else if (this.userRole === 'AGENT') {
+      this.sidebarSections = this.agentSections;
+    } else {
+      this.sidebarSections = this.adminSections;
+    }
   }
 
   navigateTo(path: string): void {

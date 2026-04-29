@@ -115,7 +115,13 @@ const routes: Routes = [
       { path: 'operators/:id', component: OperatorDetailComponent, canActivate: [AuthGuard] },
       { path: 'partners', component: UserPartnerListComponent, canActivate: [AuthGuard] },
       { path: 'partners/:id', component: UserPartnerListComponent, canActivate: [AuthGuard] },
-      { path: 'partners', component: UserPartnerListComponent, canActivate: [AuthGuard] }
+      { path: 'partners', component: UserPartnerListComponent, canActivate: [AuthGuard] },
+
+      // Transit Frontend Public Routes
+      { path: 'public/lines', loadComponent: () => import('./public/lines-public/lines-public.component').then(m => m.LinesPublicComponent) },
+      { path: 'public/schedules', loadComponent: () => import('./public/schedules-public/schedules-public.component').then(m => m.SchedulesPublicComponent) },
+      { path: 'public/trips', loadComponent: () => import('./public/trips-public/trips-public.component').then(m => m.TripsPublicComponent) },
+      { path: 'public/alerts', loadComponent: () => import('./public/alerts-public/alerts-public.component').then(m => m.AlertsPublicComponent) }
     ]
   },
 
@@ -174,6 +180,41 @@ const routes: Routes = [
       { path: 'ticket/tickets', loadComponent: () => import('./admin-ticket/ticket/ticket-list/ticket-list').then(m => m.TicketListComponent) },
       { path: 'ticket/tickets/new', loadComponent: () => import('./admin-ticket/ticket/ticket-form/ticket-form').then(m => m.TicketFormComponent) },
       { path: 'ticket/tickets/edit/:id', loadComponent: () => import('./admin-ticket/ticket/ticket-form/ticket-form').then(m => m.TicketFormComponent) },
+      { path: 'ai-stats', loadComponent: () => import('./admin-ticket/ai-stats/ai-stats').then(m => m.AIStatsComponent), data: { roles: ['ADMIN'] } },
+
+      // Transit Frontend Fleet Routes
+      { path: 'vehicles', loadComponent: () => import('./vehicles/vehicle-list/vehicle-list.component').then(m => m.VehicleListComponent) },
+      { path: 'vehicles/new', loadComponent: () => import('./vehicles/vehicle-form/vehicle-form.component').then(m => m.VehicleFormComponent) },
+      { path: 'vehicles/edit/:id', loadComponent: () => import('./vehicles/vehicle-form/vehicle-form.component').then(m => m.VehicleFormComponent) },
+      { path: 'maintenance', loadComponent: () => import('./maintenance/maintenance-list/maintenance-list.component').then(m => m.MaintenanceListComponent) },
+      { path: 'maintenance/new', loadComponent: () => import('./maintenance/maintenance-form/maintenance-form.component').then(m => m.MaintenanceFormComponent) },
+      { path: 'maintenance/edit/:id', loadComponent: () => import('./maintenance/maintenance-form/maintenance-form.component').then(m => m.MaintenanceFormComponent) },
+      { path: 'lines', loadComponent: () => import('./lines/line-list/line-list.component').then(m => m.LineListComponent) },
+      { path: 'lines/new', loadComponent: () => import('./lines/line-form/line-form.component').then(m => m.LineFormComponent) },
+      { path: 'lines/edit/:id', loadComponent: () => import('./lines/line-form/line-form.component').then(m => m.LineFormComponent) },
+      { path: 'stops', loadComponent: () => import('./stops/stop-list/stop-list.component').then(m => m.StopListComponent) },
+      { path: 'stops/new', loadComponent: () => import('./stops/stop-form/stop-form.component').then(m => m.StopFormComponent) },
+      { path: 'stops/edit/:id', loadComponent: () => import('./stops/stop-form/stop-form.component').then(m => m.StopFormComponent) },
+      { path: 'schedules', loadComponent: () => import('./schedules/schedule-list/schedule-list.component').then(m => m.ScheduleListComponent) },
+      { path: 'schedules/new', loadComponent: () => import('./schedules/schedule-form/schedule-form.component').then(m => m.ScheduleFormComponent) },
+      { path: 'schedules/edit/:id', loadComponent: () => import('./schedules/schedule-form/schedule-form.component').then(m => m.ScheduleFormComponent) },
+      { path: 'trips', loadComponent: () => import('./trips/trip-list/trip-list.component').then(m => m.TripListComponent) },
+      { path: 'trips/new', loadComponent: () => import('./trips/trip-form/trip-form.component').then(m => m.TripFormComponent) },
+      { path: 'trips/edit/:id', loadComponent: () => import('./trips/trip-form/trip-form.component').then(m => m.TripFormComponent) },
+      { path: 'drivers', loadComponent: () => import('./metiers/drivers/driver-list/driver-list.component').then(m => m.DriverListComponent) },
+      { path: 'drivers/new', loadComponent: () => import('./metiers/drivers/driver-form/driver-form.component').then(m => m.DriverFormComponent) },
+      { path: 'drivers/edit/:id', loadComponent: () => import('./metiers/drivers/driver-form/driver-form.component').then(m => m.DriverFormComponent) },
+      { path: 'fuel-logs', loadComponent: () => import('./metiers/fuel-logs/fuel-log-list/fuel-log-list.component').then(m => m.FuelLogListComponent) },
+      { path: 'fuel-logs/new', loadComponent: () => import('./metiers/fuel-logs/fuel-log-form/fuel-log-form.component').then(m => m.FuelLogFormComponent) },
+      { path: 'fuel-logs/edit/:id', loadComponent: () => import('./metiers/fuel-logs/fuel-log-form/fuel-log-form.component').then(m => m.FuelLogFormComponent) },
+      { path: 'drivers/validation', loadComponent: () => import('./metiers/drivers/driver-validation/driver-validation.component').then(m => m.DriverValidationComponent) },
+      { path: 'drivers/license/:id', loadComponent: () => import('./metiers/drivers/driver-license-upload/driver-license-upload.component').then(m => m.DriverLicenseUploadComponent) },
+      { path: 'spare-parts', loadComponent: () => import('./metiers/spare-parts/spare-part-list/spare-part-list.component').then(m => m.SparePartListComponent) },
+      { path: 'spare-parts/new', loadComponent: () => import('./metiers/spare-parts/spare-part-form/spare-part-form.component').then(m => m.SparePartFormComponent) },
+      { path: 'spare-parts/edit/:id', loadComponent: () => import('./metiers/spare-parts/spare-part-form/spare-part-form.component').then(m => m.SparePartFormComponent) },
+      { path: 'predictions', loadComponent: () => import('./metiers/prediction-page/prediction-page.component').then(m => m.PredictionPageComponent) },
+      { path: 'part-usage', loadComponent: () => import('./metiers/part-usage/part-usage-page.component').then(m => m.PartUsagePageComponent) },
+      { path: 'route-map', loadComponent: () => import('./metiers/route-map/route-map.component').then(m => m.RouteMapComponent) }
       { path: 'ai-stats', loadComponent: () => import('./admin-ticket/ai-stats/ai-stats').then(m => m.AIStatsComponent) }
     ]
   },
