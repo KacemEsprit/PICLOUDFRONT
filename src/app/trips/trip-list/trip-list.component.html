@@ -18,11 +18,11 @@
           </tr>
         </thead>
             <tbody *ngIf="trips?.length; else emptyTrips">
-              
+
           <tr *ngFor="let t of trips">
             <td>
-              {{ t.schedule?.line?.code || 'N/A' }} —
-              {{ t.schedule?.vehicle?.plateNumber || 'N/A' }}
+              {{ t.schedule.line.code || 'N/A' }} —
+              {{ t.schedule.vehicle.plateNumber || 'N/A' }}
             </td>
             <td>{{ t.departureTime | date:'dd/MM/yyyy HH:mm' }}</td>
             <td>{{ t.arrivalTime | date:'dd/MM/yyyy HH:mm' }}</td>

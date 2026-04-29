@@ -128,7 +128,7 @@
           <span class="live-dot ms-1"></span>
         </div>
         <div class="vehicle-item" *ngFor="let p of positions">
-          <div class="v-plate">{{ p.vehicle?.plateNumber }}</div>
+          <div class="v-plate">{{ p.vehicle.plateNumber }}</div>
           <div class="v-info">
             <span class="v-status"
               [class.status-on]="p.status === 'ON_ROUTE'"

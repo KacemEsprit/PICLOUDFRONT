@@ -44,7 +44,7 @@ export interface VehiclePosition {
 
 @Injectable({ providedIn: 'root' })
 export class RoutingService {
-  private base = environment.apiUrl;
+  private base = environment.apiBaseUrl;
   constructor(private http: HttpClient) {}
 
   optimizeRoute(lineId: number): Observable<RouteResult> {

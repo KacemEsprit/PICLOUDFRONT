@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 export class VehicleService {
 
-  private url = `${environment.apiUrl}/vehicles`;
+  private url = `${environment.apiBaseUrl}/vehicles`;
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Vehicle[]> {

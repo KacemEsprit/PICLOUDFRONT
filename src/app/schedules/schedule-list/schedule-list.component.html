@@ -19,8 +19,8 @@
           </tr>
         </thead>
             <tbody *ngIf="schedules?.length">
-                <tr *ngFor="let s of schedules">            <td>{{ s.line?.code }} - {{ s.line?.name }}</td>
-<td>{{ s.vehicle?.plateNumber }}</td>
+                <tr *ngFor="let s of schedules">            <td>{{ s.line.code }} - {{ s.line.name }}</td>
+<td>{{ s.vehicle.plateNumber }}</td>
             <td>
               <span class="badge"
                 [class.bg-primary]="s.dayType==='WEEKDAY'"

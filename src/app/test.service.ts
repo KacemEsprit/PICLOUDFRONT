@@ -10,6 +10,6 @@ export class TestService {
   constructor(private http: HttpClient) { }
 
   getHello() {
-    return this.http.get(`${environment.apiUrl}/hello`, { responseType: 'text' });
+    return this.http.get(`${environment.apiBaseUrl}/hello`, { responseType: 'text' });
   }
 }

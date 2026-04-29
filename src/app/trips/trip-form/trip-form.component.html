@@ -14,7 +14,7 @@
                     name="scheduleId" (change)="onScheduleChange()" required>
                     <option [ngValue]="null" disabled>-- Select schedule --</option>
                     <option *ngFor="let s of schedules" [value]="s.id">
-                        {{ s.line?.code }} — {{ s.vehicle?.plateNumber }} — {{ s.dayType }}
+                        {{ s.line.code }} — {{ s.vehicle.plateNumber }} — {{ s.dayType }}
                       </option>
             </select>
           </div>

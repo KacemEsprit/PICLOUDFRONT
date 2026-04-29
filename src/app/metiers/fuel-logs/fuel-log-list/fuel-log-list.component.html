@@ -21,7 +21,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let f of fuelLogs">
-          <td><strong>{{ f.vehicle?.plateNumber }}</strong></td>
+          <td><strong>{{ f.vehicle.plateNumber }}</strong></td>
           <td>{{ f.fuelDate | date:'mediumDate' }}</td>
           <td>{{ f.liters }} L</td>
           <td>{{ f.costPerLiter | number:'1.3-3' }}</td>

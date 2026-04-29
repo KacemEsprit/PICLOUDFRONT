@@ -22,7 +22,7 @@ export interface PartPrediction {
 
 @Injectable({ providedIn: 'root' })
 export class PredictionService {
-  private url = `${environment.apiUrl}/predictions`;
+  private url = `${environment.apiBaseUrl}/predictions`;
   constructor(private http: HttpClient) {}
 
   getFleetPredictions(): Observable<PartPrediction[]> {

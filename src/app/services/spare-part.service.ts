@@ -46,8 +46,8 @@ export interface PartSuggestion {
 
 @Injectable({ providedIn: 'root' })
 export class SparePartService {
-  private url     = `${environment.apiUrl}/spare-parts`;
-  private useUrl  = `${environment.apiUrl}/part-usages`;
+  private url     = `${environment.apiBaseUrl}/spare-parts`;
+  private useUrl  = `${environment.apiBaseUrl}/part-usages`;
 
   constructor(private http: HttpClient) {}
 

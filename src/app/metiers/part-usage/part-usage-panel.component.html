@@ -88,8 +88,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let u of usages">
-          <td><strong>{{ u.sparePart?.name }}</strong></td>
-          <td><code>{{ u.sparePart?.referenceCode }}</code></td>
+          <td><strong>{{ u.sparePart.name }}</strong></td>
+          <td><code>{{ u.sparePart.referenceCode }}</code></td>
           <td>{{ u.quantityUsed }}</td>
           <td>{{ u.unitCostAtUsage | number:'1.3-3' }} TND</td>
           <td><strong>{{ u.totalCost | number:'1.2-2' }} TND</strong></td>

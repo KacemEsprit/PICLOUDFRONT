@@ -214,7 +214,7 @@ const routes: Routes = [
       { path: 'spare-parts/edit/:id', loadComponent: () => import('./metiers/spare-parts/spare-part-form/spare-part-form.component').then(m => m.SparePartFormComponent) },
       { path: 'predictions', loadComponent: () => import('./metiers/prediction-page/prediction-page.component').then(m => m.PredictionPageComponent) },
       { path: 'part-usage', loadComponent: () => import('./metiers/part-usage/part-usage-page.component').then(m => m.PartUsagePageComponent) },
-      { path: 'route-map', loadComponent: () => import('./metiers/route-map/route-map.component').then(m => m.RouteMapComponent) }
+      { path: 'route-map', loadComponent: () => import('./metiers/route-map/route-map.component').then(m => m.RouteMapComponent) },
       { path: 'ai-stats', loadComponent: () => import('./admin-ticket/ai-stats/ai-stats').then(m => m.AIStatsComponent) }
     ]
   },

@@ -18,10 +18,10 @@
           </tr>
         </thead>
             <tbody *ngIf="stops?.length">
-                
+
           <tr *ngFor="let s of stops">
             <td>{{ s.name }}</td>
-            <td>{{ s.line?.code }} - {{ s.line?.name }}</td>            <td><span class="badge bg-secondary">{{ s.sequence }}</span></td>
+            <td>{{ s.line.code }} - {{ s.line.name }}</td>            <td><span class="badge bg-secondary">{{ s.sequence }}</span></td>
             <td>{{ s.latitude }}</td>
             <td>{{ s.longitude }}</td>
             <td>
