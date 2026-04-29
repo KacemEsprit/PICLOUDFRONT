@@ -1,8 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { ProfileResponse, ProfileUpdateRequest } from '../../models/profile.model';
+
+interface CurrentUserResponse {
+  id: number;
+  role: string;
+  enabled?: boolean;
+}
+
+interface AdminUserUpdateRequest {
+  username: string;
+  email: string;
+  name: string;
+  role: string;
+  enabled: boolean;
+  cin?: number;
+}
 
 /**
  * Service for user profile operations
@@ -13,6 +28,7 @@ import { ProfileResponse, ProfileUpdateRequest } from '../../models/profile.mode
 })
 export class ProfileService {
   private apiUrl = '/api/profile';
+  private adminUsersApiUrl = '/api/admin/users';
   private profileSubject = new BehaviorSubject<ProfileResponse | null>(null);
   public profile$ = this.profileSubject.asObservable();
 
@@ -31,7 +47,38 @@ export class ProfileService {
    * Update current user's profile
    */
   updateProfile(request: ProfileUpdateRequest): Observable<ProfileResponse> {
-    return this.http.put<ProfileResponse>(this.apiUrl, request).pipe(
+    const requestedUsername = request.username?.trim();
+    const profileRequest: ProfileUpdateRequest = {
+      email: request.email,
+      name: request.name,
+      ...(request.cin != null ? { cin: request.cin } : {})
+    };
+
+    return this.http.put<ProfileResponse>(this.apiUrl, profileRequest).pipe(
+      switchMap((updatedProfile) => {
+        if (!requestedUsername || requestedUsername === updatedProfile.username) {
+          return of(updatedProfile);
+        }
+
+        return this.http.get<CurrentUserResponse>(`${this.adminUsersApiUrl}/me`).pipe(
+          switchMap((currentUser) => {
+            const adminUpdateRequest: AdminUserUpdateRequest = {
+              username: requestedUsername,
+              email: profileRequest.email,
+              name: profileRequest.name,
+              role: currentUser.role,
+              enabled: currentUser.enabled ?? true,
+              ...(profileRequest.cin != null ? { cin: profileRequest.cin } : {})
+            };
+
+            return this.http.put(`${this.adminUsersApiUrl}/${currentUser.id}`, adminUpdateRequest).pipe(
+              switchMap(() => this.http.get<ProfileResponse>(this.apiUrl)),
+              catchError(() => of(updatedProfile))
+            );
+          }),
+          catchError(() => of(updatedProfile))
+        );
+      }),
       tap(profile => this.profileSubject.next(profile))
     );
   }

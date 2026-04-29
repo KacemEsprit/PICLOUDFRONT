@@ -20,7 +20,7 @@ export interface ProfileResponse {
  * Used for updating profile information (username, email, name, cin)
  */
 export interface ProfileUpdateRequest {
-  username: string;
+  username?: string;
   email: string;
   name: string;
   cin?: number;

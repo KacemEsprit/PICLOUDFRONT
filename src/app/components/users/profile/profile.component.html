@@ -86,25 +86,6 @@
       </div>
 
       <form [formGroup]="profileForm">
-        <!-- Username -->
-        <div class="form-group">
-          <label for="username">Username:
-            <span class="required-badge">*</span>
-          </label>
-          <small class="hint-text" *ngIf="hasFieldError('username')">ℹ Minimum 3 characters</small>
-          <input
-            type="text"
-            id="username"
-            class="form-control"
-            formControlName="username"
-            [class.error]="hasFieldError('username')"
-            placeholder="Enter your username (3+ characters)"
-          />
-          <small *ngIf="hasFieldError('username')" class="error-message">
-            <strong>✗</strong> {{ getFieldError('username') }}
-          </small>
-        </div>
-
         <!-- Email -->
         <div class="form-group">
           <label for="email">Email:

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ProfileService } from '../../../services/shared/profile.service';
 import { ToastService } from '../../../services/shared/toast.service';
@@ -68,7 +69,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
    */
   private initializeForm(): void {
     this.profileForm = this.formBuilder.group({
-      username: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(3)]],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       name: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2)]],
       cin: [{ value: '', disabled: true }, [cinValidator]]
@@ -174,11 +174,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     this.loading = true;
+    const raw = this.profileForm.getRawValue();
+    const requestedUsername = (raw.username ?? '').trim();
+    const cinValue = typeof raw.cin === 'string' ? raw.cin.trim() : raw.cin;
+    const parsedCin = cinValue === '' || cinValue == null ? undefined : Number(cinValue);
+
     const updateRequest: ProfileUpdateRequest = {
-      username: this.profileForm.get('username')?.value,
-      email: this.profileForm.get('email')?.value,
-      name: this.profileForm.get('name')?.value,
-      cin: this.profileForm.get('cin')?.value || null
+      username: requestedUsername,
+      email: (raw.email ?? '').trim(),
+      name: (raw.name ?? '').trim(),
+      ...(Number.isFinite(parsedCin) ? { cin: parsedCin } : {})
     };
 
     this.profileService.updateProfile(updateRequest)
@@ -194,22 +199,52 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.profileForm.get('cin')?.disable();
           this.loading = false;
           this.fieldErrors = {};
-          this.toastService.success('Successs', 'Profile updated successfully');
+
+          if (requestedUsername && updatedProfile.username !== requestedUsername) {
+            this.fieldErrors['username'] = 'Username update is not allowed by the current backend endpoint/permissions.';
+            this.toastService.warning('Partial Update', 'Profile updated, but username was not changed.');
+          } else {
+            this.toastService.success('Successs', 'Profile updated successfully');
+          }
         },
-        error: (error) => {
+        error: (error: unknown) => {
           console.error('Error updating profile:', error);
           this.loading = false;
           this.fieldErrors = {};
 
+          const backendMessage = this.getBackendErrorMessage(error);
+
           // Handle specific error messages
-          if (error.error?.message?.includes('Email already exists')) {
+          if (backendMessage.includes('Email already exists')) {
             this.fieldErrors['email'] = 'Email already exists. Please use a different email.';
             this.toastService.error('Error', 'Email already exists');
           } else {
-            this.toastService.error('Error', 'Failed to update profile');
+            this.toastService.error('Error', backendMessage || 'Failed to update profile');
           }
         }
       });
+  }
+
+  private getBackendErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      const err = error.error as any;
+      if (typeof err === 'string' && err.trim()) {
+        return err;
+      }
+      if (err && typeof err.message === 'string' && err.message.trim()) {
+        return err.message;
+      }
+      if (err && typeof err.error === 'string' && err.error.trim()) {
+        return err.error;
+      }
+      return error.statusText || `Request failed (${error.status})`;
+    }
+
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return 'Failed to update profile';
   }
 
   /**

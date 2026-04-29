@@ -9,15 +9,16 @@ import { ApiError, BackendHealthResponse, DocumentSummaryResponse } from '../../
   providedIn: 'root'
 })
 export class DocumentApiService {
-  private readonly apiBaseUrl = environment.apiBaseUrl;
+  private readonly apiBaseUrl = environment.documentSummaryApiBaseUrl ?? environment.apiBaseUrl;
   private readonly healthUrl = environment.healthUrl;
-  private readonly requestTimeoutMs = 30000;
+  private readonly healthTimeoutMs = 10000;
+  private readonly summarizeTimeoutMs = 180000;
 
   constructor(private http: HttpClient) {}
 
   health(): Observable<BackendHealthResponse> {
     return this.http.get<BackendHealthResponse>(this.healthUrl).pipe(
-      timeout(this.requestTimeoutMs),
+      timeout(this.healthTimeoutMs),
       catchError(error => this.handleError(error))
     );
   }
@@ -28,7 +29,7 @@ export class DocumentApiService {
     formData.append('generate_summary', generateSummary ? 'true' : 'false');
 
     return this.http.post<DocumentSummaryResponse>(`${this.apiBaseUrl}/summarize`, formData).pipe(
-      timeout(this.requestTimeoutMs),
+      timeout(this.summarizeTimeoutMs),
       map(response => this.normalizeSummaryResponse(response)),
       catchError(error => this.handleError(error))
     );
@@ -52,7 +53,7 @@ export class DocumentApiService {
 
   private mapErrorMessage(error: unknown): string {
     if (error instanceof Error && error.name === 'TimeoutError') {
-      return 'The request timed out. Please try again.';
+      return 'The request timed out. Large documents may need more time to process.';
     }
 
     if (error instanceof HttpErrorResponse) {
