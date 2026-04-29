@@ -62,7 +62,7 @@ export class SparePartFormComponent implements OnInit {
       : this.service.create(this.part);
 
     obs.subscribe({
-      next: () => this.router.navigate(['/spare-parts']),
+      next: () => this.router.navigate(['/admin/spare-parts']),
       error: err => this.errorMsg = err.error?.error || err.error?.message || 'An error occurred.'
     });
   }

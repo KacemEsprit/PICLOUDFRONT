@@ -55,10 +55,10 @@ export class FuelLogFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.fuelLog)
-        .subscribe(() => this.router.navigate(['/fuel-logs']));
+        .subscribe(() => this.router.navigate(['/admin/fuel-logs']));
     } else {
       this.service.create(this.fuelLog)
-        .subscribe(() => this.router.navigate(['/fuel-logs']));
+        .subscribe(() => this.router.navigate(['/admin/fuel-logs']));
     }
   }
 }

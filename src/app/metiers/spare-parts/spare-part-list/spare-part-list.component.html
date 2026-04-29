@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h4 class="fw-bold">Spare Parts Inventory</h4>
-  <a routerLink="/spare-parts/new" class="btn btn-primary btn-sm">
+  <a routerLink="/admin/spare-parts/new" class="btn btn-primary btn-sm">
     <i class="bi bi-plus"></i> Add Part
   </a>
 </div>
@@ -113,7 +113,7 @@
           <td>{{ (p.stockQuantity * p.unitCost) | number:'1.2-2' }} TND</td>
           <td>{{ p.supplier || '—' }}</td>
           <td>
-            <a [routerLink]="['/spare-parts/edit', p.id]"
+            <a [routerLink]="['/admin/spare-parts/edit', p.id]"
                class="btn btn-sm btn-outline-primary me-1">
               <i class="bi bi-pencil"></i>
             </a>

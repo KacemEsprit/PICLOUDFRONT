@@ -15,7 +15,7 @@
 // ══════════════════════════════════════════════════════════════════
 /*
 <li>
-  <a routerLink="/spare-parts" routerLinkActive="active" class="nav-link text-white">
+  <a routerLink="/admin/spare-parts" routerLinkActive="active" class="nav-link text-white">
     <i class="bi bi-box-seam me-2"></i> Spare Parts
   </a>
 </li>

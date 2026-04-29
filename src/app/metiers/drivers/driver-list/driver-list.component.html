@@ -1,11 +1,11 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="fw-bold">Drivers</h4>
     <div class="d-flex gap-2">
-      <a routerLink="/drivers/validation"
+      <a routerLink="/admin/drivers/validation"
          class="btn btn-warning btn-sm">
         <i class="bi bi-shield-check me-1"></i>Pending Validations
       </a>
-      <a routerLink="/drivers/new" class="btn btn-primary btn-sm">
+      <a routerLink="/admin/drivers/new" class="btn btn-primary btn-sm">
         <i class="bi bi-plus"></i> Add Driver
       </a>
     </div>
@@ -109,14 +109,14 @@
                     class="text-muted">—</span>
             </td> 
             <td>
-            <a [routerLink]="['/drivers/license', d.id]"
+            <a [routerLink]="['/admin/drivers/license', d.id]"
    class="btn btn-sm btn-outline-success me-1"
    title="Upload License">
   <i class="bi bi-card-image"></i>
 </a>
             </td>
             <td>
-              <a [routerLink]="['/drivers/edit', d.id]"
+              <a [routerLink]="['/admin/drivers/edit', d.id]"
                  class="btn btn-sm btn-outline-primary me-1">
                 <i class="bi bi-pencil"></i>
               </a>

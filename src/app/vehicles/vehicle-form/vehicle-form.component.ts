@@ -63,10 +63,10 @@ export class VehicleFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.vehicle)
-        .subscribe(() => this.router.navigate(['/vehicles']));
+        .subscribe(() => this.router.navigate(['/admin/vehicles']));
     } else {
       this.service.create(this.vehicle)
-        .subscribe(() => this.router.navigate(['/vehicles']));
+        .subscribe(() => this.router.navigate(['/admin/vehicles']));
     }
   }
 }

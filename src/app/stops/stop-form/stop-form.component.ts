@@ -54,10 +54,10 @@ export class StopFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.stop)
-        .subscribe(() => this.router.navigate(['/stops']));
+        .subscribe(() => this.router.navigate(['/admin/stops']));
     } else {
       this.service.create(this.stop)
-        .subscribe(() => this.router.navigate(['/stops']));
+        .subscribe(() => this.router.navigate(['/admin/stops']));
     }
   }
 }

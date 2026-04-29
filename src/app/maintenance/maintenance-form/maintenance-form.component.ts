@@ -62,10 +62,10 @@ export class MaintenanceFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.order)
-        .subscribe(() => this.router.navigate(['/maintenance']));
+        .subscribe(() => this.router.navigate(['/admin/maintenance']));
     } else {
       this.service.create(this.order)
-        .subscribe(() => this.router.navigate(['/maintenance']));
+        .subscribe(() => this.router.navigate(['/admin/maintenance']));
     }
   }
 }

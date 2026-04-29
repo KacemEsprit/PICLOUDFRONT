@@ -12,7 +12,7 @@
 // ══════════════════════════════════════════════════════════════════
 /*
 <li>
-  <a routerLink="/predictions" routerLinkActive="active" class="nav-link text-white">
+  <a routerLink="/admin/predictions" routerLinkActive="active" class="nav-link text-white">
     <i class="bi bi-cpu me-2"></i> Parts Prediction
   </a>
 </li>

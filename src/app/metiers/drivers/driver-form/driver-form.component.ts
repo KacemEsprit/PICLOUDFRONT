@@ -91,10 +91,10 @@ export class DriverFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.driver)
-        .subscribe(() => this.router.navigate(['/drivers']));
+        .subscribe(() => this.router.navigate(['/admin/drivers']));
     } else {
       this.service.create(this.driver)
-        .subscribe(() => this.router.navigate(['/drivers']));
+        .subscribe(() => this.router.navigate(['/admin/drivers']));
     }
   }
 }

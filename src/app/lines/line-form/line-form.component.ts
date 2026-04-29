@@ -40,10 +40,10 @@ export class LineFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.line)
-        .subscribe(() => this.router.navigate(['/lines']));
+        .subscribe(() => this.router.navigate(['/admin/lines']));
     } else {
       this.service.create(this.line)
-        .subscribe(() => this.router.navigate(['/lines']));
+        .subscribe(() => this.router.navigate(['/admin/lines']));
     }
   }
 }

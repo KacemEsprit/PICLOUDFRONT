@@ -75,10 +75,10 @@ export class ScheduleFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.schedule)
-        .subscribe(() => this.router.navigate(['/schedules']));
+        .subscribe(() => this.router.navigate(['/admin/schedules']));
     } else {
       this.service.create(this.schedule)
-        .subscribe(() => this.router.navigate(['/schedules']));
+        .subscribe(() => this.router.navigate(['/admin/schedules']));
     }
   }
 }

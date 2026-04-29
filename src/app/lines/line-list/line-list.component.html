@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="fw-bold">Lines</h4>
-    <a routerLink="/lines/new" class="btn btn-success btn-sm">
+    <a routerLink="/admin/lines/new" class="btn btn-success btn-sm">
       <i class="bi bi-plus"></i> Add Line
     </a>
   </div>
@@ -32,7 +32,7 @@
               </span>
             </td>
             <td>
-              <a [routerLink]="['/lines/edit', l.id]"
+              <a [routerLink]="['/admin/lines/edit', l.id]"
                  class="btn btn-sm btn-outline-primary me-1">
                 <i class="bi bi-pencil"></i>
               </a>

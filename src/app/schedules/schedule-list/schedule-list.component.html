@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="fw-bold">Schedules</h4>
-    <a routerLink="/schedules/new" class="btn btn-info btn-sm">
+    <a routerLink="/admin/schedules/new" class="btn btn-info btn-sm">
       <i class="bi bi-plus"></i> Add Schedule
     </a>
   </div>
@@ -33,7 +33,7 @@
             <td>{{ s.endTime }}</td>
             <td>every {{ s.frequencyMinutes }} min</td>
             <td>
-              <a [routerLink]="['/schedules/edit', s.id]"
+              <a [routerLink]="['/admin/schedules/edit', s.id]"
                  class="btn btn-sm btn-outline-primary me-1">
                 <i class="bi bi-pencil"></i>
               </a>

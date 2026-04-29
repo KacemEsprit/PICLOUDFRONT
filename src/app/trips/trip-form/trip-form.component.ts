@@ -65,10 +65,10 @@ export class TripFormComponent implements OnInit {
 
     if (this.isEdit) {
       this.service.update(this.id, this.trip)
-        .subscribe(() => this.router.navigate(['/trips']));
+        .subscribe(() => this.router.navigate(['/admin/trips']));
     } else {
       this.service.create(this.trip)
-        .subscribe(() => this.router.navigate(['/trips']));
+        .subscribe(() => this.router.navigate(['/admin/trips']));
     }
   }
 }
